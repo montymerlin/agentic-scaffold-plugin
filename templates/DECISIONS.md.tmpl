@@ -1,0 +1,30 @@
+# Decisions — {{project_name}}
+
+Architectural decisions for this project, logged in a lightweight ADR (Architectural Decision Record) format. Each entry captures the context, the choice made, and its consequences — creating a searchable trail that survives memory loss and team changes.
+
+**Format:** Each decision gets a sequential number, a status, and four sections: Context, Decision, Consequences, and (optionally) Alternatives Considered.
+
+---
+
+## Decision 001: Adopted agentic scaffold
+
+**Status:** Accepted
+**Date:** {{date}}
+
+**Context:** This project benefits from structured conventions for AI-assisted development. Without explicit instructions, agents make inconsistent assumptions about file organization, commit conventions, and documentation standards. A scaffold provides smart defaults that can evolve with the project.
+
+**Decision:** Adopted the Agentic Scaffold pattern — a set of coordinated files (CLAUDE.md, README.md, DECISIONS.md, CHANGELOG.md, editor configs) that establish conventions, document decisions, and separate human-facing from agent-facing documentation.
+
+**Consequences:**
+- Agents working in this repo have clear instructions from session one
+- Architectural choices are logged and searchable, not buried in commit messages or lost in conversation
+- The scaffold adds a small number of files, but each serves a distinct purpose
+- Conventions can evolve — update CLAUDE.md and log the change here
+
+**Alternatives Considered:**
+- No scaffold (rely on README alone) — insufficient for agent workflows
+- Heavy framework (full ADR tooling, multiple config files) — premature for most projects
+- Single mega-file — conflates human and agent audiences, becomes unwieldy
+
+<!-- Scaffold sources: Michael Nygard ADR proposal (2011), Keeling & Runde sustainable ADRs (IEEE Software), bridging-worlds DECISIONS.md pattern -->
+<!-- Agentic Scaffold v0.1.0 | https://github.com/montymerlin/agentic-scaffold-cowork -->

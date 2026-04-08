@@ -1,0 +1,11 @@
+{
+  "name": "agentic-scaffold-cowork",
+  "version": "0.1.0",
+  "description": "Scaffold agentic best practices into any repo. Generates README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, and editor configs with smart defaults adapted to your project.",
+  "author": {
+    "name": "Monty Merlin"
+  },
+  "repository": "https://github.com/montymerlin/agentic-scaffold-cowork",
+  "license": "MIT",
+  "keywords": ["scaffold", "init", "claude-md", "decisions", "adr", "agentic", "repo-setup", "cursorrules", "best-practices"]
+}

@@ -1,0 +1,60 @@
+# Contributing to {{project_name}}
+
+This project uses an agentic scaffold — a set of files and conventions designed for AI-assisted development. This guide explains how to work within that structure.
+
+## The Files
+
+| File | Audience | Purpose |
+|------|----------|---------|
+| README.md | Humans | Project overview, setup, usage |
+| CLAUDE.md | AI agents | Conventions, boundaries, instructions |
+| DECISIONS.md | Both | Architectural decision log |
+| CHANGELOG.md | Both | Narrative change history |
+| .cursorrules | Cursor IDE | Editor-specific conventions |
+
+## How to Make Changes
+
+### Before implementing
+- Read CLAUDE.md for current conventions
+- Check DECISIONS.md for relevant prior decisions
+- For significant architectural changes, log a new decision BEFORE implementing
+
+### While working
+- Follow the conventions in CLAUDE.md
+- Keep commits focused with concise messages
+- Reference decision numbers when relevant
+
+### After completing work
+- Update CHANGELOG.md with a narrative entry describing what changed and why
+- If you changed conventions, update CLAUDE.md
+- If you made an architectural choice, ensure it's logged in DECISIONS.md
+
+## Updating CLAUDE.md
+
+CLAUDE.md is the agent instruction set. Update it when:
+- A new convention is established
+- An existing convention changes
+- The directory structure changes significantly
+- New tools or workflows are adopted
+
+Keep it under 150 lines. Be specific. Agents read this file at the start of every session.
+
+## Decision Logging
+
+Use this format in DECISIONS.md:
+
+```markdown
+## Decision NNN: Title
+
+**Status:** Accepted | Superseded | Deprecated
+**Date:** YYYY-MM-DD
+
+**Context:** Why this decision was needed.
+**Decision:** What was chosen.
+**Consequences:** What follows from this choice.
+```
+
+Not every choice needs a decision record. Log decisions that affect project structure, tool choices, convention changes, or trade-offs that future contributors would benefit from understanding.
+
+<!-- Scaffold sources: GitHub community guidelines, open source contribution conventions -->
+<!-- Agentic Scaffold v0.1.0 | https://github.com/montymerlin/agentic-scaffold-cowork -->
