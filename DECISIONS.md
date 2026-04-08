@@ -1,4 +1,4 @@
-# Decisions — agentic-scaffold-cowork
+# Decisions — agentic-scaffold
 
 Architectural decisions for this plugin, in lightweight ADR format.
 
@@ -94,3 +94,26 @@ Architectural decisions for this plugin, in lightweight ADR format.
 - Templates are readable as-is (no special syntax beyond `{{variables}}`)
 - Limited to string interpolation (no conditionals, loops in templates)
 - Conditional logic (e.g., solo vs team) lives in SKILL.md, not in templates
+
+---
+
+## Decision 006: ROADMAP.md as default scaffolded file
+
+**Status:** Accepted
+**Date:** 2026-04-08
+
+**Context:** The original scaffold (6 default files) had no place to capture future directions, inspiration, or ideas that aren't ready for implementation. These ideas were either lost (forgotten between sessions), buried in conversation history, or awkwardly shoehorned into DECISIONS.md (which is for evaluated choices, not unevaluated possibilities). The principle of "implement what's needed now, document what might be needed later" needed a home.
+
+**Decision:** Added ROADMAP.md as a 7th default scaffolded file. Four sections (Near-term, Future explorations, Parking lot, Decided) with four statuses (active, idea, parked, decided). The "Decided" section creates an explicit pipeline to DECISIONS.md — items don't disappear, they get a pointer to where the reasoning lives.
+
+**Consequences:**
+- Every scaffolded project now has a place for future thinking from day one
+- The ROADMAP → DECISIONS pipeline is a novel pattern (not yet established as convention elsewhere) — we're defining it
+- 7 default files instead of 6, but ROADMAP.md is lightweight and doesn't add cognitive overhead
+- Parking lot section prevents good ideas from being lost without creating pressure to act on them
+
+**Alternatives Considered:**
+- PLAN.md — implies current execution, not future aspirations
+- TODO.md — too granular, too tactical
+- Keep it in README.md — conflates project documentation with aspirational planning
+- No file (use GitHub Issues instead) — loses portability and agent-readability

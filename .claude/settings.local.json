@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/settings-schema.json",
   "project": {
-    "name": "agentic-scaffold-cowork",
+    "name": "agentic-scaffold",
     "instructions": [
       "Read CLAUDE.md at session start",
       "Log architectural decisions in DECISIONS.md before implementing",

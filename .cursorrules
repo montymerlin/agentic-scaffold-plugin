@@ -1,7 +1,7 @@
-# agentic-scaffold-cowork — Cursor Rules
+# agentic-scaffold — Cursor Rules
 
 ## Project
-- Name: agentic-scaffold-cowork
+- Name: agentic-scaffold
 - Type: Cowork plugin (Claude Desktop)
 - Stack: Markdown templates + SKILL.md workflow specification
 
@@ -9,6 +9,7 @@
 - Read CLAUDE.md at session start for full project conventions
 - Log architectural decisions in DECISIONS.md before implementing
 - Update CHANGELOG.md after significant work sessions
+- Capture future ideas in ROADMAP.md — items flow to DECISIONS.md when evaluated
 - README.md is human-facing; CLAUDE.md is agent-facing — keep them distinct
 
 ## Templates
@@ -23,7 +24,7 @@
 - Workflow must be fully self-contained
 
 ## Plugin Packaging
-- Package: `zip -r agentic-scaffold-cowork.plugin .` from plugin root
+- Package: `zip -r agentic-scaffold.plugin .` from plugin root
 - Exclude: .git/, .DS_Store, node_modules/
 - Version in plugin.json must match latest CHANGELOG.md entry
 

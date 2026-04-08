@@ -6,13 +6,14 @@ description: >
   "initialize", "set up CLAUDE.md", "add agentic files", "scaffold repo",
   "repo init", "set up best practices", "add decisions file", "create project
   structure", or wants to add CLAUDE.md, DECISIONS.md, CHANGELOG.md, or editor
-  configs to a new or existing project. Also trigger when the user opens a fresh
-  repo and asks "what should I set up?" or "how should I organize this?"
+  configs to a new or existing project. Also trigger when the user asks to
+  "add a roadmap", "set up a roadmap", or opens a fresh repo and asks
+  "what should I set up?" or "how should I organize this?"
 ---
 
 # Init — Agentic Scaffold
 
-Scaffold agentic best practices into any project folder. Generates coordinated files — README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, editor configs — with smart defaults adapted to what's already in the folder.
+Scaffold agentic best practices into any project folder. Generates coordinated files — README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, editor configs — with smart defaults adapted to what's already in the folder.
 
 **Core principles:**
 - Progressive disclosure — start with what's needed, add complexity when earned
@@ -27,7 +28,7 @@ Scan the target directory to understand what exists. Run these checks:
 ### Existing agentic files
 ```bash
 # Check for each file (in the target directory)
-for f in CLAUDE.md README.md CHANGELOG.md DECISIONS.md CONTRIBUTING.md .cursorrules; do
+for f in CLAUDE.md README.md CHANGELOG.md DECISIONS.md ROADMAP.md CONTRIBUTING.md .cursorrules; do
   [ -f "$f" ] && echo "EXISTS: $f" || echo "MISSING: $f"
 done
 [ -d ".claude" ] && echo "EXISTS: .claude/" || echo "MISSING: .claude/"
@@ -135,6 +136,7 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 | DECISIONS.md | DECISIONS.md.tmpl | Architectural decision log |
 | .cursorrules | cursorrules.tmpl | Cursor IDE conventions |
 | .claude/settings.local.json | claude-settings.json.tmpl | Claude Code config |
+| ROADMAP.md | ROADMAP.md.tmpl | Future directions and inspiration pipeline |
 
 **Generate only for team projects:**
 
@@ -161,6 +163,7 @@ Here's what I'll scaffold for {{project_name}}:
 - CLAUDE.md — Agent instructions with {{stack}} conventions
 - CHANGELOG.md — Narrative change history, seeded with today's entry
 - DECISIONS.md — Decision log with "adopted scaffold" as Decision 001
+- ROADMAP.md — Future directions, inspiration, and the pipeline to DECISIONS.md
 - .cursorrules — Cursor IDE conventions for {{stack}}
 - .claude/settings.local.json — Claude Code project config
 
@@ -183,11 +186,12 @@ After approval:
 After writing, confirm:
 
 ```
-Scaffold complete. 6 files created:
-- README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, .cursorrules, .claude/settings.local.json
+Scaffold complete. 7 files created:
+- README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, .cursorrules, .claude/settings.local.json
 
 Next steps:
 - Review and customize CLAUDE.md for your specific conventions
+- Capture future ideas in ROADMAP.md — they'll flow to DECISIONS.md when evaluated
 - Add your first real decision to DECISIONS.md when you make an architectural choice
 - Commit when you're happy with the scaffold
 ```

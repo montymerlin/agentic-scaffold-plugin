@@ -1,10 +1,10 @@
-# CLAUDE.md — agentic-scaffold-cowork
+# CLAUDE.md — agentic-scaffold
 
-A Cowork plugin that scaffolds agentic best practices into any repo. One `/init` command generates README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, and editor configs with smart defaults adapted to the target project.
+A Cowork plugin that scaffolds agentic best practices into any repo. One `/init` command generates README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and editor configs with smart defaults adapted to the target project.
 
 ## Project Identity
 
-- **Name:** agentic-scaffold-cowork
+- **Name:** agentic-scaffold
 - **Type:** Cowork plugin (Claude Desktop)
 - **Version:** 0.1.0
 - **Stack:** Markdown templates + SKILL.md workflow specification (no runtime dependencies)
@@ -12,7 +12,7 @@ A Cowork plugin that scaffolds agentic best practices into any repo. One `/init`
 ## Directory Structure
 
 ```
-agentic-scaffold-cowork-plugin/
+agentic-scaffold-plugin/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest
 ├── skills/
@@ -23,12 +23,14 @@ agentic-scaffold-cowork-plugin/
 │   ├── CLAUDE.md.tmpl
 │   ├── CHANGELOG.md.tmpl
 │   ├── DECISIONS.md.tmpl
+│   ├── ROADMAP.md.tmpl
 │   ├── CONTRIBUTING.md.tmpl
 │   ├── cursorrules.tmpl
 │   └── claude-settings.json.tmpl
 ├── CLAUDE.md                # This file — agent instructions
 ├── CHANGELOG.md             # Narrative change history
 ├── DECISIONS.md             # Architectural decision log
+├── ROADMAP.md               # Future directions and inspiration
 ├── .cursorrules             # Cursor IDE conventions
 └── README.md                # Human-facing documentation
 ```
@@ -47,7 +49,7 @@ agentic-scaffold-cowork-plugin/
 - Workflow is fully self-contained — an agent should be able to execute it with no external context
 
 ### Plugin packaging
-- Package with `zip -r agentic-scaffold-cowork.plugin .` from the plugin root directory
+- Package with `zip -r agentic-scaffold.plugin .` from the plugin root directory
 - Exclude .git/, .DS_Store, and other non-essential files
 - plugin.json version must match CHANGELOG.md latest entry
 
@@ -55,6 +57,7 @@ agentic-scaffold-cowork-plugin/
 - README.md is human-facing — explains what the plugin does, how to use it, design sources
 - CLAUDE.md (this file) is agent-facing — conventions, structure, boundaries
 - DECISIONS.md logs architectural choices — add entries before implementing changes
+- ROADMAP.md captures future directions — items flow to DECISIONS.md when evaluated
 - CHANGELOG.md tracks evolution narratively — update after significant work
 
 ## Agent Boundaries
@@ -75,7 +78,7 @@ agentic-scaffold-cowork-plugin/
 
 ## Design Principles
 
-1. **Progressive disclosure** — The scaffold starts simple (6 files). Future versions add layers for specialized project types. Don't front-load complexity.
+1. **Progressive disclosure** — The scaffold starts simple (7 files). Future versions add layers for specialized project types. Don't front-load complexity.
 
 2. **Dual-audience documentation** — README for humans, CLAUDE.md for agents. This principle applies both to the plugin itself and to what it generates.
 
@@ -90,5 +93,6 @@ agentic-scaffold-cowork-plugin/
 ## References
 
 - [DECISIONS.md](DECISIONS.md) — Architectural decision log
+- [ROADMAP.md](ROADMAP.md) — Future directions and inspiration
 - [CHANGELOG.md](CHANGELOG.md) — Narrative change history
 - [README.md](README.md) — Human-facing documentation with Design Sources

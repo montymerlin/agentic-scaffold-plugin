@@ -1,4 +1,4 @@
-# agentic-scaffold-cowork
+# agentic-scaffold
 
 A Cowork plugin that scaffolds agentic best practices into any project folder. One `/init` command detects your project's stack and state, then generates coordinated documentation and configuration files with smart defaults.
 
@@ -12,6 +12,7 @@ Run `/init` in any project folder. The plugin scans for existing files, infers y
 | CLAUDE.md | AI agents | Conventions, boundaries, stack-specific instructions |
 | CHANGELOG.md | Both | Narrative change history |
 | DECISIONS.md | Both | Lightweight architectural decision records |
+| ROADMAP.md | Both | Future directions and inspiration pipeline |
 | .cursorrules | Cursor IDE | Editor-specific conventions |
 | .claude/settings.local.json | Claude Code | Project configuration |
 | CONTRIBUTING.md | Humans (teams) | Collaboration guide (offered for team projects) |
@@ -38,7 +39,7 @@ In Cowork, type `/init` in any project folder. The skill handles the rest adapti
 > "I can see this is a Python package called `datapipe` — solo developer, no agentic files yet. Here's what I'd add: [list]. Want me to proceed?"
 
 **Partially scaffolded project:**
-> "Found existing CLAUDE.md and README.md. Missing: CHANGELOG.md, DECISIONS.md, .cursorrules, .claude/settings.local.json. Want me to add those?"
+> "Found existing CLAUDE.md and README.md. Missing: CHANGELOG.md, DECISIONS.md, ROADMAP.md, .cursorrules, .claude/settings.local.json. Want me to add those?"
 
 ## Supported Stacks
 
@@ -56,13 +57,7 @@ The scaffold adapts its conventions to your detected stack:
 
 ## Roadmap
 
-Future versions will add progressive layers for specialized project types:
-
-- **Monorepo support** — workspace-aware scaffolding with shared and per-package conventions
-- **API project patterns** — OpenAPI spec pointers, endpoint documentation conventions
-- **Knowledge garden scaffold** — adapted structure for personal knowledge management
-- **`/scaffold-check` skill** — audit an existing scaffold against current best practices and suggest updates
-- **Template customization** — user-defined template overrides for organization-specific conventions
+See [ROADMAP.md](ROADMAP.md) for future directions, ideas, and inspiration — including monorepo support, API project patterns, knowledge garden scaffolds, a `/scaffold-check` audit skill, and more.
 
 ## Design Sources & Inspiration
 
@@ -101,6 +96,14 @@ https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-f
 Letta's approach to persistent context for AI agents — separating core memory, archival memory, and working memory. Influenced the principle of giving agents a clear, structured "starting point" document rather than relying on conversation context.
 https://github.com/letta-ai/letta
 
+**GitHub Roadmap Patterns**
+GitHub's own public roadmap repository demonstrates phase-based roadmap organization (in design, in development, beta, GA). Informed the ROADMAP.md template's section structure and status-based tracking.
+https://github.com/github/roadmap
+
+**Mozilla Science — Roadmapping Guide**
+Open source roadmapping methodology emphasizing project mission, contributor onboarding, and timeline sections. Informed the balance between strategic direction and practical next steps.
+https://mozillascience.github.io/working-open-workshop/roadmapping/
+
 **Jesse Vincent — Superpowers Framework**
 Workflow discipline framework for AI-assisted work. Its emphasis on verification gates, rationalization prevention, and skill composition influenced the scaffold's approach to documenting agent boundaries and design principles.
 https://github.com/obra/superpowers
@@ -108,7 +111,7 @@ https://github.com/obra/superpowers
 ### Conceptual Sources
 
 **Progressive Disclosure** (Krug, *Don't Make Me Think*; Nielsen Norman Group)
-The interaction design principle of revealing complexity gradually rather than all at once. Applied here as an architectural principle: the scaffold starts with 6 files, future versions add layers for specialized project types. Also embedded in the CLAUDE.md template as a documented design principle for the scaffolded project itself.
+The interaction design principle of revealing complexity gradually rather than all at once. Applied here as an architectural principle: the scaffold starts with 7 default files, future versions add layers for specialized project types. Also embedded in the CLAUDE.md template as a documented design principle for the scaffolded project itself.
 
 **Convention over Configuration** (Rails / David Heinemeier Hansson)
 The principle that sensible defaults reduce decision fatigue. Applied here through stack-specific convention defaults and the "infer first, ask second" approach. A Python project gets pytest/ruff conventions without being asked; a JS project gets ESM/prettier.
@@ -121,6 +124,9 @@ The UX principle that good defaults let users skip configuration while still all
 
 **Architectural Decision Records as First-Class Artifacts**
 The practice of treating design decisions as versioned, searchable documents rather than ephemeral conversation or buried commit messages. Draws from ADR literature and the observed failure mode of "why did we do it this way?" in projects without decision logs.
+
+**YAGNI + Documented Backlog** (Extreme Programming / Agile)
+"You Ain't Gonna Need It" says don't build what you don't need yet — but good ideas shouldn't be lost. The ROADMAP.md template formalizes the "parking lot" pattern from agile: a place to capture inspiration and future directions without committing to a timeline. Items flow from ROADMAP.md into DECISIONS.md when evaluated.
 
 ### Personal Sources
 
