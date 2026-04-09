@@ -32,4 +32,5 @@
 - Zero runtime dependencies
 - Never overwrite user files — always present and get approval first
 - Progressive disclosure — don't front-load complexity
+- Layered generation — 5 core files always, adaptive files based on tooling/team
 - Eat your own cooking — this repo uses its own scaffold pattern

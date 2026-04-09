@@ -13,7 +13,7 @@ description: >
 
 # Init — Agentic Scaffold
 
-Scaffold agentic best practices into any project folder. Generates coordinated files — README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, editor configs — with smart defaults adapted to what's already in the folder.
+Scaffold agentic best practices into any project folder. Generates 5 core files (README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md) plus adaptive files based on your tooling and team setup — with smart defaults adapted to what's already in the folder.
 
 **Core principles:**
 - Progressive disclosure — start with what's needed, add complexity when earned
@@ -50,6 +50,13 @@ find . -maxdepth 3 -type f -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name
 ls -la
 ```
 
+### Tooling signals
+```bash
+# Detect editor/agent tooling
+[ -f ".cursorrules" ] || [ -d ".cursor" ] && echo "TOOL: cursor" || echo "TOOL_MISSING: cursor"
+[ -d ".claude" ] && echo "TOOL: claude-code" || echo "TOOL_MISSING: claude-code"
+```
+
 ### Build the inference map
 
 From the scan results, infer:
@@ -62,6 +69,7 @@ From the scan results, infer:
 | **solo_or_team** | Presence of CONTRIBUTING.md, .github/ directory, multiple git authors | Default to solo |
 | **directory_structure** | Output of `ls` / `tree -L 2` if available | Generate after file creation |
 | **license** | LICENSE file content, or `license` field from manifest | "MIT" default |
+| **tooling** | Presence of .cursorrules, .cursor/, .claude/ directories | Ask user |
 
 ### Stack detection table
 
@@ -93,17 +101,25 @@ Based on the scan, classify the target as one of:
 For a **mature existing project**, this might be zero questions:
 > "I can see this is a Python CLI tool called `datapipe` — solo developer, no agentic files yet. Here's what I'd add: [list]. Want me to proceed?"
 
-For a **blank directory**, ask up to three questions using the AskUserQuestion tool:
+For a **blank directory**, ask up to four questions using the AskUserQuestion tool:
 
 1. **What is this project?** (One-line description — feeds into CLAUDE.md header and README)
 2. **What's the primary stack/domain?** (e.g., "Python CLI tool", "React app", "research project")
 3. **Solo or team?** (Determines whether CONTRIBUTING.md is included)
+4. **What tools do you use with this repo?** (Cursor, Claude Code, both, neither — determines which adaptive files to generate)
+
+**Tooling detection shortcuts:**
+- If .cursorrules or .cursor/ exists → Cursor detected, don't ask
+- If .claude/ exists → Claude Code detected, don't ask
+- If both detected → don't ask about tooling at all
+- Only ask about tooling if no signals are found
 
 **Rules:**
 - Never ask a question you can answer from the scan
 - Present inferences confidently ("I can see this is...") with an option to correct
 - If only one field is ambiguous, ask only that one question
 - Default solo unless team signals are present
+- Default no adaptive files unless tooling is detected or stated
 
 ## Step 4: Generate Files
 
@@ -126,7 +142,7 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 
 ### Files to generate
 
-**Always generate (if missing):**
+**Core files (always generate if missing):**
 
 | File | Template | Purpose |
 |------|----------|---------|
@@ -134,15 +150,15 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 | CLAUDE.md | CLAUDE.md.tmpl | Agent instruction set |
 | CHANGELOG.md | CHANGELOG.md.tmpl | Narrative change history |
 | DECISIONS.md | DECISIONS.md.tmpl | Architectural decision log |
-| .cursorrules | cursorrules.tmpl | Cursor IDE conventions |
-| .claude/settings.local.json | claude-settings.json.tmpl | Claude Code config |
 | ROADMAP.md | ROADMAP.md.tmpl | Future directions and inspiration pipeline |
 
-**Generate only for team projects:**
+**Adaptive files (generate based on tooling and team setup):**
 
-| File | Template | Purpose |
-|------|----------|---------|
-| CONTRIBUTING.md | CONTRIBUTING.md.tmpl | Collaboration guide |
+| File | Template | When to generate |
+|------|----------|-----------------|
+| .cursorrules | cursorrules.tmpl | User uses Cursor (detected or stated) |
+| .claude/settings.local.json | claude-settings.json.tmpl | User uses Claude Code (detected or stated) |
+| CONTRIBUTING.md | CONTRIBUTING.md.tmpl | Team project (detected or stated) |
 
 ### For partially scaffolded repos
 
@@ -158,12 +174,14 @@ Before writing any files, show the user exactly what will be created:
 ```
 Here's what I'll scaffold for {{project_name}}:
 
-**New files:**
+**Core files:**
 - README.md — Human-facing overview ({{description}})
 - CLAUDE.md — Agent instructions with {{stack}} conventions
 - CHANGELOG.md — Narrative change history, seeded with today's entry
 - DECISIONS.md — Decision log with "adopted scaffold" as Decision 001
 - ROADMAP.md — Future directions, inspiration, and the pipeline to DECISIONS.md
+
+**Adaptive files (based on your Cursor + Claude Code setup):**
 - .cursorrules — Cursor IDE conventions for {{stack}}
 - .claude/settings.local.json — Claude Code project config
 
@@ -186,8 +204,10 @@ After approval:
 After writing, confirm:
 
 ```
-Scaffold complete. 7 files created:
-- README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, .cursorrules, .claude/settings.local.json
+Scaffold complete. 5 core files + N adaptive files created:
+
+Core: README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md
+Adaptive: [list whichever adaptive files were generated]
 
 Next steps:
 - Review and customize CLAUDE.md for your specific conventions

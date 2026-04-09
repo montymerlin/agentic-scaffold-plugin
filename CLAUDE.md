@@ -1,6 +1,6 @@
 # CLAUDE.md — agentic-scaffold
 
-A Cowork plugin that scaffolds agentic best practices into any repo. One `/init` command generates README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and editor configs with smart defaults adapted to the target project.
+A Cowork plugin that scaffolds agentic best practices into any repo. One `/init` command generates 5 core files (README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md) plus adaptive files based on your tooling and team setup.
 
 ## Project Identity
 
@@ -78,7 +78,8 @@ agentic-scaffold-plugin/
 
 ## Design Principles
 
-1. **Progressive disclosure** — The scaffold starts simple (7 files). Future versions add layers for specialized project types. Don't front-load complexity.
+1. **Progressive disclosure** — The scaffold starts simple (5 core files + adaptive extras). Future versions add layers for specialized project types. Don't front-load complexity.
+
 
 2. **Dual-audience documentation** — README for humans, CLAUDE.md for agents. This principle applies both to the plugin itself and to what it generates.
 
@@ -88,7 +89,9 @@ agentic-scaffold-plugin/
 
 5. **Convention over configuration** — Prefer consistent patterns. When adding a new template or modifying an existing one, follow established patterns.
 
-6. **Eat your own cooking** — This plugin repo uses its own scaffold pattern. Changes to templates should be reflected here, and vice versa.
+6. **Layered generation** — Core files are always generated. Tool-specific and team-specific files adapt to the user's setup.
+
+7. **Eat your own cooking** — This plugin repo uses its own scaffold pattern. Changes to templates should be reflected here, and vice versa.
 
 ## References
 

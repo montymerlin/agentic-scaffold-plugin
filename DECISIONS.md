@@ -117,3 +117,26 @@ Architectural decisions for this plugin, in lightweight ADR format.
 - TODO.md — too granular, too tactical
 - Keep it in README.md — conflates project documentation with aspirational planning
 - No file (use GitHub Issues instead) — loses portability and agent-readability
+
+---
+
+## Decision 007: Layered file generation (core vs adaptive)
+
+**Status:** Accepted
+**Date:** 2026-04-08
+
+**Context:** The scaffold originally generated all files as defaults — including .cursorrules and .claude/settings.local.json. But these are tool-specific: a user who doesn't use Cursor gets a .cursorrules file they don't need, and a user who doesn't use Claude Code gets a .claude/settings.local.json that serves no purpose. Similarly, CONTRIBUTING.md is team-specific and adds noise for solo projects. Generating unnecessary files contradicts the progressive disclosure principle.
+
+**Decision:** Split file generation into two layers. **Core files** (README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md) are always generated — these are universally valuable regardless of tooling. **Adaptive files** (.cursorrules, .claude/settings.local.json, CONTRIBUTING.md) are generated based on detected or stated tooling and team setup. The /init skill detects existing tool configurations and only asks about tooling when detection is inconclusive.
+
+**Consequences:**
+- Cleaner scaffold for users who don't use Cursor or Claude Code
+- 5 core files + 0-3 adaptive files instead of a flat 7
+- Requires tooling detection logic and an additional question in the /init flow
+- Better alignment with progressive disclosure — don't generate what isn't needed
+- README restructured to explain the distinction between core and adaptive files
+
+**Alternatives Considered:**
+- Keep all files as defaults — contradicts progressive disclosure for tool-specific files
+- Make everything optional — too many questions, undermines smart defaults for core files
+- Detect only, never ask — misses cases where user plans to adopt a tool but hasn't configured it yet

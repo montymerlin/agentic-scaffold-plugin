@@ -35,3 +35,4 @@ No active near-term items. See Future explorations for what's next.
 - **Dual-audience documentation** — → Decision 004. `status: decided`
 - **Zero runtime dependencies** — → Decision 005. `status: decided`
 - **ROADMAP.md as default scaffolded file** — → Decision 006. `status: decided`
+- **Layered file generation (core vs adaptive)** — → Decision 007. `status: decided`
