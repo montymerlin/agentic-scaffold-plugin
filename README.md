@@ -36,7 +36,7 @@ These files are offered based on what tools you use and whether you work solo or
 
 README.md is the human-readable overview of the project. It answers the questions every person landing on the repo will ask: what is this, how do I set it up, how do I use it, and how do I contribute?
 
-This is one of the oldest conventions in software — [GitHub's own documentation guidelines](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) formalize what open source projects have practiced for decades. The scaffold generates a README with standard sections (project name, description, getting started, usage, contributing, license) because these have proven their worth across millions of repositories.
+This is one of the oldest conventions in software — GitHub's own [documentation guidelines](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) formalize what open source projects have practiced for decades. The scaffold generates a README with standard sections (project name, description, getting started, usage, contributing, license) because these have proven their worth across millions of repositories.
 
 What makes the scaffold's README distinctive is what it *doesn't* try to do. It doesn't contain agent instructions, convention details, or structural maps — those live in CLAUDE.md. This separation is deliberate. When a single README tries to serve both humans browsing the project and AI agents working in it, neither audience is served well. The human wades through agent-specific jargon; the agent parses human-oriented prose looking for its instructions. Giving each audience its own document means each document can be focused and concise.
 
@@ -46,7 +46,7 @@ CLAUDE.md is the counterpart to README.md — where README serves humans, CLAUDE
 
 The CLAUDE.md convention was established by [Anthropic](https://docs.anthropic.com/en/docs/claude-code/memory) as part of Claude Code's memory system — a project-level instruction file that persists across sessions. The [HumanLayer community](https://humanlayer.dev/blog/claude-md-best-practices) built on this with a best practices guide that contributed several key insights: keep it under 150 lines (agents lose focus in long documents), include explicit do/don't boundaries (agents need guardrails, not just guidelines), and never duplicate what's in the README (reference it instead).
 
-The scaffold's CLAUDE.md template goes further by embedding a Design Principles section into every generated file. This means the project's own evolution principles — progressive disclosure, dual-audience documentation, decisions as first-class artifacts — are documented from day one, not added retroactively. The concept of progressive disclosure comes from [Steve Krug's *Don't Make Me Think*](https://sensible.com/dont-make-me-think/) and [Nielsen Norman Group's interaction design research](https://www.nngroup.com/articles/progressive-disclosure/): reveal complexity gradually, don't front-load structure you haven't earned yet. By embedding this as a documented principle, the scaffold encourages projects to grow organically rather than over-engineering from the start.
+The scaffold's CLAUDE.md template goes further by embedding a Design Principles section into every generated file. This means the project's own evolution principles — progressive disclosure, dual-audience documentation, decisions as first-class artifacts — are documented from day one, not added retroactively. The concept of progressive disclosure comes from [Steve Krug's *Don't Make Me Think*](https://sensible.com/dont-make-me-think/) and [Nielsen Norman Group's interaction design research](https://www.nngroup.com/articles/progressive-disclosure/): reveal complexity gradually, don't front-load structure you haven't earned yet. For agentic projects the stakes are sharper — every token loaded at session start is a token unavailable for the actual task. [Anthropic's Agent Skills architecture](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) formalizes the same idea for AI contexts via a three-level model (metadata → instructions → nested files), where bundled content has no context cost until accessed. The scaffold's CLAUDE.md therefore stays small at the root and points to deeper files (DECISIONS.md, ROADMAP.md, sub-directory docs) that are discovered only when the task requires them.
 
 ### DECISIONS.md — The architectural decision record
 
@@ -123,19 +123,19 @@ The scaffold adapts its conventions to your detected stack:
 
 ## Design Principles
 
-These principles guide both the scaffold itself and the projects it generates:
+These principles guide both the scaffold itself and the projects it generates. Each is grounded in an established source so the reasoning is inspectable rather than taste-based.
 
-1. **Progressive disclosure** — Start simple. Add complexity only when earned. The scaffold generates 5 core files by default; adaptive files are added based on your actual tooling.
+1. **Progressive disclosure** — Start simple, and keep root and initialization files deliberately small. Every token an agent loads at session start is a token unavailable for the actual task — and frontier models only reliably follow a bounded number of instructions before focus degrades. Deeper context should live nested further down in the file structure, referenced by name and loaded only when specifically needed. The scaffold generates minimal core files at the root; detailed guidance lives in sub-documents discovered on demand; adaptive files are added only when the environment warrants them. The pattern traces to [Nielsen Norman Group's progressive disclosure research](https://www.nngroup.com/articles/progressive-disclosure/) in interaction design, and has been formalized for agents in [Anthropic's Agent Skills architecture](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) (metadata → instructions → nested files, where bundled content has no context cost until accessed) and the [HumanLayer community's CLAUDE.md best practices](https://humanlayer.dev/blog/claude-md-best-practices) (keep the root file small; push detail into linked files).
 
-2. **Dual-audience documentation** — README.md serves humans. CLAUDE.md serves agents. Keep them distinct. Don't collapse one audience's needs into the other's document.
+2. **Dual-audience documentation** — README.md serves humans. CLAUDE.md serves agents. Keep them distinct. Don't collapse one audience's needs into the other's document. Grounded in [Anthropic's CLAUDE.md memory convention](https://docs.anthropic.com/en/docs/claude-code/memory), which establishes CLAUDE.md as a dedicated agent-facing file separate from project README, and reinforced by [HumanLayer's guidance](https://humanlayer.dev/blog/claude-md-best-practices) to never duplicate README content — reference it instead.
 
-3. **Adaptive detection** — Infer from the environment first, ask only what can't be determined. Smart defaults beat questionnaires.
+3. **Adaptive detection** — Infer from the environment first, ask only what can't be determined. Smart defaults beat questionnaires. This is an application of sensible-defaults thinking from [*The Ruby on Rails Doctrine*](https://rubyonrails.org/doctrine) ("The menu is omakase") and aligns with the principle of least astonishment: the scaffold should behave the way an experienced practitioner would expect without needing to be told.
 
-4. **Source-grounded defaults** — Every template design choice traces to a documented source. No convention exists "because it seemed right."
+4. **Source-grounded defaults** — Every template design choice traces to a documented source. No convention exists "because it seemed right." This discipline is adapted from the [ADR practice itself](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions): if you can't articulate *why* a default exists, it probably shouldn't be a default. Applied to the scaffold, it means this README's Design Sources sections aren't decorative — they are the evidence trail for every decision baked into the templates.
 
-5. **Convention over configuration** — Prefer consistent patterns over per-case customization. When a pattern is established, follow it.
+5. **Convention over configuration** — Prefer consistent patterns over per-case customization. When a pattern is established, follow it. The phrase was coined by David Heinemeier Hansson as a core tenet of [*The Ruby on Rails Doctrine*](https://rubyonrails.org/doctrine) and has since become one of the most influential ideas in modern framework design. The scaffold inherits the philosophy: a new contributor (human or agent) can drop into any scaffolded project and find the same file names, the same sections, and the same decision format.
 
-6. **Layered generation** — Core files are always generated. Tool-specific and team-specific files adapt to your setup. Don't generate files you don't need.
+6. **Layered generation** — Core files are always generated. Tool-specific and team-specific files adapt to your setup. Don't generate files you don't need. This is an application of the [YAGNI principle](https://martinfowler.com/bliki/Yagni.html) ("You Ain't Gonna Need It") from extreme programming, codified by Martin Fowler: the cost of speculative features is paid immediately while the value is uncertain. Layered generation also echoes the metadata/instructions/nested-files progression of [Anthropic's Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) at the repo-scaffold scale — load what's needed now, leave the rest to be added when the project earns it.
 
 ## Roadmap
 
@@ -146,7 +146,11 @@ See [ROADMAP.md](ROADMAP.md) for future directions, ideas, and inspiration — i
 Sources referenced throughout this document, for those who want to dig deeper:
 
 - [Anthropic CLAUDE.md conventions](https://docs.anthropic.com/en/docs/claude-code/memory) — the canonical reference for agent instruction files
+- [Anthropic — Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) — the three-level progressive disclosure model for agent context
 - [HumanLayer CLAUDE.md best practices](https://humanlayer.dev/blog/claude-md-best-practices) — community guide to effective CLAUDE.md files
+- [Nielsen Norman Group — Progressive Disclosure](https://www.nngroup.com/articles/progressive-disclosure/) — the foundational UX principle
+- [The Ruby on Rails Doctrine](https://rubyonrails.org/doctrine) — convention over configuration, sensible defaults, "the menu is omakase"
+- [Martin Fowler — YAGNI](https://martinfowler.com/bliki/Yagni.html) — "You Ain't Gonna Need It" from extreme programming
 - [Michael Nygard — Architectural Decision Records](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) — the original ADR proposal (2011)
 - [keep-a-changelog](https://keepachangelog.com) — the standard for changelog formatting
 - [GitHub public roadmap](https://github.com/github/roadmap) — phase-based roadmap patterns at scale
@@ -155,8 +159,7 @@ Sources referenced throughout this document, for those who want to dig deeper:
 - [GitHub README guidelines](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) — effective README structure
 - [Jesse Vincent — Superpowers framework](https://github.com/obra/superpowers) — workflow discipline for AI-assisted work
 - [Letta context management](https://github.com/letta-ai/letta) — persistent context patterns for AI agents
-- *Don't Make Me Think* (Steve Krug) — progressive disclosure and interaction design
-- Nielsen Norman Group — interaction design principles
+- [*Don't Make Me Think* (Steve Krug)](https://sensible.com/dont-make-me-think/) — progressive disclosure and interaction design
 - Keeling & Runde, IEEE Software — sustainable architectural decisions
 - montymerlinHQ — three-space knowledge garden architecture, narrative changelog pattern
 - bridging-worlds — project scaffold patterns, DECISIONS.md format, controlled vocabulary
