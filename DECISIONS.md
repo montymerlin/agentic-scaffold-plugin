@@ -140,3 +140,27 @@ Architectural decisions for this plugin, in lightweight ADR format.
 - Keep all files as defaults — contradicts progressive disclosure for tool-specific files
 - Make everything optional — too many questions, undermines smart defaults for core files
 - Detect only, never ask — misses cases where user plans to adopt a tool but hasn't configured it yet
+
+---
+
+## Decision 008: Bundle design rationale as an on-demand reference
+
+**Status:** Accepted
+**Date:** 2026-04-15
+
+**Context:** The `/init` skill executes a workflow (what to do) but the rationale for its invariants — the ~150-line CLAUDE.md budget from HumanLayer best practices, the write-before-implement timing for DECISIONS.md, the template source-attribution footer convention, the ROADMAP → DECISIONS pipeline as an emerging pattern we defined, and the grounding of core vs adaptive split in progressive disclosure — lived only in CLAUDE.md, README.md, and DECISIONS.md. Cowork doesn't auto-load those files when a user invokes the skill, so the skill would execute correctly but couldn't defend its own choices, enforce the CLAUDE.md length budget, preserve template footers during edits, or communicate timing discipline to users.
+
+**Decision:** Add `skills/init/references/design-principles.md` containing the skill's invariants and their sources. Add one pointer line to the top of SKILL.md instructing the agent to load it when generating CLAUDE.md, modifying templates, logging decisions, or defending architectural choices. Content stays out of SKILL.md's main body to preserve progressive disclosure.
+
+**Consequences:**
+- Skill can now enforce the 150-line CLAUDE.md budget and flag bloat to users
+- Skill can defend defaults with source citations rather than treating them as preferences
+- Template source-attribution footer becomes a preserved invariant across edits
+- SKILL.md grows by one line; rationale file is ~80 lines loaded on-demand only
+- Establishes a pattern for future skills in this plugin (references for *why*, SKILL.md for *what*)
+- Creates a minor maintenance burden: if a decision changes (e.g., new DECISIONS.md entry supersedes old guidance), the reference file must be updated too
+
+**Alternatives Considered:**
+- Inline the rationale in SKILL.md — violates progressive disclosure; bloats every skill invocation with context that's only relevant in specific sub-tasks
+- Rely on CLAUDE.md — Cowork doesn't auto-load plugin-internal CLAUDE.md files at skill-invocation time
+- Leave rationale in README.md only — README is human-facing and not addressable from the skill via `${CLAUDE_PLUGIN_ROOT}`

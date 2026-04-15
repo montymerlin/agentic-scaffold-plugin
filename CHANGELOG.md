@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-04-15 — v0.2.0: Bundled design rationale for skill invariants
+
+Added `skills/init/references/design-principles.md` and a one-line pointer at the top of SKILL.md. The new file bundles the six invariants the `/init` skill is supposed to uphold — the ~150-line CLAUDE.md budget from HumanLayer best practices, the write-before-implement timing discipline for DECISIONS.md, the template source-attribution footer convention, the ROADMAP → DECISIONS pipeline as a pattern we defined, the progressive-disclosure grounding of the core-vs-adaptive split, and the source map for defending generated defaults (Nygard, keep-a-changelog, GitHub README guidelines, Nielsen Norman, YAGNI, Anthropic Agent Skills).
+
+The problem: Cowork loads SKILL.md when the skill is invoked, but doesn't auto-load the plugin's own CLAUDE.md, README.md, or DECISIONS.md. That meant `/init` would execute the workflow correctly but couldn't enforce the CLAUDE.md length budget, preserve template footers during edits, or defend its defaults with source citations when a user pushed back. The new reference file closes that gap without bloating the main skill body — progressive disclosure preserved, rationale reachable on demand. See Decision 008.
+
 ## 2026-04-08 — v0.1.0: Initial Release
 
 Built the first version of the agentic scaffold plugin after a thorough brainstorming and design process. The plugin provides a single `/init` skill that scaffolds agentic best practices into any project folder.

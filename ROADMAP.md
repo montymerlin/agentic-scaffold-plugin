@@ -36,3 +36,4 @@ No active near-term items. See Future explorations for what's next.
 - **Zero runtime dependencies** — → Decision 005. `status: decided`
 - **ROADMAP.md as default scaffolded file** — → Decision 006. `status: decided`
 - **Layered file generation (core vs adaptive)** — → Decision 007. `status: decided`
+- **Bundle design rationale as on-demand reference** — → Decision 008. `status: decided`

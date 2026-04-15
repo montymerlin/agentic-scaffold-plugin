@@ -21,6 +21,8 @@ Scaffold agentic best practices into any project folder. Generates 5 core files 
 - Adaptive detection — infer what you can, ask only what you must
 - Source-grounded defaults — every template choice traces to documented sources
 
+> **Design rationale & invariants:** Read `${CLAUDE_PLUGIN_ROOT}/skills/init/references/design-principles.md` when generating CLAUDE.md (150-line budget), modifying templates (source attribution footers), logging decisions (write-before-implement timing), or defending architectural choices to the user. The workflow below encodes *what* to do; that file encodes *why* and the invariants to preserve.
+
 ## Step 1: Detect & Infer
 
 Scan the target directory to understand what exists. Run these checks:
