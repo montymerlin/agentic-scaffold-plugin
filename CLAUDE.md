@@ -16,8 +16,10 @@ agentic-scaffold-plugin/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest
 ├── skills/
-│   └── init/
-│       └── SKILL.md         # The /init skill — full workflow spec
+│   ├── init/
+│   │   └── SKILL.md         # The /init skill — full workflow spec
+│   └── logchange/
+│       └── SKILL.md         # The /logchange skill — maintains CHANGELOG.md
 ├── templates/               # Template files for scaffolded output
 │   ├── README.md.tmpl
 │   ├── CLAUDE.md.tmpl
@@ -42,6 +44,15 @@ agentic-scaffold-plugin/
 - All templates live in `templates/` and are referenced via `${CLAUDE_PLUGIN_ROOT}/templates/`
 - Every template includes a source attribution footer comment
 - Template variables: `{{project_name}}`, `{{description}}`, `{{stack}}`, `{{directory_structure}}`, `{{stack_conventions}}`, `{{date}}`, `{{year}}`, `{{license}}`
+
+### Skills
+
+This plugin provides two skills:
+
+- **init** — scaffolds the five core agentic files (including CHANGELOG.md) into a new repo
+- **logchange** — maintains CHANGELOG.md over the project's lifetime
+
+logchange lives here because it maintains CHANGELOG.md, which agentic-scaffold generates — same artifact lifecycle. scaffold creates the file, logchange keeps it current.
 
 ### SKILL.md
 - Follows CSO (Claude Search Optimization) pattern: description triggers on conditions, doesn't summarize workflow
