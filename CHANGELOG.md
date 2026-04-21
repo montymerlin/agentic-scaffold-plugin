@@ -4,6 +4,24 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-04-21 — v0.4.0: logchange skill migrated from git-plugin
+
+Added `logchange` as the second skill in this plugin (`agentic-scaffold:logchange`). The skill was previously in `git-plugin` as `git:logchange`, but it maintains CHANGELOG.md — an artifact this plugin creates via `/init`. Moving it here co-locates the full lifecycle: init creates the file, logchange keeps it current. See Decision 010.
+
+The skill works in both git repos (summarises from commit history since the last changelog entry) and non-git folders (asks the user to describe what's changed). A patch commit immediately followed to handle the edge case of a brand-new git repo with zero commits — the git-based workflow now detects this via `git rev-list --count HEAD` and routes to the manual flow rather than running `git log` on an empty history.
+
+---
+
+## 2026-04-21 — v0.3.0: Adaptive versioning conventions
+
+Added versioning best practices as an adaptive feature of the scaffold. The `/init` skill now detects whether a project needs version tracking (by checking for plugin manifests, package.json version fields, git tags, release workflows) and, when it does, injects a `### Versioning` section into the generated CLAUDE.md with four rules: single source of truth, semver, git tags on release, and a pre-commit version check.
+
+This was motivated by real version drift across six plugins — most notably mdpowers, which had plugin.json at v0.3.2, CHANGELOG at v0.4.2, and zero git tags. The conventions codified here are the ones that fixed it. Projects that don't track versions (knowledge gardens, research corpora, docs sites) skip the section entirely, following the existing core-vs-adaptive pattern. See Decision 009.
+
+New reference file: `skills/init/references/versioning-conventions.md` — the pattern and rationale agents use when generating the versioning section, adapted to whatever manifest the project uses.
+
+---
+
 ## 2026-04-15 — v0.2.0: Bundled design rationale for skill invariants
 
 Added `skills/init/references/design-principles.md` and a one-line pointer at the top of SKILL.md. The new file bundles the six invariants the `/init` skill is supposed to uphold — the ~150-line CLAUDE.md budget from HumanLayer best practices, the write-before-implement timing discipline for DECISIONS.md, the template source-attribution footer convention, the ROADMAP → DECISIONS pipeline as a pattern we defined, the progressive-disclosure grounding of the core-vs-adaptive split, and the source map for defending generated defaults (Nygard, keep-a-changelog, GitHub README guidelines, Nielsen Norman, YAGNI, Anthropic Agent Skills).

@@ -164,3 +164,60 @@ Architectural decisions for this plugin, in lightweight ADR format.
 - Inline the rationale in SKILL.md — violates progressive disclosure; bloats every skill invocation with context that's only relevant in specific sub-tasks
 - Rely on CLAUDE.md — Cowork doesn't auto-load plugin-internal CLAUDE.md files at skill-invocation time
 - Leave rationale in README.md only — README is human-facing and not addressable from the skill via `${CLAUDE_PLUGIN_ROOT}`
+
+---
+
+## Decision 009: Adaptive versioning conventions in scaffolded projects
+
+**Status:** Accepted
+**Date:** 2026-04-21
+
+**Context:** Managing six plugins (mdpowers, agentic-scaffold, superpowers-cowork, git-cowork, regen-network, notion-sync) revealed a consistent pattern: projects that track versions need explicit conventions to prevent drift between their version source (plugin.json, package.json, etc.), CHANGELOG headings, commit messages, and git tags. mdpowers drifted to four conflicting version sources before the problem was caught. Meanwhile, knowledge gardens and documentation projects don't need versioning at all — adding it would be noise.
+
+The scaffold already has adaptive file generation (core vs adaptive, per Decision 007). Versioning conventions fit the same pattern: detect whether the project needs version tracking, and only include the conventions when they're warranted.
+
+**Decision:** Add versioning as an adaptive section in the scaffold:
+
+1. **Detection** — new "Versioning signals" step in the init scan checks for `.claude-plugin/plugin.json`, manifest `version` fields, git tags, release workflows, and existing changelogs
+2. **Inference** — `needs_versioning` field in the inference map, defaulting to yes for software/plugins and no for knowledge/docs projects
+3. **Adaptive question** — only ask when detection is inconclusive (follows existing "never ask what you can infer" rule)
+4. **Reference file** — `skills/init/references/versioning-conventions.md` with the four rules (single source of truth, semver, git tags on release, pre-commit version check) and their rationale
+5. **Injection** — when `needs_versioning` is true, a `### Versioning` subsection is added to the generated CLAUDE.md, adapted to the project's specific version source
+
+For partially-scaffolded repos that already have a CLAUDE.md but lack versioning conventions, the skill suggests adding them rather than silently skipping.
+
+**Consequences:**
+- Software projects and plugins get versioning conventions from day one, preventing the drift pattern seen in mdpowers
+- Knowledge gardens and docs projects don't get unnecessary versioning noise
+- The reference file documents the "why" (mdpowers incident, real-world experience) so future agents can defend the conventions
+- Adds one detection step, one inference field, one potential question, one reference file, and one adaptive section — modest complexity increase, proportional to the value
+- The versioning section contributes ~8 lines to generated CLAUDE.md files, well within the 150-line budget
+
+**Alternatives Considered:**
+- *Always include versioning* — contradicts progressive disclosure; knowledge gardens don't need it
+- *Never include versioning (leave to the user)* — the mdpowers drift shows this doesn't work in practice; conventions need to be established at scaffold time
+- *Separate versioning skill* — overkill for what's essentially a documentation convention; the scaffold is the right time to establish it
+
+---
+
+## Decision 010: Add logchange skill (migrated from git-plugin) (2026-04-21)
+
+**Status:** Accepted
+**Date:** 2026-04-21
+
+**Context:** The `logchange` skill maintains CHANGELOG.md — updating it with a narrative summary of recent work after a session. It was originally shipped in `git-plugin` because it's invoked alongside git workflows. However, CHANGELOG.md is created by this plugin's `/init` skill. The artifact has two phases: creation (init) and ongoing maintenance (logchange). Having them in separate plugins splits an artifact lifecycle across unrelated packages.
+
+`git-plugin` is focused on git operations: staging, committing, PR creation, repo orientation. Maintaining a human-readable changelog is documentation work, not a git operation. The conceptual fit is much stronger here.
+
+**Decision:** Migrate `logchange` from `git-plugin` to `agentic-scaffold-plugin`. Namespace it as `agentic-scaffold:logchange`. Remove it from `git-plugin` in that repo's v0.3.0 release.
+
+**Consequences:**
+- The full CHANGELOG.md lifecycle (create → maintain) is co-located in one plugin
+- `git-plugin` is more focused: commit, PR, status, and nothing else
+- Users with `logchange` symlinked to `git-plugin` must update their symlinks — in montymerlinHQ, `.claude/skills/logchange` was rewired in the same session
+- Skill is now namespaced `agentic-scaffold:logchange` rather than `git:logchange` — any documentation or habit referencing `git:logchange` is stale
+- Establishes a cleaner principle: skills in this plugin maintain artifacts that this plugin creates
+
+**Alternatives Considered:**
+- *Keep in git-plugin* — simpler in the short term, but splits the artifact lifecycle and muddies git-plugin's focus
+- *Standalone logchange plugin* — overkill for one skill with a clear home already
