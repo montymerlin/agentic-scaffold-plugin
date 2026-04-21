@@ -18,7 +18,10 @@ agentic-scaffold-plugin/
 │   └── marketplace.json     # Self-hosted marketplace listing
 ├── skills/
 │   ├── init/
-│   │   └── SKILL.md         # The /init skill — full workflow spec
+│   │   ├── SKILL.md         # The /init skill — full workflow spec
+│   │   └── references/
+│   │       ├── design-principles.md    # 6 scaffold invariants
+│   │       └── versioning-conventions.md  # Adaptive versioning rules
 │   └── logchange/
 │       └── SKILL.md         # The /logchange skill — maintains CHANGELOG.md
 ├── templates/               # Template files for scaffolded output

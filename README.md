@@ -1,4 +1,4 @@
-# smart-agentic-scaffold
+# agentic-scaffold
 
 Scaffold agentic best practices into any project folder. One `/init` command detects your project's stack and state, then generates a coordinated set of documentation and configuration files — each serving a distinct purpose, each informed by established conventions — with smart defaults adapted to what's already there.
 

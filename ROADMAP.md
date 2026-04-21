@@ -38,3 +38,5 @@ No active near-term items. See Future explorations for what's next.
 - **Layered file generation (core vs adaptive)** — → Decision 007. `status: decided`
 - **Bundle design rationale as on-demand reference** — → Decision 008. `status: decided`
 - **Adaptive versioning conventions** — → Decision 009. `status: decided`
+- **Add logchange skill (migrated from git-plugin)** — → Decision 010. `status: decided`
+- **Dual-distribution packaging with marketplace.json** — → Decision 011. `status: decided`
