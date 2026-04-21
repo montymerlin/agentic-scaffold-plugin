@@ -1,6 +1,6 @@
 {
   "name": "agentic-scaffold",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Scaffold agentic best practices into any repo. Generates README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, and editor configs with smart defaults adapted to your project.",
   "author": {
     "name": "Monty Merlin"

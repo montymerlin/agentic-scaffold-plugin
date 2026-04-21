@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-04-21 — v0.4.1: Dual-distribution packaging
+
+Added `marketplace.json` for Claude Code CLI installation via `claude plugins install`. Updated CLAUDE.md to position the plugin as a "Claude Agent SDK plugin" rather than "Cowork plugin (Claude Desktop)". Replaced the Plugin Packaging section with a Distribution section covering both Claude Code CLI and Cowork install paths. Added Installation section to README.md. See Decision 011.
+
+---
+
 ## 2026-04-21 — v0.4.0: logchange skill migrated from git-plugin
 
 Added `logchange` as the second skill in this plugin (`agentic-scaffold:logchange`). The skill was previously in `git-plugin` as `git:logchange`, but it maintains CHANGELOG.md — an artifact this plugin creates via `/init`. Moving it here co-locates the full lifecycle: init creates the file, logchange keeps it current. See Decision 010.

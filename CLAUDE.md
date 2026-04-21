@@ -5,8 +5,8 @@ A Cowork plugin that scaffolds agentic best practices into any repo. One `/init`
 ## Project Identity
 
 - **Name:** agentic-scaffold
-- **Type:** Cowork plugin (Claude Desktop)
-- **Version:** 0.1.0
+- **Type:** Claude Agent SDK plugin (Claude Code, Cowork, Cursor)
+- **Version:** 0.4.1
 - **Stack:** Markdown templates + SKILL.md workflow specification (no runtime dependencies)
 
 ## Directory Structure
@@ -14,7 +14,8 @@ A Cowork plugin that scaffolds agentic best practices into any repo. One `/init`
 ```
 agentic-scaffold-plugin/
 ├── .claude-plugin/
-│   └── plugin.json          # Plugin manifest
+│   ├── plugin.json          # Plugin manifest
+│   └── marketplace.json     # Self-hosted marketplace listing
 ├── skills/
 │   ├── init/
 │   │   └── SKILL.md         # The /init skill — full workflow spec
@@ -59,10 +60,20 @@ logchange lives here because it maintains CHANGELOG.md, which agentic-scaffold g
 - YAML frontmatter with `name` and `description` fields
 - Workflow is fully self-contained — an agent should be able to execute it with no external context
 
-### Plugin packaging
-- Package with `zip -r agentic-scaffold.plugin .` from the plugin root directory
-- Exclude .git/, .DS_Store, and other non-essential files
-- plugin.json version must match CHANGELOG.md latest entry
+### Distribution
+
+This plugin supports two installation paths:
+
+- **Claude Code CLI:** `claude plugins install github.com/montymerlin/agentic-scaffold` (uses `marketplace.json`)
+- **Claude Cowork (desktop):** Package as `.plugin` zip and drag into Cowork chat, or install from the plugin marketplace
+
+Both paths load the same skills from the same source. The plugin has no runtime dependencies and no host-specific code.
+
+**Packaging for Cowork:** `zip -r agentic-scaffold.plugin . -x ".git/*" ".DS_Store"` from the plugin root directory.
+
+**Auto-update:** Claude Code pins to a commit SHA at install time; users update manually or via marketplace sync. Cowork requires re-uploading the `.plugin` file or GitHub sync if configured at the organization level.
+
+**Version alignment:** plugin.json version must match CHANGELOG.md latest entry and marketplace.json version.
 
 ### Documentation
 - README.md is human-facing — explains what the plugin does, how to use it, design sources

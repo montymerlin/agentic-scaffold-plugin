@@ -221,3 +221,24 @@ For partially-scaffolded repos that already have a CLAUDE.md but lack versioning
 **Alternatives Considered:**
 - *Keep in git-plugin* — simpler in the short term, but splits the artifact lifecycle and muddies git-plugin's focus
 - *Standalone logchange plugin* — overkill for one skill with a clear home already
+
+---
+
+## Decision 011: Dual-distribution packaging with marketplace.json (2026-04-21)
+
+**Status:** Accepted
+**Date:** 2026-04-21
+
+**Context:** The plugin was described as "Cowork plugin (Claude Desktop)" in CLAUDE.md, with no marketplace.json for Claude Code CLI installation. The plugin has zero runtime dependencies — it's pure markdown templates and workflow specs — so there's no technical reason to limit it to one host. As the plugin portfolio standardised on dual-distribution, this plugin needed the same treatment.
+
+**Decision:** Add `.claude-plugin/marketplace.json`, update CLAUDE.md Project Identity to say "Claude Agent SDK plugin" rather than "Cowork plugin", replace the Plugin Packaging section with a Distribution section covering both install paths, and add Installation instructions to README.md.
+
+**Consequences:**
+- Users can install via `claude plugins install github.com/montymerlin/agentic-scaffold`
+- Cowork users can install via `.plugin` zip or marketplace
+- CLAUDE.md no longer positions the plugin as single-host
+- marketplace.json version must stay in sync with plugin.json on each release
+
+**Alternatives Considered:**
+- *Cowork only* — rejected. `/init` is equally useful in Claude Code CLI where users scaffold new repos
+- *Add COMPATIBILITY.md* — deferred. The plugin has no environment-specific behaviour to document; the Distribution section in CLAUDE.md is sufficient

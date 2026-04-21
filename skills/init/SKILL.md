@@ -59,6 +59,16 @@ ls -la
 [ -d ".claude" ] && echo "TOOL: claude-code" || echo "TOOL_MISSING: claude-code"
 ```
 
+### Versioning signals
+```bash
+# Detect whether this project tracks versions
+[ -d ".claude-plugin" ] && echo "VERSION_SIGNAL: plugin (claude-plugin/plugin.json)"
+grep -l '"version"' package.json pyproject.toml Cargo.toml 2>/dev/null && echo "VERSION_SIGNAL: manifest-has-version"
+git tag -l 2>/dev/null | head -5 | grep -q . && echo "VERSION_SIGNAL: git-tags-exist"
+[ -d ".github/workflows" ] && grep -rl "release\|publish\|deploy" .github/workflows/ 2>/dev/null && echo "VERSION_SIGNAL: release-workflow"
+ls CHANGELOG.md CHANGES.md HISTORY.md 2>/dev/null && echo "VERSION_SIGNAL: changelog-exists"
+```
+
 ### Build the inference map
 
 From the scan results, infer:
@@ -72,6 +82,7 @@ From the scan results, infer:
 | **directory_structure** | Output of `ls` / `tree -L 2` if available | Generate after file creation |
 | **license** | LICENSE file content, or `license` field from manifest | "MIT" default |
 | **tooling** | Presence of .cursorrules, .cursor/, .claude/ directories | Ask user |
+| **needs_versioning** | Presence of plugin.json, manifest `version` field, git tags, release workflows, or existing CHANGELOG | Default to no for knowledge/docs projects, yes for software/plugins |
 
 ### Stack detection table
 
@@ -84,6 +95,20 @@ From the scan results, infer:
 | Gemfile | Ruby | RSpec, rubocop, YARD docs |
 | build.gradle or pom.xml | Java/Kotlin | JUnit, checkstyle, Javadoc |
 | No manifest | Generic | Descriptive naming, consistent formatting, tests encouraged |
+
+### Versioning detection table
+
+| Signal | Inference | Confidence |
+|--------|-----------|------------|
+| `.claude-plugin/plugin.json` with `version` field | Plugin — needs versioning | High |
+| `package.json` / `pyproject.toml` / `Cargo.toml` with `version` field | Library/package — needs versioning | High |
+| Git tags matching `v*` or semver pattern | Already versioning — needs convention docs | High |
+| `.github/workflows/` with release/publish/deploy jobs | CI releases — needs versioning | High |
+| Existing CHANGELOG.md / CHANGES.md / HISTORY.md | Already tracking changes — needs convention docs | Medium |
+| No manifest, no tags, content-oriented directory (journal/, readings/, docs/) | Knowledge/docs project — probably doesn't need versioning | Medium |
+| Blank directory or fresh git repo | Unknown — ask if inconclusive from stack | Low |
+
+**Default:** If the stack is software (any manifest detected) or plugin (`.claude-plugin/` present), default `needs_versioning: yes`. If the project is a knowledge garden, research corpus, or documentation site, default `needs_versioning: no`. When inconclusive, ask.
 
 ## Step 2: Classify
 
@@ -103,18 +128,26 @@ Based on the scan, classify the target as one of:
 For a **mature existing project**, this might be zero questions:
 > "I can see this is a Python CLI tool called `datapipe` — solo developer, no agentic files yet. Here's what I'd add: [list]. Want me to proceed?"
 
-For a **blank directory**, ask up to four questions using the AskUserQuestion tool:
+For a **blank directory**, ask up to five questions using the AskUserQuestion tool:
 
 1. **What is this project?** (One-line description — feeds into CLAUDE.md header and README)
 2. **What's the primary stack/domain?** (e.g., "Python CLI tool", "React app", "research project")
 3. **Solo or team?** (Determines whether CONTRIBUTING.md is included)
 4. **What tools do you use with this repo?** (Cursor, Claude Code, both, neither — determines which adaptive files to generate)
+5. **Will this project have releases or versions?** (Determines whether versioning conventions are added to CLAUDE.md — e.g., "yes, it's a library" or "no, it's a knowledge garden")
 
 **Tooling detection shortcuts:**
 - If .cursorrules or .cursor/ exists → Cursor detected, don't ask
 - If .claude/ exists → Claude Code detected, don't ask
 - If both detected → don't ask about tooling at all
 - Only ask about tooling if no signals are found
+
+**Versioning detection shortcuts:**
+- If `.claude-plugin/plugin.json` exists with a `version` field → versioning needed, don't ask
+- If any manifest (`package.json`, `pyproject.toml`, `Cargo.toml`, etc.) has a `version` field → versioning needed, don't ask
+- If git tags matching `v*` exist → already versioning, don't ask
+- If the project is clearly a knowledge garden, docs site, or research corpus → no versioning, don't ask
+- Only ask about versioning if the project type is ambiguous
 
 **Rules:**
 - Never ask a question you can answer from the scan
@@ -154,7 +187,7 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 | DECISIONS.md | DECISIONS.md.tmpl | Architectural decision log |
 | ROADMAP.md | ROADMAP.md.tmpl | Future directions and inspiration pipeline |
 
-**Adaptive files (generate based on tooling and team setup):**
+**Adaptive files (generate based on tooling, team, and versioning setup):**
 
 | File | Template | When to generate |
 |------|----------|-----------------|
@@ -162,12 +195,21 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 | .claude/settings.local.json | claude-settings.json.tmpl | User uses Claude Code (detected or stated) |
 | CONTRIBUTING.md | CONTRIBUTING.md.tmpl | Team project (detected or stated) |
 
+**Adaptive sections (injected into CLAUDE.md when applicable):**
+
+| Section | Reference | When to include |
+|---------|-----------|-----------------|
+| Versioning conventions | `${CLAUDE_PLUGIN_ROOT}/skills/init/references/versioning-conventions.md` | Project needs version tracking (detected or stated) |
+
+When `needs_versioning` is true, read `${CLAUDE_PLUGIN_ROOT}/skills/init/references/versioning-conventions.md` and inject its content as a `### Versioning` subsection inside the `## Key Conventions` section of the generated CLAUDE.md, between the `### Commits` and `### Documentation` subsections. Adapt the content to the project's specific version source (plugin.json, package.json, pyproject.toml, Cargo.toml, etc.) — the reference file provides the pattern, not a verbatim paste.
+
 ### For partially scaffolded repos
 
 If some agentic files already exist:
 - **Never overwrite** existing files
 - Only generate files that are MISSING
 - After generation, note which existing files might benefit from updates (e.g., "Your existing CLAUDE.md doesn't have a Design Principles section — consider adding one")
+- If `needs_versioning` is true and an existing CLAUDE.md lacks a Versioning section, suggest adding one: "Your project tracks versions but CLAUDE.md doesn't have versioning conventions — want me to add them?"
 
 ## Step 5: Present & Approve
 
@@ -183,9 +225,12 @@ Here's what I'll scaffold for {{project_name}}:
 - DECISIONS.md — Decision log with "adopted scaffold" as Decision 001
 - ROADMAP.md — Future directions, inspiration, and the pipeline to DECISIONS.md
 
-**Adaptive files (based on your Cursor + Claude Code setup):**
+**Adaptive files (based on your setup):**
 - .cursorrules — Cursor IDE conventions for {{stack}}
 - .claude/settings.local.json — Claude Code project config
+
+**Adaptive sections in CLAUDE.md:**
+- Versioning conventions — single source of truth, semver, git tags, pre-commit check
 
 **Already present (won't touch):**
 - [list any existing files detected in Step 1]

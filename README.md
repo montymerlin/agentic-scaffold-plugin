@@ -137,6 +137,22 @@ These principles guide both the scaffold itself and the projects it generates. E
 
 6. **Layered generation** — Core files are always generated. Tool-specific and team-specific files adapt to your setup. Don't generate files you don't need. This is an application of the [YAGNI principle](https://martinfowler.com/bliki/Yagni.html) ("You Ain't Gonna Need It") from extreme programming, codified by Martin Fowler: the cost of speculative features is paid immediately while the value is uncertain. Layered generation also echoes the metadata/instructions/nested-files progression of [Anthropic's Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) at the repo-scaffold scale — load what's needed now, leave the rest to be added when the project earns it.
 
+## Installation
+
+### Claude Code CLI
+
+```bash
+claude plugins install github.com/montymerlin/agentic-scaffold
+```
+
+### Claude Desktop (Cowork)
+
+Install the `.plugin` file by dragging it into a Cowork chat, or install from the plugin marketplace. Once installed, type `/init` in any project folder.
+
+### Cursor / Other Hosts
+
+Clone the repository and follow your host's plugin loading documentation. The `/init` skill is a self-contained markdown workflow with no runtime dependencies.
+
 ## Roadmap
 
 See [ROADMAP.md](ROADMAP.md) for future directions, ideas, and inspiration — including monorepo support, API project patterns, knowledge garden scaffolds, a `/scaffold-check` audit skill, and more.
