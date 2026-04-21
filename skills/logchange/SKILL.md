@@ -36,7 +36,14 @@ last_changelog_commit=$(git log -1 --format="%H" -- CHANGELOG.md)
 git log --oneline $last_changelog_commit..HEAD
 ```
 
-If CHANGELOG.md doesn't exist or has never been committed, use the full recent history (`git log --oneline -20`).
+If CHANGELOG.md doesn't exist or has never been committed, check whether the repo has any commits at all:
+
+```bash
+git rev-list --count HEAD 2>/dev/null
+```
+
+- **Zero commits** (empty repo): no git history to summarise. Route to the manual workflow (Step 2b) and ask the user to describe what's been built so far.
+- **Commits exist**: use the full recent history (`git log --oneline -20`).
 
 If there are no new commits since the last changelog update, tell the user there's nothing new to log and stop.
 
