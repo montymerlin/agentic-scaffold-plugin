@@ -1,11 +1,11 @@
 {
   "name": "agentic-scaffold",
-  "version": "0.4.1",
-  "description": "Scaffold agentic best practices into any repo. Generates README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, and editor configs with smart defaults adapted to your project.",
+  "version": "0.5.0",
+  "description": "Scaffold agentic best practices into any repo. Generates AGENTS.md as the canonical instruction file, a CLAUDE.md compatibility wrapper, README.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and adaptive editor configs.",
   "author": {
     "name": "Monty Merlin"
   },
-  "repository": "https://github.com/montymerlin/agentic-scaffold",
+  "repository": "https://github.com/montymerlin/agentic-scaffold-plugin",
   "license": "MIT",
-  "keywords": ["scaffold", "init", "claude-md", "decisions", "adr", "agentic", "repo-setup", "cursorrules", "best-practices"]
+  "keywords": ["scaffold", "init", "agents-md", "claude-md", "decisions", "adr", "agentic", "repo-setup", "cursorrules", "best-practices", "codex"]
 }

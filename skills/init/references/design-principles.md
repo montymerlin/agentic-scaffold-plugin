@@ -1,17 +1,17 @@
 # Design Principles & Invariants — agentic-scaffold
 
-Load this file when generating CLAUDE.md, modifying templates, logging decisions, or defending architectural choices. SKILL.md encodes *what* to do; this file encodes *why* and the invariants the skill must preserve.
+Load this file when generating AGENTS.md, modifying templates, logging decisions, or defending architectural choices. SKILL.md encodes *what* to do; this file encodes *why* and the invariants the skill must preserve.
 
-## 1. CLAUDE.md has a ~150-line budget
+## 1. AGENTS.md has a ~150-line budget
 
-Generated CLAUDE.md files should stay under ~150 lines. Agents lose focus when CLAUDE.md grows long, and every token loaded at session start is a token unavailable for the actual task.
+Generated AGENTS.md files should stay under ~150 lines. Agents lose focus when root instruction files grow long, and every token loaded at session start is a token unavailable for the actual task.
 
 **Source:** HumanLayer's CLAUDE.md best practices (built on Anthropic's Claude Code memory system), reinforced by Anthropic's Agent Skills architecture which uses progressive disclosure (metadata → instructions → nested files) to keep root-level context small.
 
 **How to apply:**
-- When interpolating CLAUDE.md.tmpl, keep `{{directory_structure}}` and `{{stack_conventions}}` concise
-- If a generated CLAUDE.md would exceed ~150 lines, push detail into referenced files (DECISIONS.md, sub-directory CLAUDE.md files) rather than inlining it
-- Flag bloat to the user: "Your CLAUDE.md is getting long — consider splitting X into a referenced file"
+- When interpolating `AGENTS.md.tmpl`, keep `{{directory_structure}}` and `{{stack_conventions}}` concise
+- If a generated AGENTS.md would exceed ~150 lines, push detail into referenced files rather than inlining it
+- Flag bloat to the user: "Your AGENTS.md is getting long — consider splitting X into a referenced file"
 
 ## 2. DECISIONS.md entries are written BEFORE implementation
 
@@ -46,7 +46,7 @@ This plugin introduced the pattern that roadmap items don't disappear when resol
 
 ## 5. Core vs adaptive split is grounded in progressive disclosure
 
-Core files (README, CLAUDE.md, CHANGELOG, DECISIONS, ROADMAP) are universally valuable. Adaptive files (.cursorrules, .claude/settings.local.json, CONTRIBUTING.md) are tool- or team-specific. Generating adaptive files for users who don't need them violates progressive disclosure — it creates noise and maintenance burden.
+Core files (README, AGENTS.md, CLAUDE.md wrapper, CHANGELOG, DECISIONS, ROADMAP) are universally valuable. Adaptive files (.cursorrules, .claude/settings.local.json, CONTRIBUTING.md) are tool- or team-specific. Generating adaptive files for users who don't need them violates progressive disclosure — it creates noise and maintenance burden.
 
 **Source:** Decision 007 in this plugin's own DECISIONS.md.
 
@@ -61,7 +61,7 @@ Every template choice traces to a documented source — not personal preference.
 
 **Key sources to cite when defending choices:**
 - README.md structure → GitHub's README guidelines
-- CLAUDE.md format → Anthropic's Claude Code memory system + HumanLayer best practices
+- Canonical agent-file format → Anthropic's Claude Code memory system + HumanLayer best practices, adapted to AGENTS.md canon
 - DECISIONS.md format → Michael Nygard's ADR proposal
 - ROADMAP.md parking lot → agile practice (Aha! Roadmaps) + YAGNI (Martin Fowler)
 - Narrative CHANGELOG → adapted from keep-a-changelog, shifted to narrative style

@@ -3,9 +3,9 @@ name: agentic-scaffold:init
 description: >
   Scaffold agentic best practices into a repo or project folder. Use when the
   user asks to "init", "scaffold", "set up repo", "agentic setup", "bootstrap",
-  "initialize", "set up CLAUDE.md", "add agentic files", "scaffold repo",
+  "initialize", "set up AGENTS.md", "set up CLAUDE.md", "add agentic files", "scaffold repo",
   "repo init", "set up best practices", "add decisions file", "create project
-  structure", or wants to add CLAUDE.md, DECISIONS.md, CHANGELOG.md, or editor
+  structure", or wants to add AGENTS.md, CLAUDE.md, DECISIONS.md, CHANGELOG.md, or editor
   configs to a new or existing project. Also trigger when the user asks to
   "add a roadmap", "set up a roadmap", or opens a fresh repo and asks
   "what should I set up?" or "how should I organize this?"
@@ -13,15 +13,15 @@ description: >
 
 # Init — Agentic Scaffold
 
-Scaffold agentic best practices into any project folder. Generates 5 core files (README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md) plus adaptive files based on your tooling and team setup — with smart defaults adapted to what's already in the folder.
+Scaffold agentic best practices into any project folder. Generates canonical repo guidance with `AGENTS.md`, a `CLAUDE.md` compatibility wrapper, README.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and adaptive files based on tooling and team setup.
 
 **Core principles:**
 - Progressive disclosure — start with what's needed, add complexity when earned
-- Dual-audience documentation — README for humans, CLAUDE.md for agents
+- Dual-audience documentation — README for humans, AGENTS.md for agents
 - Adaptive detection — infer what you can, ask only what you must
 - Source-grounded defaults — every template choice traces to documented sources
 
-> **Design rationale & invariants:** Read `${CLAUDE_PLUGIN_ROOT}/skills/init/references/design-principles.md` when generating CLAUDE.md (150-line budget), modifying templates (source attribution footers), logging decisions (write-before-implement timing), or defending architectural choices to the user. The workflow below encodes *what* to do; that file encodes *why* and the invariants to preserve.
+> **Design rationale & invariants:** Set `AGENTIC_SCAFFOLD_ROOT="${AGENTIC_SCAFFOLD_ROOT:-${CLAUDE_PLUGIN_ROOT:-${CODEX_HOME:-$HOME/.codex}/vendor_imports/repos/agentic-scaffold-plugin}}"`. Read `${AGENTIC_SCAFFOLD_ROOT}/skills/init/references/design-principles.md` when generating AGENTS.md, modifying templates, logging decisions, or defending architectural choices to the user. The workflow below encodes *what* to do; that file encodes *why* and the invariants to preserve.
 
 ## Step 1: Detect & Infer
 
@@ -30,7 +30,7 @@ Scan the target directory to understand what exists. Run these checks:
 ### Existing agentic files
 ```bash
 # Check for each file (in the target directory)
-for f in CLAUDE.md README.md CHANGELOG.md DECISIONS.md ROADMAP.md CONTRIBUTING.md .cursorrules; do
+for f in AGENTS.md CLAUDE.md README.md CHANGELOG.md DECISIONS.md ROADMAP.md CONTRIBUTING.md .cursorrules; do
   [ -f "$f" ] && echo "EXISTS: $f" || echo "MISSING: $f"
 done
 [ -d ".claude" ] && echo "EXISTS: .claude/" || echo "MISSING: .claude/"
@@ -48,7 +48,7 @@ git log --oneline -5 2>/dev/null  # Recent history if exists
 # File extension census (detect primary language)
 find . -maxdepth 3 -type f -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.rs" -o -name "*.go" -o -name "*.rb" -o -name "*.java" 2>/dev/null | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -5
 
-# Directory structure (for CLAUDE.md)
+# Directory structure (for AGENTS.md)
 ls -la
 ```
 
@@ -130,11 +130,11 @@ For a **mature existing project**, this might be zero questions:
 
 For a **blank directory**, ask up to five questions using the AskUserQuestion tool:
 
-1. **What is this project?** (One-line description — feeds into CLAUDE.md header and README)
+1. **What is this project?** (One-line description — feeds into AGENTS.md header and README)
 2. **What's the primary stack/domain?** (e.g., "Python CLI tool", "React app", "research project")
 3. **Solo or team?** (Determines whether CONTRIBUTING.md is included)
 4. **What tools do you use with this repo?** (Cursor, Claude Code, both, neither — determines which adaptive files to generate)
-5. **Will this project have releases or versions?** (Determines whether versioning conventions are added to CLAUDE.md — e.g., "yes, it's a library" or "no, it's a knowledge garden")
+5. **Will this project have releases or versions?** (Determines whether versioning conventions are added to AGENTS.md — e.g., "yes, it's a library" or "no, it's a knowledge garden")
 
 **Tooling detection shortcuts:**
 - If .cursorrules or .cursor/ exists → Cursor detected, don't ask
@@ -158,7 +158,7 @@ For a **blank directory**, ask up to five questions using the AskUserQuestion to
 
 ## Step 4: Generate Files
 
-Load templates from `${CLAUDE_PLUGIN_ROOT}/templates/` and interpolate variables.
+Load templates from `${AGENTIC_SCAFFOLD_ROOT}/templates/` and interpolate variables.
 
 ### Template interpolation
 
@@ -182,7 +182,8 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 | File | Template | Purpose |
 |------|----------|---------|
 | README.md | README.md.tmpl | Human-facing project overview |
-| CLAUDE.md | CLAUDE.md.tmpl | Agent instruction set |
+| AGENTS.md | AGENTS.md.tmpl | Canonical agent instruction set |
+| CLAUDE.md | CLAUDE.md.tmpl | Claude compatibility wrapper |
 | CHANGELOG.md | CHANGELOG.md.tmpl | Narrative change history |
 | DECISIONS.md | DECISIONS.md.tmpl | Architectural decision log |
 | ROADMAP.md | ROADMAP.md.tmpl | Future directions and inspiration pipeline |
@@ -195,21 +196,21 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 | .claude/settings.local.json | claude-settings.json.tmpl | User uses Claude Code (detected or stated) |
 | CONTRIBUTING.md | CONTRIBUTING.md.tmpl | Team project (detected or stated) |
 
-**Adaptive sections (injected into CLAUDE.md when applicable):**
+**Adaptive sections (injected into AGENTS.md when applicable):**
 
 | Section | Reference | When to include |
 |---------|-----------|-----------------|
-| Versioning conventions | `${CLAUDE_PLUGIN_ROOT}/skills/init/references/versioning-conventions.md` | Project needs version tracking (detected or stated) |
+| Versioning conventions | `${AGENTIC_SCAFFOLD_ROOT}/skills/init/references/versioning-conventions.md` | Project needs version tracking (detected or stated) |
 
-When `needs_versioning` is true, read `${CLAUDE_PLUGIN_ROOT}/skills/init/references/versioning-conventions.md` and inject its content as a `### Versioning` subsection inside the `## Key Conventions` section of the generated CLAUDE.md, between the `### Commits` and `### Documentation` subsections. Adapt the content to the project's specific version source (plugin.json, package.json, pyproject.toml, Cargo.toml, etc.) — the reference file provides the pattern, not a verbatim paste.
+When `needs_versioning` is true, read `${AGENTIC_SCAFFOLD_ROOT}/skills/init/references/versioning-conventions.md` and inject its content as a `### Versioning` subsection inside the `## Key Conventions` section of the generated AGENTS.md, between the `### Commits` and `### Documentation` subsections. Adapt the content to the project's specific version source (plugin.json, package.json, pyproject.toml, Cargo.toml, etc.) — the reference file provides the pattern, not a verbatim paste.
 
 ### For partially scaffolded repos
 
 If some agentic files already exist:
 - **Never overwrite** existing files
 - Only generate files that are MISSING
-- After generation, note which existing files might benefit from updates (e.g., "Your existing CLAUDE.md doesn't have a Design Principles section — consider adding one")
-- If `needs_versioning` is true and an existing CLAUDE.md lacks a Versioning section, suggest adding one: "Your project tracks versions but CLAUDE.md doesn't have versioning conventions — want me to add them?"
+- After generation, note which existing files might benefit from updates (e.g. "Your existing AGENTS.md doesn't have a Design Principles section — consider adding one")
+- If `needs_versioning` is true and an existing AGENTS.md lacks a Versioning section, suggest adding one: "Your project tracks versions but AGENTS.md doesn't have versioning conventions — want me to add them?"
 
 ## Step 5: Present & Approve
 
@@ -220,7 +221,8 @@ Here's what I'll scaffold for {{project_name}}:
 
 **Core files:**
 - README.md — Human-facing overview ({{description}})
-- CLAUDE.md — Agent instructions with {{stack}} conventions
+- AGENTS.md — Canonical agent instructions with {{stack}} conventions
+- CLAUDE.md — Thin compatibility wrapper for Claude-family hosts
 - CHANGELOG.md — Narrative change history, seeded with today's entry
 - DECISIONS.md — Decision log with "adopted scaffold" as Decision 001
 - ROADMAP.md — Future directions, inspiration, and the pipeline to DECISIONS.md
@@ -229,7 +231,7 @@ Here's what I'll scaffold for {{project_name}}:
 - .cursorrules — Cursor IDE conventions for {{stack}}
 - .claude/settings.local.json — Claude Code project config
 
-**Adaptive sections in CLAUDE.md:**
+**Adaptive sections in AGENTS.md:**
 - Versioning conventions — single source of truth, semver, git tags, pre-commit check
 
 **Already present (won't touch):**
@@ -244,20 +246,20 @@ Create these files?
 
 After approval:
 
-1. Create `.claude/` directory if it doesn't exist
+1. Create `.claude/` directory if it doesn't exist and Claude-specific settings are being generated
 2. Write each file from the interpolated templates
 3. Do NOT run `git add` or `git commit` — let the user decide when to commit
 
 After writing, confirm:
 
 ```
-Scaffold complete. 5 core files + N adaptive files created:
+Scaffold complete. Core files plus N adaptive files created:
 
-Core: README.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md
+Core: README.md, AGENTS.md, CLAUDE.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md
 Adaptive: [list whichever adaptive files were generated]
 
 Next steps:
-- Review and customize CLAUDE.md for your specific conventions
+- Review and customize AGENTS.md for your specific conventions
 - Capture future ideas in ROADMAP.md — they'll flow to DECISIONS.md when evaluated
 - Add your first real decision to DECISIONS.md when you make an architectural choice
 - Commit when you're happy with the scaffold
@@ -279,8 +281,8 @@ Report: "This project already has all agentic scaffold files. Nothing to add." T
 ### User runs /init in montymerlinHQ or another knowledge garden
 Detect the presence of SOUL.md, STYLE.md, or journal/ directories. Report: "This looks like a knowledge garden with its own established structure. The agentic scaffold is designed for code repos and projects — it might conflict with your existing setup. Want to proceed anyway, or would you like to scaffold a specific sub-project instead?"
 
-### User runs /init inside a Cowork plugin directory
-Detect .claude-plugin/ directory. Adapt: plugin repos have different conventions. Adjust CLAUDE.md template to reference plugin.json, SKILL.md patterns, and packaging conventions.
+### User runs /init inside a Claude plugin directory
+Detect `.claude-plugin/` directory. Adapt: plugin repos have different conventions. Adjust AGENTS.md to reference plugin.json, SKILL.md patterns, and packaging conventions, while keeping CLAUDE.md as a wrapper.
 
 ### Target directory has no write access
 Report the error clearly and suggest an alternative location.

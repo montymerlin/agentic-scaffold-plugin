@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-04-22 — v0.5.0: AGENTS.md canon and cross-host scaffold output
+
+Shifted the plugin and the scaffold it generates to a compatibility-layer model. `AGENTS.md` is now the canonical agent instruction file for both this repo and newly scaffolded repos, while `CLAUDE.md` becomes a thin wrapper for Claude-family hosts. This aligns the scaffold with the same cross-host pattern now used across montymerlinHQ: one source of truth, host-specific aliases only where needed.
+
+The `/init` skill and templates were updated together so the generated output matches the repo's own conventions instead of lagging behind them. Added portable root resolution for internal references, Codex install/update scripts for global skill use, and updated docs and metadata to position the project as host-agnostic with Claude packaging compatibility. See Decision 012.
+
 ## 2026-04-21 — v0.4.1: Dual-distribution packaging
 
 Added `marketplace.json` for Claude Code CLI installation via `claude plugins install`. Updated CLAUDE.md to position the plugin as a "Claude Agent SDK plugin" rather than "Cowork plugin (Claude Desktop)". Replaced the Plugin Packaging section with a Distribution section covering both Claude Code CLI and Cowork install paths. Added Installation section to README.md. See Decision 011.

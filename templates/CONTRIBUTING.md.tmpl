@@ -7,7 +7,8 @@ This project uses an agentic scaffold — a set of files and conventions designe
 | File | Audience | Purpose |
 |------|----------|---------|
 | README.md | Humans | Project overview, setup, usage |
-| CLAUDE.md | AI agents | Conventions, boundaries, instructions |
+| AGENTS.md | AI agents | Canonical conventions, boundaries, instructions |
+| CLAUDE.md | Claude-family agents | Compatibility wrapper pointing to AGENTS.md |
 | DECISIONS.md | Both | Architectural decision log |
 | ROADMAP.md | Both | Future directions and inspiration |
 | CHANGELOG.md | Both | Narrative change history |
@@ -16,30 +17,30 @@ This project uses an agentic scaffold — a set of files and conventions designe
 ## How to Make Changes
 
 ### Before implementing
-- Read CLAUDE.md for current conventions
+- Read AGENTS.md for current conventions
 - Check DECISIONS.md for relevant prior decisions
 - Check ROADMAP.md for related future ideas or prior exploration
 - For significant architectural changes, log a new decision BEFORE implementing
 
 ### While working
-- Follow the conventions in CLAUDE.md
+- Follow the conventions in AGENTS.md
 - Keep commits focused with concise messages
 - Reference decision numbers when relevant
 
 ### After completing work
 - Update CHANGELOG.md with a narrative entry describing what changed and why
-- If you changed conventions, update CLAUDE.md
+- If you changed conventions, update AGENTS.md
 - If you made an architectural choice, ensure it's logged in DECISIONS.md
 
-## Updating CLAUDE.md
+## Updating AGENTS.md
 
-CLAUDE.md is the agent instruction set. Update it when:
+AGENTS.md is the canonical agent instruction set. Update it when:
 - A new convention is established
 - An existing convention changes
 - The directory structure changes significantly
 - New tools or workflows are adopted
 
-Keep it under 150 lines. Be specific. Agents read this file at the start of every session.
+Keep it under 150 lines where practical. Be specific. Agents read this file at the start of every session. Keep CLAUDE.md as a thin compatibility wrapper rather than a duplicate.
 
 ## Decision Logging
 
@@ -59,4 +60,4 @@ Use this format in DECISIONS.md:
 Not every choice needs a decision record. Log decisions that affect project structure, tool choices, convention changes, or trade-offs that future contributors would benefit from understanding.
 
 <!-- Scaffold sources: GitHub community guidelines, open source contribution conventions -->
-<!-- Agentic Scaffold v0.1.0 | https://github.com/montymerlin/agentic-scaffold -->
+<!-- Agentic Scaffold v0.5.0 | https://github.com/montymerlin/agentic-scaffold-plugin -->

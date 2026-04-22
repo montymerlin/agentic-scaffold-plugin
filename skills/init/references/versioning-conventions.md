@@ -1,6 +1,6 @@
 # Versioning Conventions — Reference for Scaffolded Projects
 
-When the `/init` skill detects that a project needs version tracking, inject a Versioning subsection into the generated CLAUDE.md. This file provides the pattern and rationale — adapt the specifics to the project's version source.
+When the `/init` skill detects that a project needs version tracking, inject a Versioning subsection into the generated AGENTS.md. This file provides the pattern and rationale — adapt the specifics to the project's version source.
 
 ## The convention to inject
 

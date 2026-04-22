@@ -17,6 +17,7 @@ No active near-term items. See Future explorations for what's next.
 - **Knowledge garden scaffold** — Adapted structure for personal knowledge management systems (journal, readings, wisdom directories). Different from code repo patterns. `status: idea`
 - **`/scaffold-check` audit skill** — Review an existing scaffold against current best practices and suggest updates. Could re-run /init in "audit mode." `status: idea`
 - **Template customization** — User-defined template overrides for organization-specific conventions. Load from a `.agentic-scaffold/` config directory. `status: idea`
+- **Thin compatibility wrappers for more hosts** — Extend the `AGENTS.md` canonical pattern beyond Claude and Codex if other host-specific wrapper files emerge. `status: idea`
 
 ## Parking lot
 
@@ -40,3 +41,4 @@ No active near-term items. See Future explorations for what's next.
 - **Adaptive versioning conventions** — → Decision 009. `status: decided`
 - **Add logchange skill (migrated from git-plugin)** — → Decision 010. `status: decided`
 - **Dual-distribution packaging with marketplace.json** — → Decision 011. `status: decided`
+- **Canonicalize scaffold instructions around AGENTS.md** — → Decision 012. `status: decided`

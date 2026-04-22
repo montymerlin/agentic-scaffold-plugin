@@ -218,6 +218,29 @@ For partially-scaffolded repos that already have a CLAUDE.md but lack versioning
 - Skill is now namespaced `agentic-scaffold:logchange` rather than `git:logchange` — any documentation or habit referencing `git:logchange` is stale
 - Establishes a cleaner principle: skills in this plugin maintain artifacts that this plugin creates
 
+---
+
+## Decision 012: Canonicalize scaffold instructions around AGENTS.md
+
+**Status:** Accepted
+**Date:** 2026-04-22
+
+**Context:** The plugin had become Claude-first in two layers at once: the repo itself used `CLAUDE.md` as its own source of truth, and the `/init` skill generated `CLAUDE.md` as the canonical instruction file for every scaffolded repo. That now conflicts with the convention adopted across montymerlinHQ: `AGENTS.md` should be canonical, while Claude-facing files exist as compatibility layers. Leaving agentic-scaffold on the old pattern would keep reintroducing drift into every newly scaffolded project.
+
+**Decision:** Make `AGENTS.md` canonical in both the plugin repo and scaffolded output. Keep `CLAUDE.md` as a thin compatibility wrapper that points to `AGENTS.md`. Update templates, skill instructions, references, installation docs, and packaging metadata together so the repo and generated output follow the same cross-host convention.
+
+**Consequences:**
+- Newly scaffolded repos get a future-friendly canonical instruction file from day one
+- Claude-family tools still work cleanly through a wrapper rather than a second source of truth
+- The plugin is repositioned as host-agnostic, with `.claude-plugin/` serving packaging compatibility rather than defining the repo
+- The migration touches both the plugin repo and the generator logic, but avoids the worse outcome of a half-migrated scaffold
+- Codex can consume the same skills directly via global install scripts or workspace symlinks
+
+**Alternatives Considered:**
+- Keep `CLAUDE.md` canonical and document AGENTS as optional — perpetuates drift and conflicts with the newer workspace convention
+- Migrate only the repo, not the generated output — leaves the product behavior stale
+- Generate AGENTS only for non-Claude users — reintroduces branching logic where a single canonical file is simpler
+
 **Alternatives Considered:**
 - *Keep in git-plugin* — simpler in the short term, but splits the artifact lifecycle and muddies git-plugin's focus
 - *Standalone logchange plugin* — overkill for one skill with a clear home already
@@ -234,7 +257,7 @@ For partially-scaffolded repos that already have a CLAUDE.md but lack versioning
 **Decision:** Add `.claude-plugin/marketplace.json`, update CLAUDE.md Project Identity to say "Claude Agent SDK plugin" rather than "Cowork plugin", replace the Plugin Packaging section with a Distribution section covering both install paths, and add Installation instructions to README.md.
 
 **Consequences:**
-- Users can install via `claude plugins install github.com/montymerlin/agentic-scaffold`
+- Users can install via `claude plugins install github.com/montymerlin/agentic-scaffold-plugin`
 - Cowork users can install via `.plugin` zip or marketplace
 - CLAUDE.md no longer positions the plugin as single-host
 - marketplace.json version must stay in sync with plugin.json on each release
