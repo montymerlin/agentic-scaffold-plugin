@@ -1,6 +1,14 @@
 # agentic-scaffold
 
-Scaffold agentic best practices into any project folder. One `/init` command detects a project's stack and state, then generates a coordinated set of documentation and configuration files with `AGENTS.md` as the canonical agent instruction file, `CLAUDE.md` as a compatibility wrapper, and smart defaults adapted to what's already there.
+Scaffold agentic best practices into any project folder. Three skills cover the full scaffold lifecycle: **init** to create the canonical documentation structure, **logchange** to keep it current, and **repo-audit** to verify it stays healthy and secure.
+
+## Skills
+
+| Skill | Invoke | What it does |
+|-------|--------|-------------|
+| `agentic-scaffold:init` | `/init` | Detects stack and state, then generates `AGENTS.md`, `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `DECISIONS.md`, `ROADMAP.md`, and adaptive files (`.cursorrules`, `CONTRIBUTING.md`, etc.). Smart defaults — infers what it can, asks only what it can't. |
+| `agentic-scaffold:logchange` | `/logchange` | Maintains a human-readable `CHANGELOG.md`. In git repos, summarises commits since the last changelog entry; in non-git folders, asks what changed. Groups changes thematically, not by commit. |
+| `agentic-scaffold:repo-audit` | `/repo-audit` | Audits scaffold health and security in two phases: **Artifact Audit** (files present, versions consistent, CHANGELOG fresh, ROADMAP → DECISIONS integrity) then **Security Scan** (secrets exposure, gitignore completeness, agent permissions, dependency CVEs, supply chain risks). Mechanical fixes applied silently; everything else surfaces as a punch list. |
 
 ## What It Generates
 
@@ -85,7 +93,7 @@ Clone the repository and load the skills according to your host's skill or plugi
 
 ## Roadmap
 
-See [ROADMAP.md](ROADMAP.md) for future directions such as monorepo support, knowledge garden scaffolds, and scaffold auditing.
+See [ROADMAP.md](ROADMAP.md) for future directions such as monorepo support, knowledge garden scaffolds, live dependency threat intelligence, and wiring `repo-audit` into the finishing-a-development-branch workflow.
 
 ## License
 
