@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-04-23 — v0.6.0: repo-audit skill — scaffold health and security audit
+
+Added `repo-audit` as the third skill in this plugin (`agentic-scaffold:repo-audit`). The skill audits a repo's scaffold health and security posture in two phases: Artifact Audit (checks scaffold files are present, version numbers consistent across manifests, CHANGELOG fresh, ROADMAP → DECISIONS integrity intact) followed by a Security Scan (secrets exposure, gitignore completeness, overly broad agent permissions, dependency CVEs, sensitive files in git history, dependency pinning, custom registry overrides, submodule URL drift, MCP server external URLs).
+
+Mechanical zero-judgment fixes — version number mismatches across manifest files, missing standard `.gitignore` entries — are applied silently. Everything else surfaces as a punch list and waits for user confirmation. Security patterns live in `references/security-checklist.md` so they can grow independently. Supply chain live threat intelligence (OSV/NVD queries, breach report cross-referencing) is noted on the ROADMAP as the natural next evolution of the security scan phase. See Decision 013.
+
 ## 2026-04-22 — v0.5.0: AGENTS.md canon and cross-host scaffold output
 
 Shifted the plugin and the scaffold it generates to a compatibility-layer model. `AGENTS.md` is now the canonical agent instruction file for both this repo and newly scaffolded repos, while `CLAUDE.md` becomes a thin wrapper for Claude-family hosts. This aligns the scaffold with the same cross-host pattern now used across montymerlinHQ: one source of truth, host-specific aliases only where needed.

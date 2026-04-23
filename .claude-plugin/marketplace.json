@@ -8,7 +8,7 @@
       "name": "agentic-scaffold",
       "source": "./",
       "description": "Scaffold agentic best practices into any repo. Generates AGENTS.md as the canonical instruction file, a CLAUDE.md compatibility wrapper, README.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and adaptive editor configs.",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "author": {
         "name": "Monty Merlin"
       },

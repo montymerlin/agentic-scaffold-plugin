@@ -4,6 +4,27 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 013: Add repo-audit skill — scaffold health and security audit (2026-04-23)
+
+**Status:** Accepted
+**Date:** 2026-04-23
+
+**Context:** The `agentic-scaffold:init` skill creates scaffold files. There was no corresponding skill to *check* those files stay fresh and consistent after a repo evolves — no way to catch a stale CHANGELOG, a version number drift across manifests, or a ROADMAP item marked `decided` without a matching Decision entry. A gap also existed on the security side: no lightweight agent-runnable scan for secrets, overly broad permissions, or supply chain risks.
+
+**Decision:** Add `agentic-scaffold:repo-audit` as the third skill in this plugin. Two-phase design: Artifact Audit (scaffold freshness and consistency) then Security Scan (secrets, permissions, supply chain). Security patterns live in `references/security-checklist.md` so they can grow independently without modifying the skill logic. Mechanical zero-judgment fixes (version number mismatches, missing standard `.gitignore` entries) are applied silently; everything else surfaces as a punch list with proposed actions.
+
+**Consequences:**
+- Plugin now covers the full scaffold lifecycle: init → logchange → repo-audit
+- `finishing-a-development-branch` (superpowers) gains a documented optional integration point
+- Security checklist is independently expandable as new patterns emerge
+- Live threat intelligence (querying OSV/NVD, cross-referencing breach reports) is noted on the ROADMAP as the natural v2 evolution
+
+**Alternatives Considered:**
+- Encode the audit inside `finishing-a-development-branch` only — catches it at the right moment but doesn't support on-demand use or cross-repo health checks
+- Separate `security-audit` skill — cleaner boundaries but adds a skill slot and splits a natural two-phase workflow that users invoke together
+
+---
+
 ## Decision 001: Standalone plugin (not integrated into superpowers-cowork)
 
 **Status:** Accepted
