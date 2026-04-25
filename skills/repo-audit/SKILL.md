@@ -213,9 +213,97 @@ grep -E '"url"|"host"|"endpoint"' .claude/settings.json .claude/settings.local.j
 
 Flag any MCP server configs pointing to non-localhost / non-127.0.0.1 URLs as ⚠️ — potential prompt injection surface.
 
-## Step 4: Report
+## Step 4: Repo-specific audit
 
-Present results as two separate punch lists. Format:
+After completing the standard checks above, look for a repo-specific companion audit skill:
+
+```bash
+ls .agents/skills/*:repo-audit/SKILL.md 2>/dev/null
+```
+
+**If one or more local skills exist:**
+
+1. Load and run all checks defined in each. (Multiple matches is rare but allowed — run them all.)
+2. Report findings in the Step 5 report under a `## Local audit skill` subsection, using the same ✅/⚠️/❌ convention as the standard sections.
+3. Evaluate whether the local skill itself is stale. Flag it (⚠️) if:
+   - New tooling, scripts, hooks, plugin manifests, or sibling skills have appeared since the local skill was last touched
+   - New project directories have appeared that the skill doesn't reference
+   - Any of its checks are now redundant with the standard audit
+
+```bash
+for skill_path in $(ls .agents/skills/*:repo-audit/SKILL.md 2>/dev/null); do
+  skill_mtime=$(git log -1 --format="%ct" -- "$skill_path" 2>/dev/null)
+  [ -z "$skill_mtime" ] && continue
+  infra_changes=$(git log --since="@$skill_mtime" --name-only --pretty=format: -- \
+    .scripts/ .githooks/ .agents/ .claude/ .claude-plugin/ '*.plugin/skills/' 2>/dev/null \
+    | sort -u | grep -c .)
+  echo "Local skill: $skill_path (last touched: $(date -r "$skill_mtime" '+%Y-%m-%d' 2>/dev/null))"
+  echo "Infra/script/skill changes since: $infra_changes"
+done
+```
+
+**If no local skill exists:**
+
+Offer to create one. Explain the concept: it captures repo-specific health checks the generic scaffold audit doesn't cover — frontmatter patterns, corpus link integrity, project structure conventions, custom scripts, etc.
+
+Infer the namespace:
+1. Reuse the prevailing prefix from existing `.agents/skills/*:*/` entries (e.g. `bw:`, `myproject:`).
+2. If `.agents/skills/` doesn't exist or has no namespaced entries, fall back to the repo directory's basename, lowercased and hyphenated.
+3. Confirm the namespace with the user before scaffolding — it's sticky.
+
+If the user agrees, scaffold `.agents/skills/<namespace>:repo-audit/SKILL.md` with this skeleton (mirrors the placeholder style used by `agentic-scaffold:init` — gives the user something concrete to edit rather than blank sections):
+
+````markdown
+---
+name: <namespace>:repo-audit
+description: >
+  Repo-specific audit checks that complement agentic-scaffold:repo-audit. Use when
+  running a full repo audit or when explicitly invoked.
+---
+
+# <namespace>:repo-audit
+
+Repo-specific health checks for this repo. Invoked by `agentic-scaffold:repo-audit`
+after the standard scaffold and security checks complete. Can also be run standalone.
+
+## Step 1: Corpus / content checks
+
+<!-- Frontmatter consistency, link integrity, content structure, etc. -->
+
+```bash
+# Example: check that all markdown files in <corpus dir> have required frontmatter keys
+```
+
+## Step 2: Custom script health
+
+<!-- Anything in .scripts/ worth validating: shellcheck, dry-run, version pinning, etc. -->
+
+```bash
+# Example
+```
+
+## Step 3: Project structure consistency
+
+<!-- Per-project sub-directory patterns specific to this repo -->
+
+```bash
+# Example
+```
+
+## Step 4: After completing checks
+
+If this skill was invoked by `agentic-scaffold:repo-audit`, **stop here** — the parent
+audit owns the audit-log writeback and will include findings from this skill in its
+report.
+
+If running standalone, append a row to the `## Audit Log` table at the bottom of
+`CHANGELOG.md` (create the section if absent) following the format defined in
+`agentic-scaffold:repo-audit` Step 5.
+````
+
+## Step 5: Report
+
+Present results as two separate punch lists (plus a `## Local audit skill` subsection if Step 4 ran a local skill). Format:
 
 ```
 ## Artifact Audit
@@ -240,5 +328,27 @@ After presenting the report:
 1. List any silent fixes already applied
 2. For ⚠️ and ❌ items, ask which the user wants to address now vs note for later
 3. For CHANGELOG staleness, offer to invoke `agentic-scaffold:logchange` immediately
+4. After fixes are confirmed (applied, deferred, or dismissed), append a single row to the `## Audit Log` section at the bottom of `CHANGELOG.md`. This **always** runs — even if the audit was clean, even if the user dismissed every finding — because absence of a row is ambiguous (was it clean, or was the audit skipped?).
+
+   **Skip the writeback only if** `CHANGELOG.md` doesn't exist. In that case, suggest running `agentic-scaffold:init` first and do not create `CHANGELOG.md` mid-audit.
+
+   **If the section doesn't exist yet, create it at the bottom of the file:**
+
+   ```markdown
+   ## Audit Log
+
+   Lightweight record of when full repo audits were run and what was fixed. Detail lives in git log.
+
+   | Date       | Commit  | Notes                                              |
+   |------------|---------|----------------------------------------------------|
+   | YYYY-MM-DD | abc1234 | One-sentence summary of what was found and fixed.  |
+   ```
+
+   - **Date** comes from `$(date +%Y-%m-%d)` — don't infer from conversation context.
+   - **Commit** is the short SHA of `HEAD` at audit time: `git rev-parse --short HEAD`. Lets readers run `git log <prev row commit>..<this row commit>` to see what changed between audits.
+   - **Notes** is one sentence covering both standard and local-skill findings combined. If clean, write something like "Clean audit, no issues found."
+   - Running the audit twice in one day produces two rows — don't dedupe by date. Each run is a discrete event.
+   - New rows can go most-recent-first (top) or appended (bottom) — either is fine as long as the log grows over time. Match whichever direction the existing table uses.
+   - **Ownership when a local sub-skill is invoked:** the parent audit (this skill) owns the writeback. Do not let the local skill add its own row in the same run.
 
 **Do not write any fixes until the user approves** — except the silent auto-fix category defined in Step 2b.
