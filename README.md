@@ -150,31 +150,12 @@ These principles guide both the scaffold itself and the projects it generates. E
 
 ## Installation
 
-### Claude Code CLI
+See **[SETUP.md](./SETUP.md)** for full details across Cowork, Claude Code, Codex, Cursor, and other hosts.
 
-```bash
-claude plugins install github.com/montymerlin/agentic-scaffold-plugin
-```
-
-### Claude Desktop (Cowork)
-
-Install the plugin from the marketplace or package the repo for upload:
-
-```bash
-zip -r agentic-scaffold.plugin . -x ".git/*" ".DS_Store"
-```
-
-### Codex
-
-```bash
-bash scripts/install_codex_skills.sh --from-github
-```
-
-This installs global Codex skills that point back to a vendor clone of the same repo.
-
-### Other Hosts
-
-Clone the repository and load the skills according to your host's skill or plugin conventions. The workflows are markdown-first and have no runtime dependencies.
+**TL;DR**:
+- **Claude Code CLI**: `claude plugins install github.com/montymerlin/agentic-scaffold-plugin`
+- **Cowork**: Upload `agentic-scaffold-<version>.plugin` from `ops/plugins/_dist/`
+- **Codex**: `bash scripts/install_codex_skills.sh --from-github`
 
 ## Repo Conventions
 

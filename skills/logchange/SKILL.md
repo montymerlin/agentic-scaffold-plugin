@@ -1,5 +1,5 @@
 ---
-name: agentic-scaffold:logchange
+name: logchange
 description: >
   Log high-level changes to a CHANGELOG.md file in the current working directory. Use when
   the user says "logchange", "log change", "update changelog", "what's changed", "record

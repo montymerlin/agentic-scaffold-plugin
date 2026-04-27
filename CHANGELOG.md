@@ -4,6 +4,16 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-04-27 — Plugin audit pass + skill name fix + version drift
+
+Audited the plugin against `/create-cowork-plugin` standards. Fixed the namespaced skill `name:` frontmatter bug — all 3 SKILL.md files had `name: agentic-scaffold:<skill>` which caused doubled runtime IDs at install time. Fixed to bare dir names: `init`, `logchange`, `repo-audit`.
+
+Also fixed AGENTS.md version drift (said 0.5.0, plugin.json was already at 0.6.0); updated the Canonical Structure tree to include `repo-audit/` skill (added in v0.6.0), `SETUP.md`, and `.gitignore`. Added `.gitignore`. Added `SETUP.md` § "Quick Install (for AI agents)" decision tree and a 3-option Cowork packaging pattern. Restructured the Claude Code CLI section as global-vs-local with explicit user question. Flagged: `.claude/settings.local.json` line 6 still says "Read CLAUDE.md" but AGENTS.md is canonical — needs manual update (path-protected from session).
+
+## 2026-04-27 — Cowork packaging: SETUP.md as setup canon
+
+Added `SETUP.md` as the single source of truth for install pathways and host compatibility. `README.md`'s installation section was trimmed to a brief pointer at SETUP.md. The plugin is now packaged as `agentic-scaffold-0.6.0.plugin` in the workspace's `ops/plugins/_dist/` directory using the new `cowork-plugin-packager` skill at `.agents/skills/cowork-plugin-packager/`. No skill or behavior changes — packaging-and-docs only.
+
 ## 2026-04-23 — v0.6.0: repo-audit skill — scaffold health and security audit
 
 Added `repo-audit` as the third skill in this plugin (`agentic-scaffold:repo-audit`). The skill audits a repo's scaffold health and security posture in two phases: Artifact Audit (checks scaffold files are present, version numbers consistent across manifests, CHANGELOG fresh, ROADMAP → DECISIONS integrity intact) followed by a Security Scan (secrets exposure, gitignore completeness, overly broad agent permissions, dependency CVEs, sensitive files in git history, dependency pinning, custom registry overrides, submodule URL drift, MCP server external URLs).

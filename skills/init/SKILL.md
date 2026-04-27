@@ -1,5 +1,5 @@
 ---
-name: agentic-scaffold:init
+name: init
 description: >
   Scaffold agentic best practices into a repo or project folder. Use when the
   user asks to "init", "scaffold", "set up repo", "agentic setup", "bootstrap",

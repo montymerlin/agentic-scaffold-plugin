@@ -6,7 +6,7 @@ Canonical repo instructions for `agentic-scaffold-plugin`.
 
 - **Name:** agentic-scaffold
 - **Type:** Host-agnostic scaffold and skills repo with Claude plugin packaging compatibility
-- **Version:** 0.5.0
+- **Version:** 0.6.0
 - **Stack:** Markdown templates + SKILL.md workflow specifications + lightweight install scripts
 
 ## Canonical Structure
@@ -20,8 +20,11 @@ agentic-scaffold-plugin/
 │   ├── init/
 │   │   ├── SKILL.md
 │   │   └── references/
-│   └── logchange/
-│       └── SKILL.md
+│   ├── logchange/
+│   │   └── SKILL.md
+│   └── repo-audit/
+│       ├── SKILL.md
+│       └── references/
 ├── templates/
 │   ├── AGENTS.md.tmpl
 │   ├── CLAUDE.md.tmpl
@@ -37,11 +40,23 @@ agentic-scaffold-plugin/
 │   └── update_codex_skills.sh
 ├── AGENTS.md                # Canonical repo instructions
 ├── CLAUDE.md                # Claude compatibility wrapper
+├── SETUP.md                 # Canonical install + compatibility reference (all hosts)
 ├── CHANGELOG.md
 ├── DECISIONS.md
 ├── ROADMAP.md
-└── README.md
+├── README.md
+├── .gitignore
+└── .cursorrules             # Cursor-specific behavior config
 ```
+
+## Packaging for Cowork
+
+Cowork install is via a `.plugin` zip uploaded through Claude Desktop. Two paths:
+
+1. **Use the `cowork-plugin-packager` skill** in the montymerlinHQ workspace — runs validation, packaging, and verification. Produces `agentic-scaffold-<version>.plugin` in `ops/plugins/_dist/`.
+2. **Build by hand** — see `SETUP.md` § "Cowork (Claude Desktop App)" for the raw `zip` command and verification steps. Use this when working outside montymerlinHQ.
+
+`SETUP.md` is the single source of truth for install pathways across Cowork, Claude Code CLI, Codex, Cursor/VS Code, and Agent SDK — read it before changing install or packaging behavior.
 
 ## Canonical Rules
 

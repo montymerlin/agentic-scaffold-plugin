@@ -1,5 +1,5 @@
 ---
-name: agentic-scaffold:repo-audit
+name: repo-audit
 description: >
   Audit a repo's scaffold health and security posture. Use when the user asks to
   "audit", "check scaffold", "repo audit", "check repo health", "verify reasoning
