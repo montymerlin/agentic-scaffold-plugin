@@ -4,6 +4,44 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 014: Adopt the three-layer instruction pattern as the plugin's core mental model
+
+**Status:** Accepted
+**Date:** 2026-05-18
+
+**Context:** Current best practice across agent-coding platforms converges on a three-layer instruction pattern: root rules (project-wide), folder-scoped rules (specialization for "when working in here"), and templates as exemplars (concrete shapes agents copy and imitate rather than reconstruct from rules). Anthropic's Claude Code memory docs document nested `CLAUDE.md` discovery with lazy-loading; OpenAI's Codex AGENTS.md guide documents the same nesting pattern with eager loading from project root down to cwd; the cross-host agents.md spec stewarded by the Linux Foundation's Agentic AI Foundation is used by 60,000+ open-source projects; GitHub's analysis of 2,500 real `AGENTS.md` files found that concrete templates and decision tables drive adherence more than abstract rule lists, summarised as *"language models are pattern-followers more than rule-followers."*
+
+The plugin currently models layer one only. Every scaffold it generates is flat. This was acceptable when the ecosystem was younger, but it now lags the documented best practice from both major hosts and from the open spec. The "Monorepo support" item in the ROADMAP has been blocked at `idea` precisely because the folder-level scaffolding primitive doesn't exist yet.
+
+**Decision:** Adopt the three-layer pattern as the plugin's core mental model. This single decision authorizes the following coordinated changes (each can be implemented independently but they share this rationale):
+
+1. **New principle in `references/design-principles.md`** — *"Rules live at the narrowest scope where they apply"* — with the four primary sources cited.
+2. **Updated `templates/AGENTS.md.tmpl`** — Design Principles section acknowledges the layered model; footer cites the three-layer pattern.
+3. **Updated `skills/init/SKILL.md`** — frames the generated scaffold as the *root* of an optionally layered structure, with the new `nest` skill as the path to deeper layers.
+4. **New `nest` skill** at `skills/nest/SKILL.md` — scaffolds folder-level `AGENTS.md` + `TEMPLATE.md` pairs for a specified subdirectory.
+5. **New templates**: `templates/folder-AGENTS.md.tmpl` (folder-scoped instructions stub) and `templates/TEMPLATE.md.tmpl` (the exemplar shape).
+6. **Extended `repo-audit`** — three new checks: root AGENTS.md length (>200 lines flags bloat), content folders without AGENTS.md (suggestion only), duplication between root and folder AGENTS.md (rule restatement flag).
+7. **`.claude/rules/` as a new adaptive scaffolding option** — Claude-Code-specific complement to nested AGENTS.md, generated only when Claude Code is detected and the repo would benefit from path-scoped rules.
+
+**Consequences:**
+- The plugin's mental model shifts from "flat scaffold" to "layered scaffold whose root is what we generate by default." Users opt into deeper layers when needed; nothing forced.
+- "Monorepo support" (ROADMAP `idea`) becomes tractable. A monorepo is now just a repo with intentional nested AGENTS.md at each workspace, and the `nest` skill is the primitive that composes into monorepo workflows.
+- The audit skill begins measuring the *pattern* — root file bloat, duplication across layers, folders that have grown enough to deserve their own rules — rather than only file presence.
+- Two non-obvious caveats need to flow into generated documentation: Claude Code lazy-loads nested files (they enter context only when the agent reads a file inside the folder); Codex loads them eagerly from root down to cwd. Both behaviours are documented and valid; users should know which they're working with.
+- For rules that must fire regardless of which folder the agent is in, `.claude/rules/*.md` with `paths:` frontmatter is the Claude-specific complement to nested AGENTS.md. The plugin documents both but defaults to the cross-host nested-AGENTS.md mechanism.
+- All changes ship together as a single minor version bump (v0.7.0). They're coupled by this decision and consumed together.
+
+**Alternatives Considered:**
+- *Keep the scaffold flat* — increasingly inconsistent with what Anthropic, OpenAI, and the agents.md spec all document as best practice. Misses the leverage the new primitives provide; leaves monorepo support blocked indefinitely.
+- *Make `.claude/rules/` the primary mechanism instead of nested AGENTS.md* — Claude-specific. Loses cross-host portability. Better as a complement to the nested-AGENTS.md pattern than a replacement for it.
+- *Build full monorepo support directly rather than via `nest`* — premature; `nest` is the right primitive to compose monorepo support on top of. Defer the monorepo work to a follow-up release that builds on this one.
+- *Scaffold the deeper layers automatically during `/init`* — violates progressive disclosure (Decision 003). Most projects don't need folder-level rules on day one; forcing them in introduces structure users haven't earned the need for. Better to provide `nest` as an opt-in tool users invoke when the project has grown enough to warrant it.
+
+<!-- Sources: code.claude.com/docs/en/memory · developers.openai.com/codex/guides/agents-md · agents.md · github.blog (2,500-repo analysis) -->
+<!-- Source-grounded defaults principle: Decision 008 -->
+
+---
+
 ## Decision 013: Add repo-audit skill — scaffold health and security audit (2026-04-23)
 
 **Status:** Accepted

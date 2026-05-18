@@ -8,11 +8,11 @@ Where this plugin could go. Items here are aspirations, not commitments. When an
 
 ## Near-term
 
-No active near-term items. See Future explorations for what's next.
+- **Monorepo support — now unblocked by `nest`** — Workspace-aware scaffolding for monorepos. With `agentic-scaffold:nest` (Decision 014) the folder-level scaffolding primitive exists; monorepo support is now a composition of workspace detection (`pnpm-workspace.yaml`, `lerna.json`, Cargo workspace, Go modules, etc.) on top of `nest`. Promoted from `idea` because the blocker is resolved. `status: active`
 
 ## Future explorations
 
-- **Monorepo support** — Workspace-aware scaffolding with shared and per-package conventions. Would need detection of workspaces (npm, pnpm, Cargo, Go modules). `status: idea`
+- **Audit shape-drift detection** — Best-effort check inside `repo-audit` that samples sibling files of a `TEMPLATE.md` and reports drift between the template's structure and the actual files. Heuristic, not strict. Builds on the layered audit checks introduced in Decision 014. `status: idea`
 - **API project patterns** — OpenAPI spec pointers, endpoint documentation conventions, request/response examples structure. `status: idea`
 - **Knowledge garden scaffold** — Adapted structure for personal knowledge management systems (journal, readings, wisdom directories). Different from code repo patterns. `status: idea`
 - **Live dependency threat intelligence** — Scheduled agent queries OSV/NVD for installed package CVEs and cross-references configured tools/services against recent breach reports. Surfaces "you're using X and X was compromised last week." Requires network access and periodic re-running — natural v2 evolution of the `repo-audit` security scan phase. `status: idea`
@@ -44,3 +44,4 @@ No active near-term items. See Future explorations for what's next.
 - **Dual-distribution packaging with marketplace.json** — → Decision 011. `status: decided`
 - **Canonicalize scaffold instructions around AGENTS.md** — → Decision 012. `status: decided`
 - **`/scaffold-check` audit skill** — → Decision 013. `status: decided`
+- **Three-layer instruction pattern as core mental model** — → Decision 014. `status: decided`

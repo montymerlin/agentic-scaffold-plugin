@@ -15,11 +15,14 @@ description: >
 
 Scaffold agentic best practices into any project folder. Generates canonical repo guidance with `AGENTS.md`, a `CLAUDE.md` compatibility wrapper, README.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and adaptive files based on tooling and team setup.
 
+What this skill generates is the **root layer** of an optionally layered instruction tree. Most projects start here and never need more. Projects that grow folder-specific conventions (workshop modules with a shared shape, research notes with a citation format, monorepo packages with package-specific rules) can scaffold additional layers with the [`nest` skill](../nest/SKILL.md). See Decision 014 and Principle 7 in `references/design-principles.md` for the rationale.
+
 **Core principles:**
 - Progressive disclosure — start with what's needed, add complexity when earned
 - Dual-audience documentation — README for humans, AGENTS.md for agents
 - Adaptive detection — infer what you can, ask only what you must
 - Source-grounded defaults — every template choice traces to documented sources
+- Rules live at the narrowest scope where they apply — generate root rules here; suggest `nest` when folder-specific rules emerge
 
 > **Design rationale & invariants:** Set `AGENTIC_SCAFFOLD_ROOT="${AGENTIC_SCAFFOLD_ROOT:-${CLAUDE_PLUGIN_ROOT:-${CODEX_HOME:-$HOME/.codex}/vendor_imports/repos/agentic-scaffold-plugin}}"`. Read `${AGENTIC_SCAFFOLD_ROOT}/skills/init/references/design-principles.md` when generating AGENTS.md, modifying templates, logging decisions, or defending architectural choices to the user. The workflow below encodes *what* to do; that file encodes *why* and the invariants to preserve.
 
@@ -194,6 +197,7 @@ For each template file, read its contents and replace all `{{variable}}` placeho
 |------|----------|-----------------|
 | .cursorrules | cursorrules.tmpl | User uses Cursor (detected or stated) |
 | .claude/settings.local.json | claude-settings.json.tmpl | User uses Claude Code (detected or stated) |
+| .claude/rules/example.md | claude-rules-example.md.tmpl | User uses Claude Code AND the project has subdirectories with strong shared shape (e.g., content folders), suggesting path-scoped rules would help. Generate as a teaching seed only; the user should adapt or delete it. |
 | CONTRIBUTING.md | CONTRIBUTING.md.tmpl | Team project (detected or stated) |
 
 **Adaptive sections (injected into AGENTS.md when applicable):**
@@ -230,6 +234,7 @@ Here's what I'll scaffold for {{project_name}}:
 **Adaptive files (based on your setup):**
 - .cursorrules — Cursor IDE conventions for {{stack}}
 - .claude/settings.local.json — Claude Code project config
+- .claude/rules/example.md — Path-scoped rule stub (Claude Code only, when applicable); delete or adapt it
 
 **Adaptive sections in AGENTS.md:**
 - Versioning conventions — single source of truth, semver, git tags, pre-commit check
@@ -272,6 +277,7 @@ After the core scaffold is written:
 - **If solo mode:** "CONTRIBUTING.md is available if you later add collaborators — just run /init again."
 - **If no git:** "Consider initializing git (`git init`) to get the most from your decision and changelog history."
 - **For any project:** "This scaffold follows progressive disclosure — start with these files and add more structure as your project grows. You can re-run /init anytime to fill gaps."
+- **If the project already has content folders with files of similar shape (modules, sessions, research notes, packages):** "If files in `<folder>/` share a structure that's worth pinning down, the `nest` skill can scaffold a folder-level `AGENTS.md` plus a `TEMPLATE.md` agents can imitate. Recommended once a folder has more than a handful of related files."
 
 ## Edge Cases
 

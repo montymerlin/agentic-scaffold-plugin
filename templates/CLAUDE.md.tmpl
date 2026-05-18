@@ -1,12 +1,11 @@
 # CLAUDE.md — {{project_name}}
 
-Canonical agent instructions for this project live in `AGENTS.md`.
+Before doing anything else in this repo, Read `AGENTS.md` in full. It is the canonical agent instruction set for this project; this file is a thin compatibility wrapper for Claude-family hosts and assumes you have read `AGENTS.md` first.
 
-This file exists as a compatibility layer for Claude-family hosts.
+In Claude Code (CLI), an `@AGENTS.md` directive will expand recursively. In Cowork (desktop), that expansion is not reliable, so the explicit imperative above is required — do not skip it.
 
-When working in this repo:
+## Compatibility notes
 
-- Read `AGENTS.md` first
 - Treat `AGENTS.md` as the source of truth
 - Keep Claude-only notes here minimal
 - Update `AGENTS.md` when conventions change; update this file only if the compatibility guidance also needs to change

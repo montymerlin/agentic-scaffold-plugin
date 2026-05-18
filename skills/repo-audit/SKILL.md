@@ -13,7 +13,12 @@ description: >
 
 Audit a repo's scaffold health and security posture in two sequential phases: **Artifact Audit** then **Security Scan**. Read-only except for mechanical zero-judgment fixes (version number mismatches, missing standard `.gitignore` entries, etc.) which are applied silently. Everything else surfaces as a punch list with proposed actions and waits for confirmation.
 
-**Relation to `agentic-scaffold:init`:** `init` creates missing scaffold files. `repo-audit` checks that existing files are fresh, consistent, and secure.
+**Relation to the other skills in this plugin:**
+- `init` creates the root scaffold (project-wide instructions)
+- `nest` creates folder-level scaffolds (folder-scoped instructions + templates)
+- `repo-audit` checks that all of the above stay fresh, consistent, layered correctly, and secure
+
+The Artifact Audit now also evaluates the *layered* health introduced by Decision 014: root AGENTS.md length, duplication between root and folder-level AGENTS.md, and content folders that have grown enough to warrant nesting.
 
 > **Security reference:** Set `AGENTIC_SCAFFOLD_ROOT="${AGENTIC_SCAFFOLD_ROOT:-${CLAUDE_PLUGIN_ROOT:-${CODEX_HOME:-$HOME/.codex}/vendor_imports/repos/agentic-scaffold-plugin}}"`. Read `${AGENTIC_SCAFFOLD_ROOT}/skills/repo-audit/references/security-checklist.md` during the Security Scan phase for the full pattern lists, gitignore baseline, and OWASP LLM Top 10 reference.
 
@@ -119,6 +124,77 @@ done
 ```
 
 Missing canonical sections → suggest re-running `agentic-scaffold:init` to fill gaps.
+
+### 2f. Root AGENTS.md length
+
+Anthropic's Claude Code memory docs state that files over 200 lines reduce instruction adherence — Claude scans long files less reliably. The plugin's own design principle (see Principle 1 in `skills/init/references/design-principles.md`) targets ~150 lines as a softer budget.
+
+```bash
+agents_lines=$(wc -l < AGENTS.md 2>/dev/null | tr -d ' ')
+if [ "$agents_lines" -gt 200 ]; then
+  echo "⚠️ AGENTS.md is $agents_lines lines (>200 threshold) — adherence drops on long files"
+elif [ "$agents_lines" -gt 150 ]; then
+  echo "ℹ️ AGENTS.md is $agents_lines lines (>150 soft target) — consider trimming"
+else
+  echo "✅ AGENTS.md is $agents_lines lines"
+fi
+```
+
+If over 200 lines, surface this with the suggestion: "Consider moving folder-specific rules into nested `AGENTS.md` files using `agentic-scaffold:nest`. Keeping root focused improves adherence."
+
+### 2g. Nested instruction-file discovery
+
+Detect folder-level `AGENTS.md` files (and any `TEMPLATE.md` paired with them) and report the layered structure.
+
+```bash
+# Find all AGENTS.md files below root (excluding root itself)
+nested_agents=$(find . -mindepth 2 -name "AGENTS.md" -not -path "./.git/*" -not -path "./node_modules/*" 2>/dev/null)
+
+# Find all TEMPLATE.md files
+nested_templates=$(find . -mindepth 2 -name "TEMPLATE.md" -not -path "./.git/*" -not -path "./node_modules/*" 2>/dev/null)
+
+[ -n "$nested_agents" ] && echo "Nested AGENTS.md files:" && echo "$nested_agents" | sed 's/^/  /'
+[ -n "$nested_templates" ] && echo "Nested TEMPLATE.md files:" && echo "$nested_templates" | sed 's/^/  /'
+[ -z "$nested_agents" ] && [ -z "$nested_templates" ] && echo "ℹ️ No nested instruction files — flat scaffold"
+```
+
+This is informational, not a failure. Surface it so the next checks (2h, 2i) have context.
+
+### 2h. Folder-level AGENTS.md vs root duplication
+
+For each nested `AGENTS.md`, check whether its second-level headings appear in root. Restated rules across layers create silent conflicts and indicate that root probably has folder-specific content that should be moved down.
+
+```bash
+# Extract root's second-level headings
+root_headings=$(grep -E '^##[^#]' AGENTS.md 2>/dev/null | sort -u)
+
+for folder_file in $nested_agents; do
+  folder_headings=$(grep -E '^##[^#]' "$folder_file" 2>/dev/null | sort -u)
+  duplicated=$(comm -12 <(echo "$root_headings") <(echo "$folder_headings") | head -5)
+  if [ -n "$duplicated" ]; then
+    echo "⚠️ $folder_file shares headings with root AGENTS.md (potential duplication):"
+    echo "$duplicated" | sed 's/^/    /'
+  fi
+done
+```
+
+If duplication is detected, suggest reviewing whether the folder file is restating root rules (it should specialize, not duplicate) and whether the root file should drop folder-specific content.
+
+### 2i. Content folders without AGENTS.md
+
+Heuristic: a subfolder containing five or more markdown files of similar shape is a candidate for nested rules. Surface as a soft suggestion, not a failure.
+
+```bash
+for d in $(find . -maxdepth 2 -mindepth 1 -type d -not -path "./.git*" -not -path "./node_modules*" -not -path "./.claude*" -not -path "./.agents*" 2>/dev/null); do
+  md_count=$(find "$d" -maxdepth 1 -name "*.md" -not -name "AGENTS.md" -not -name "TEMPLATE.md" -not -name "README.md" 2>/dev/null | wc -l | tr -d ' ')
+  has_agents=$([ -f "$d/AGENTS.md" ] && echo "yes" || echo "no")
+  if [ "$md_count" -ge 5 ] && [ "$has_agents" = "no" ]; then
+    echo "ℹ️ $d has $md_count markdown files but no AGENTS.md — candidate for /nest"
+  fi
+done
+```
+
+The threshold (5) is a heuristic. Smaller folders with a strong shared shape can also benefit from nesting; folders with mixed content shouldn't be forced to nest. Treat the output as a prompt for discussion, not a directive.
 
 ## Step 3: Security Scan
 
@@ -309,8 +385,12 @@ Present results as two separate punch lists (plus a `## Local audit skill` subse
 ## Artifact Audit
 
 ✅ All six scaffold files present
-✅ v0.6.0 consistent across plugin.json, marketplace.json, and CHANGELOG
+✅ v0.7.0 consistent across plugin.json, marketplace.json, and CHANGELOG
+✅ AGENTS.md is 142 lines (within 150-line soft target)
+✅ Nested AGENTS.md detected in modules/ (paired with TEMPLATE.md)
 ⚠️  CHANGELOG stale — 3 commits since last update → run /logchange
+⚠️  modules/AGENTS.md shares the heading "## Naming" with root — possible duplication, review
+ℹ️  research/ has 8 markdown files but no AGENTS.md — candidate for /nest
 ❌  ROADMAP item "scaffold-check audit skill" marked `decided` but no matching Decision entry
 
 ## Security Scan

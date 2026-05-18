@@ -4,6 +4,26 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-05-18 — v0.7.0: Three-layer instruction pattern as the core mental model
+
+Adopted the three-layer instruction pattern (root rules → folder-level `AGENTS.md` → templates as exemplars) as the plugin's core mental model. The plugin previously modelled only the root layer; every scaffold it generated was flat. This release brings the plugin into alignment with what Anthropic's Claude Code memory docs, OpenAI's Codex AGENTS.md guide, and the cross-host [agents.md spec](https://agents.md/) (used by 60,000+ open-source projects) all document as best practice. GitHub's analysis of 2,500 real `AGENTS.md` files informed the templates-as-exemplars piece — *"language models are pattern-followers more than rule-followers"* is the clearest articulation of why concrete templates beat abstract rule lists.
+
+Decision 014 authorizes the full coordinated change. Seven concrete pieces shipped together:
+
+- **New principle in `design-principles.md`** — *"Rules live at the narrowest scope where they apply"* — Principle 7, sourced from the four primary references above.
+- **`templates/AGENTS.md.tmpl` updated** — Design Principles section now teaches the layered model; footer cites the three-layer pattern. Fixed stale `v0.5.0` version reference (caught by Decision 013's audit logic).
+- **`skills/init/SKILL.md` updated** — Frames the generated scaffold as the *root* of an optionally layered structure. Step 7 now suggests `nest` when content folders are detected.
+- **New `nest` skill** (`skills/nest/SKILL.md`) — Scaffolds folder-level `AGENTS.md` plus a `TEMPLATE.md` exemplar inside a specified subdirectory. Reads root `AGENTS.md` before generating so the folder file specializes rather than duplicates. Surfaces the Claude Code lazy-load vs Codex eager-load distinction in every file it produces.
+- **Two new templates** — `templates/folder-AGENTS.md.tmpl` (folder-scoped instructions) and `templates/TEMPLATE.md.tmpl` (the exemplar shape, generic enough to flex across folder kinds).
+- **`repo-audit` extended** with three new Artifact Audit checks: 2f (root AGENTS.md length — flag >200 lines, info >150), 2g (nested instruction-file discovery), 2h (root↔folder duplication detection by shared heading), 2i (content folders without AGENTS.md — soft suggestion). The audit now measures the layered pattern, not just root-file presence.
+- **`.claude/rules/example.md` as a new adaptive scaffolding option** — Claude-Code-specific complement to nested `AGENTS.md`, generated when Claude Code is detected and the repo would benefit from path-scoped rules. New template at `templates/claude-rules-example.md.tmpl`.
+
+Knock-on consequences logged in ROADMAP: **Monorepo support** moved from `idea` to `active` — the blocker was the missing folder-level scaffolding primitive, which `nest` now provides. A monorepo is now just a repo with intentional nested `AGENTS.md` at each workspace, and `nest` composes into that workflow.
+
+README's "The Layered Pattern" section and SETUP's opening line teach the new model to users. The plugin now does what it teaches.
+
+---
+
 ## 2026-04-27 — Plugin audit pass + skill name fix + version drift
 
 Audited the plugin against `/create-cowork-plugin` standards. Fixed the namespaced skill `name:` frontmatter bug — all 3 SKILL.md files had `name: agentic-scaffold:<skill>` which caused doubled runtime IDs at install time. Fixed to bare dir names: `init`, `logchange`, `repo-audit`.

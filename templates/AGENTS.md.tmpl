@@ -65,11 +65,13 @@ These principles guide this project's evolution:
 
 4. **Convention over configuration** — Prefer consistent patterns over per-case configuration. When a pattern is established, follow it. When a new pattern is needed, log the decision.
 
+5. **Rules live at the narrowest scope where they apply** — This file holds project-wide rules. Rules that only apply inside a specific folder belong in that folder's `AGENTS.md`. Concrete shapes that files in a folder should imitate belong in a `TEMPLATE.md` alongside that folder's `AGENTS.md`. Both Anthropic's Claude Code and OpenAI's Codex honour this nested-instruction pattern; the cross-host [agents.md spec](https://agents.md/) documents it formally. If you find yourself adding folder-specific rules here, consider scaffolding a nested `AGENTS.md` instead — keeping this file focused improves adherence to the rules that do live here.
+
 ## References
 
 - [DECISIONS.md](DECISIONS.md) — Architectural decision log
 - [ROADMAP.md](ROADMAP.md) — Future directions and inspiration
 - [CHANGELOG.md](CHANGELOG.md) — Narrative change history
 
-<!-- Scaffold sources: Anthropic CLAUDE.md conventions, HumanLayer CLAUDE.md best practices guide, progressive disclosure (Krug; Nielsen Norman Group), convention over configuration (Rails/DHH), AGENTS.md canonical compatibility pattern -->
-<!-- Agentic Scaffold v0.5.0 | https://github.com/montymerlin/agentic-scaffold-plugin -->
+<!-- Scaffold sources: Anthropic CLAUDE.md conventions, HumanLayer CLAUDE.md best practices guide, progressive disclosure (Krug; Nielsen Norman Group), convention over configuration (Rails/DHH), AGENTS.md canonical compatibility pattern, three-layer instruction pattern (Anthropic memory docs + OpenAI Codex AGENTS.md guide + agents.md spec + GitHub 2,500-repo analysis) -->
+<!-- Agentic Scaffold v0.7.0 | https://github.com/montymerlin/agentic-scaffold-plugin -->

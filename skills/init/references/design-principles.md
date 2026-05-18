@@ -66,7 +66,23 @@ Every template choice traces to a documented source — not personal preference.
 - ROADMAP.md parking lot → agile practice (Aha! Roadmaps) + YAGNI (Martin Fowler)
 - Narrative CHANGELOG → adapted from keep-a-changelog, shifted to narrative style
 - Progressive disclosure → Steve Krug, Nielsen Norman Group, Anthropic Agent Skills
+- Three-layer instruction pattern → Anthropic Claude Code memory docs, OpenAI Codex AGENTS.md guide, agents.md cross-host spec, GitHub's 2,500-repo analysis
 
 **How to apply:**
 - When a user challenges a default ("why this format?"), cite the source rather than the preference
 - When adding new defaults (future versions), require a documented source — no undefended choices
+
+## 7. Rules live at the narrowest scope where they apply
+
+The generated scaffold is the *root layer* of a potentially layered instruction tree. Project-wide rules belong in root `AGENTS.md`. Rules that only apply inside a specific folder belong in that folder's `AGENTS.md`. Concrete shapes that files in a folder should imitate belong in a `TEMPLATE.md` alongside the folder's `AGENTS.md`. This layered model is documented as best practice by both Anthropic (Claude Code memory docs) and OpenAI (Codex AGENTS.md guide), and is honoured by the cross-host agents.md spec used by 60,000+ open-source projects.
+
+The rationale rests on three findings. First, root files load into every session, so every rule placed there competes with every other rule for the agent's attention and consumes tokens — keeping root tight improves adherence to the rules that do live there. Second, GitHub's analysis of 2,500 real `AGENTS.md` files found that *"language models are pattern-followers more than rule-followers"*: a concrete `TEMPLATE.md` an agent can copy and adapt produces more consistent output than a list of stylistic rules in prose. Third, scope-specific rules in a global file create silent conflicts as the project grows — moving them down keeps each scope self-consistent.
+
+**Source:** Anthropic's [Claude Code memory docs](https://code.claude.com/docs/en/memory), OpenAI's [Codex AGENTS.md guide](https://developers.openai.com/codex/guides/agents-md), the [agents.md spec](https://agents.md/) (Linux Foundation / Agentic AI Foundation), and [GitHub's analysis](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/) of 2,500 `AGENTS.md` files. Authorized by Decision 014.
+
+**How to apply:**
+- When generating root `AGENTS.md`, keep its conventions project-wide. If a rule references a specific folder or subsystem, that's a signal it belongs in a nested `AGENTS.md` instead. Suggest the `nest` skill.
+- When the user adds folder-specific rules to root, gently push back: "This rule only applies to `<folder>/` — consider scaffolding `<folder>/AGENTS.md` so root stays focused."
+- When the user describes the shape of files in a folder ("research notes always have these sections"), propose a `TEMPLATE.md` rather than describing the shape in `AGENTS.md`. Templates demonstrate; rules describe; the demonstration is what the agent imitates.
+- **Caveat to communicate.** Folder-level `AGENTS.md` is lazy-loaded in Claude Code (enters context only when the agent reads a file inside that folder) and eagerly loaded in OpenAI Codex (from project root down to cwd). When generating folder-level scaffolding, surface this distinction in the file itself so future readers — human or agent — know which timing applies to their host.
+- **Complement to know about.** For Claude Code specifically, `.claude/rules/*.md` with `paths:` frontmatter triggers on file pattern rather than directory location. Useful when a rule must fire regardless of cwd. Generate as an adaptive file when Claude Code is detected; document but don't force.
