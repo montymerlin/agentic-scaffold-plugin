@@ -4,6 +4,32 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 015: Add session-closeout skill — the end-of-session orchestrator
+
+**Status:** Accepted
+**Date:** 2026-05-20
+
+**Context:** The plugin scaffolds a repo's structure (`init`, `nest`) and maintains it (`logchange`, `repo-audit`), but nothing ties those skills together at the moment a work session ends — when unfinished to-dos, unlogged decisions, an un-updated changelog, and an unbuilt commit all need reconciling at once. A per-commit hook reminder (the pattern some repos use) fires at the wrong granularity and can only remind, never act. The need is a coherent, on-demand end-of-session pass.
+
+**Decision:** Add `session-closeout` as the plugin's fifth skill — its capstone. It is **dual-mode**: it *scaffolds* a repo-tailored `session-closeout.md` workflow into the target repo, and *runs* that workflow to close out a session. It is an **orchestrator** — the changelog step delegates to `logchange`, the consistency step to `repo-audit`, and the skill reconciles the remaining logging surfaces itself. It is **highly adaptive**: a detection pass (reusing `init` / `repo-audit` detection) determines which logging surfaces the target repo actually has, and the generated workflow contains only the relevant steps. **Git is a first-class conditional** — an agentically-scaffolded folder need not be a git repo, so the session-delta and commit steps are omitted entirely when git is absent. The skill ships a modular step-block library at `references/closeout-blocks.md` that the generator assembles from, and includes a staleness check that offers to re-scaffold when a repo gains surfaces its existing closeout doesn't cover.
+
+**Consequences:**
+- The plugin now covers the full session lifecycle: scaffold (`init` / `nest`) → maintain (`logchange` / `repo-audit`) → close out (`session-closeout`).
+- The generated `session-closeout.md` is plugin-independent — it works as a standing workflow file even where the plugin isn't installed, and the user can edit it.
+- `session-closeout`'s value scales with how much of the plugin a repo uses, and degrades gracefully (inline reminders) where sibling skills are absent.
+- A new skill is a minor version bump: v0.7.0 → v0.8.0.
+- The generated workflow can *recommend* a version bump but never performs one — version-bump remains a separate, heavier process, not yet built as its own skill.
+
+**Alternatives Considered:**
+- *A per-commit hook reminder* — fires on every commit (wrong granularity), can only print, cannot reconcile or commit. `session-closeout` supersedes this pattern for repos that adopt it.
+- *The skill runs the closeout directly, without scaffolding a file* — loses per-repo tailoring persistence, user-editability, and plugin-independence. Scaffolding a tailored artifact matches the plugin's identity.
+- *A single fixed closeout template* — fails the adaptivity requirement; a bare non-git folder and a mature multi-skill repo need very different closeouts.
+
+<!-- Sources: runbook/playbook pattern for AI agents (briantakita.me, runplaybooks.ai); Anthropic Agent Skills + agents.md convention landscape. -->
+<!-- Builds on Decision 014 (three-layer pattern) and the init/repo-audit detection. -->
+
+---
+
 ## Decision 014: Adopt the three-layer instruction pattern as the plugin's core mental model
 
 **Status:** Accepted

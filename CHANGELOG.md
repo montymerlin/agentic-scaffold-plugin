@@ -4,6 +4,16 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-05-20 — v0.8.0: session-closeout skill — the end-of-session orchestrator
+
+Added `session-closeout` as the plugin's fifth skill and capstone. Where `init` and `nest` scaffold a repo's structure and `logchange` and `repo-audit` maintain it, `session-closeout` ties them together at the moment a work session ends.
+
+The skill is dual-mode. On first use it **scaffolds** a `session-closeout.md` workflow into the target repo — a standing, editable, plugin-independent procedure. On later use it **runs** that workflow: surface unfinished to-dos (address / drop / defer to a handoff file), reconcile whatever logging surfaces the repo has, and — only if the repo is under git — inspect the session delta and build the commit.
+
+It is adaptive and an orchestrator. A detection pass (reusing `init` / `repo-audit` detection) determines which logging surfaces the repo actually has; the generated workflow contains only the relevant steps — a bare non-git folder gets a three-step closeout, a mature multi-skill repo gets the full pass. The changelog step delegates to `logchange`, the consistency step to `repo-audit`; both degrade to inline reminders where the sibling skill is absent. Git is a first-class conditional — the commit step is omitted entirely when the folder isn't a git repo. The modular step-block library lives in `references/closeout-blocks.md`. See Decision 015.
+
+---
+
 ## 2026-05-18 — v0.7.0: Three-layer instruction pattern as the core mental model
 
 Adopted the three-layer instruction pattern (root rules → folder-level `AGENTS.md` → templates as exemplars) as the plugin's core mental model. The plugin previously modelled only the root layer; every scaffold it generated was flat. This release brings the plugin into alignment with what Anthropic's Claude Code memory docs, OpenAI's Codex AGENTS.md guide, and the cross-host [agents.md spec](https://agents.md/) (used by 60,000+ open-source projects) all document as best practice. GitHub's analysis of 2,500 real `AGENTS.md` files informed the templates-as-exemplars piece — *"language models are pattern-followers more than rule-followers"* is the clearest articulation of why concrete templates beat abstract rule lists.

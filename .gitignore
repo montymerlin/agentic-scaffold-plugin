@@ -30,3 +30,21 @@ __pycache__/
 
 # Claude Code per-user settings (NOT committed; project-level instructions belong in AGENTS.md)
 .claude/settings.local.json
+
+# Secrets and credentials (security-checklist.md §2 baseline)
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*
+*_credentials*
+secrets/
+.secrets/
+.notion-sync/
+
+# Build output (additional baselines)
+venv/
+dist/
+build/

@@ -2,6 +2,14 @@
 
 Load this file when generating AGENTS.md, modifying templates, logging decisions, or defending architectural choices. SKILL.md encodes *what* to do; this file encodes *why* and the invariants the skill must preserve.
 
+## Why scaffolding exists
+
+Every principle below serves one end: **consistent, high-quality output from a non-deterministic performer.** LLM agents produce different output — and different *quality* — across runs, sessions, and models. The variability is irreducible: it persists even at temperature 0, arising from sampling and from floating-point and batch-variance effects in the inference stack. An agent also starts each session with no memory of the last, and different models behave differently on the same prompt.
+
+Scaffolding is the response. The canonical files, the layered instructions, templates, skills, and workflow files are all **consistency mechanisms** — written, versioned structure that constrains a capable but inconsistent performer toward repeatable results. Skills, workflows, runbooks, playbooks, and checklists are not five separate inventions; they are one idea in different forms — a capability auto-loaded when relevant, a procedure followed on demand, a gate applied inline. This is the checklist tradition — structure as a defence against variability in expert work — applied to AI agents.
+
+**Sources:** LLM non-determinism — [*Non-Determinism of "Deterministic" LLM Settings*](https://arxiv.org/html/2408.04667v5), [*Numerical Sources of Nondeterminism in LLM Inference*](https://arxiv.org/html/2506.09501v2); agent reliability decomposed into consistency / robustness / predictability / safety — [*Towards a Science of AI Agent Reliability*](https://arxiv.org/abs/2602.16666); the checklist tradition — Atul Gawande, *The Checklist Manifesto* (2009).
+
 ## 1. AGENTS.md has a ~150-line budget
 
 Generated AGENTS.md files should stay under ~150 lines. Agents lose focus when root instruction files grow long, and every token loaded at session start is a token unavailable for the actual task.
@@ -67,6 +75,7 @@ Every template choice traces to a documented source — not personal preference.
 - Narrative CHANGELOG → adapted from keep-a-changelog, shifted to narrative style
 - Progressive disclosure → Steve Krug, Nielsen Norman Group, Anthropic Agent Skills
 - Three-layer instruction pattern → Anthropic Claude Code memory docs, OpenAI Codex AGENTS.md guide, agents.md cross-host spec, GitHub's 2,500-repo analysis
+- Workflow files → the runbook / playbook pattern (operations practice adapted for AI agents) — a validated pattern, not a formal standard
 
 **How to apply:**
 - When a user challenges a default ("why this format?"), cite the source rather than the preference
@@ -86,3 +95,27 @@ The rationale rests on three findings. First, root files load into every session
 - When the user describes the shape of files in a folder ("research notes always have these sections"), propose a `TEMPLATE.md` rather than describing the shape in `AGENTS.md`. Templates demonstrate; rules describe; the demonstration is what the agent imitates.
 - **Caveat to communicate.** Folder-level `AGENTS.md` is lazy-loaded in Claude Code (enters context only when the agent reads a file inside that folder) and eagerly loaded in OpenAI Codex (from project root down to cwd). When generating folder-level scaffolding, surface this distinction in the file itself so future readers — human or agent — know which timing applies to their host.
 - **Complement to know about.** For Claude Code specifically, `.claude/rules/*.md` with `paths:` frontmatter triggers on file pattern rather than directory location. Useful when a rule must fire regardless of cwd. Generate as an adaptive file when Claude Code is detected; document but don't force.
+
+## 8. Repeatable procedures belong in the repo as workflow files
+
+Some knowledge is neither a project-wide *rule* (which belongs in `AGENTS.md`) nor an agent *capability* (a skill). It is a **procedure** — a recurring, multi-step task that carries judgement and a quality bar: how to update the changelog, how to close out a session, how to run a release. Captured procedures belong in the repo as **workflow files** — versioned, modular markdown the instruction file points to, loaded only when that procedure runs.
+
+This is the runbook / playbook pattern: long-standing operations practice, recently adapted for AI agents. The reasoning: procedures evolve with the project, so they belong in the repo — not a wiki, not an agent's memory; a procedure pulled out of the root instruction file keeps that file lean (progressive disclosure, Principle 3); and a concrete written procedure is followed more consistently than one reconstructed from memory each time (the pattern-follower finding, Principle 7).
+
+**Workflow files vs. skills** — easy to confuse, genuinely different:
+
+| | Skill | Workflow file |
+|---|---|---|
+| What it is | An agent capability package (`SKILL.md`) | An explicit written procedure |
+| Loaded | Automatically, when the agent judges it relevant | On demand, when someone runs the procedure |
+| Followed by | The agent | A human or an agent |
+| Lives | `.agents/skills/` (host-discovered) | a `workflows/` folder in the repo (a repo artifact) |
+
+They are complementary and increasingly combined — a skill can scaffold or run a workflow file (the plugin's own `session-closeout` skill does exactly this).
+
+**Source:** The runbook / playbook pattern — operations heritage, adapted for AI agents. Validated independently across recent practice (e.g. [agent runbooks as on-demand procedural context](https://briantakita.me/posts/agent-runbooks-on-demand-procedural-context/); the [Playbooks](https://docs.runplaybooks.ai/) tooling). **Not** a formal cross-host standard like `AGENTS.md` or Agent Skills — there is no `workflows` spec. Describe it as a validated *pattern*, never overclaim it as a standard.
+
+**How to apply:**
+- When a recurring, multi-step, judgement-bearing procedure surfaces, don't inline it into `AGENTS.md` — suggest a workflow file. Most repos start with none and add them only as real procedures recur (progressive disclosure again — don't pre-scaffold a `workflows/` folder a repo hasn't earned).
+- A `workflows/` directory (e.g. `.agents/workflows/` or `ops/workflows/`) is the conventional home; a short README there explaining the pattern is worth it once a repo has two or more.
+- The `session-closeout` skill scaffolds one workflow file. Generalising `init` to *offer* a `workflows/` folder is a candidate future step — not a default.

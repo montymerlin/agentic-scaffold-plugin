@@ -1,6 +1,6 @@
 # SETUP.md — agentic-scaffold
 
-Scaffold agentic best practices (AGENTS.md, CLAUDE.md, DECISIONS.md, ROADMAP.md, CHANGELOG.md) into any project folder with four composable skills: **init** (root scaffold), **nest** (folder-level layers), **logchange** (changelog maintenance), and **repo-audit** (health and security check).
+Scaffold agentic best practices (AGENTS.md, CLAUDE.md, DECISIONS.md, ROADMAP.md, CHANGELOG.md) into any project folder with five composable skills: **init** (root scaffold), **nest** (folder-level layers), **logchange** (changelog maintenance), **repo-audit** (health and security check), and **session-closeout** (end-of-session reconcile and commit).
 
 ---
 
