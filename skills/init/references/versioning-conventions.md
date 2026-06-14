@@ -57,6 +57,21 @@ Skip the versioning section for:
 
 The test: "Does anything or anyone depend on a specific version of this project?" If no, skip versioning conventions.
 
+## When operating-model versioning is appropriate
+
+The "skip versioning" guidance above refers to **content-release** versioning — versioning what the project produces. For projects whose **operating model** evolves in discrete structural shifts — conventions, workflows, schemas, skills, security model, logging surfaces — operating-model versioning is a separate, valid axis. Content grows by accretion (never versioned); architecture evolves in versionable steps.
+
+A worked counter-example: montymerlinHQ (a personal/professional knowledge garden) adopted this for its `CHANGELOG.md` in its v0.6 cycle, with the precedent from `projects/bridging-worlds/` (a research commons under it) reaching v0.7 through the same reframe. Both correctly *skip* content-release versioning — journal entries, network cards, research pages grow continuously — while *adopting* operating-model versioning for their architectures. The hub now teaches the standard its plugin already taught, on a second axis.
+
+Test for this case: does the project have an architectural axis that evolves in discrete, citable shifts, separate from its content? If yes, operating-model versioning earns its keep even when content-release versioning doesn't.
+
+**How to apply when scaffolding such a project:**
+
+- Offer operating-model versioning as an option for knowledge gardens, research commons, and other content-by-accretion projects; don't impose it. Most simple notebooks don't need it; meta-orchestrators and multi-skill commons usually do.
+- The MINOR / PATCH / no-bump distinctions adapt naturally: MINOR for new conventions / skills / logging-architecture changes; PATCH for small architectural fixes; **no bump** for content additions, journal entries, captures, card updates.
+- The version source-of-truth becomes "the latest `CHANGELOG.md` heading + matching git tag" — no manifest file needed (these projects aren't packages).
+- The pre-commit check (rule 4 above) still applies: CHANGELOG heading, commit message, and any DECISIONS / plan reference to the version all agree before committing the bump.
+
 ## Source
 
 This convention was developed from real experience managing six Claude Agent SDK plugins (mdpowers, agentic-scaffold, superpowers-cowork, git-cowork, regen-network, notion-sync). The version-drift pattern that motivated it: mdpowers had plugin.json at v0.3.2 while CHANGELOG tracked v0.4.2 and git had no tags — four conflicting sources of truth with no anchoring mechanism. The pre-commit version check and git-tag-on-release rules were introduced to prevent recurrence. See mdpowers Decision 010.
