@@ -59,6 +59,24 @@ if [[ "$FROM_GITHUB" -eq 1 ]]; then
   fi
 fi
 
+SKILLS_SOURCE="$SOURCE_ROOT/skills"
+
+if [[ ! -d "$SKILLS_SOURCE" ]]; then
+  echo "Skills directory not found: $SKILLS_SOURCE" >&2
+  exit 1
+fi
+
+skill_dirs=()
+while IFS= read -r candidate; do
+  [[ -d "$candidate" && -f "$candidate/SKILL.md" ]] || continue
+  skill_dirs+=("$candidate")
+done < <(printf '%s\n' "$SKILLS_SOURCE"/* | LC_ALL=C sort)
+
+if [[ "${#skill_dirs[@]}" -eq 0 ]]; then
+  echo "No valid skills found under $SKILLS_SOURCE" >&2
+  exit 1
+fi
+
 mkdir -p "$CODEX_HOME/skills"
 
 install_link() {
@@ -78,8 +96,18 @@ install_link() {
   ln -s "$source" "$target"
 }
 
-install_link "agentic-scaffold-init" "$SOURCE_ROOT/skills/init"
-install_link "agentic-scaffold-logchange" "$SOURCE_ROOT/skills/logchange"
+installed_skills=()
+for source in "${skill_dirs[@]}"; do
+  skill="$(basename "$source")"
+  name="agentic-scaffold-$skill"
+  install_link "$name" "$source"
+  installed_skills+=("$name")
+done
 
-echo "Installed agentic-scaffold skills into $CODEX_HOME/skills"
-echo "Restart Codex to pick up new skills."
+echo "Installed Codex skills:"
+printf '  - %s\n' "${installed_skills[@]}"
+echo
+echo "Skills root: $CODEX_HOME/skills"
+echo "Source root: $SOURCE_ROOT"
+echo
+echo "Codex detects skill changes automatically; restart if the new skills do not appear."
