@@ -6,7 +6,7 @@ Canonical repo instructions for `agentic-scaffold-plugin`.
 
 - **Name:** agentic-scaffold
 - **Type:** Host-agnostic scaffold and skills repo with Claude plugin packaging compatibility
-- **Version:** 0.6.0
+- **Version:** 0.8.0
 - **Stack:** Markdown templates + SKILL.md workflow specifications + lightweight install scripts
 
 ## Canonical Structure
@@ -22,7 +22,12 @@ agentic-scaffold-plugin/
 │   │   └── references/
 │   ├── logchange/
 │   │   └── SKILL.md
-│   └── repo-audit/
+│   ├── nest/
+│   │   └── SKILL.md
+│   ├── repo-audit/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   └── session-closeout/
 │       ├── SKILL.md
 │       └── references/
 ├── templates/
@@ -38,6 +43,8 @@ agentic-scaffold-plugin/
 ├── scripts/
 │   ├── install_codex_skills.sh
 │   └── update_codex_skills.sh
+├── tests/
+│   └── test_install_codex_skills.sh
 ├── AGENTS.md                # Canonical repo instructions
 ├── CLAUDE.md                # Claude compatibility wrapper
 ├── SETUP.md                 # Canonical install + compatibility reference (all hosts)

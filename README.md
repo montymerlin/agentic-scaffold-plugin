@@ -8,11 +8,11 @@ The goal is to give every project a solid foundation for AI-assisted development
 
 | Skill | Invoke | What it does |
 |-------|--------|-------------|
-| `agentic-scaffold:init` | `/init` | Detects stack and state, then generates the root scaffold: `AGENTS.md`, `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `DECISIONS.md`, `ROADMAP.md`, and adaptive files (`.cursorrules`, `CONTRIBUTING.md`, `.claude/rules/example.md`, etc.). Smart defaults — infers what it can, asks only what it can't. |
-| `agentic-scaffold:nest` | `/nest` | Scaffolds folder-level `AGENTS.md` plus a `TEMPLATE.md` exemplar inside a subdirectory. Specializes root rules for "when working in here" and gives agents a concrete shape to imitate. Use when a folder grows several files of similar shape (modules, sessions, research notes, monorepo packages). |
-| `agentic-scaffold:logchange` | `/logchange` | Maintains a human-readable `CHANGELOG.md`. In git repos, summarises commits since the last changelog entry; in non-git folders, asks what changed. Groups changes thematically, not by commit. |
-| `agentic-scaffold:repo-audit` | `/repo-audit` | Audits scaffold health and security in two phases: **Artifact Audit** (files present, versions consistent, CHANGELOG fresh, ROADMAP → DECISIONS integrity, layered-instruction consistency) then **Security Scan** (secrets exposure, gitignore completeness, agent permissions, dependency CVEs, supply chain risks). Mechanical fixes applied silently; everything else surfaces as a punch list. |
-| `agentic-scaffold:session-closeout` | `/session-closeout` | Scaffolds a repo-tailored `session-closeout.md` workflow, then runs it to close out a work session — surfacing unfinished to-dos, reconciling the repo's logging surfaces, and building the commit if the repo is under git. An orchestrator: delegates the changelog step to `logchange` and the consistency check to `repo-audit`. Adaptive — the generated workflow contains only the steps the repo's surfaces warrant. |
+| `agentic-scaffold:init` | Claude: `/init` · Codex: `$init` | Detects stack and state, then generates the root scaffold: `AGENTS.md`, `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `DECISIONS.md`, `ROADMAP.md`, and adaptive files (`.cursorrules`, `CONTRIBUTING.md`, `.claude/rules/example.md`, etc.). Smart defaults — infers what it can, asks only what it can't. |
+| `agentic-scaffold:nest` | Claude: `/nest` · Codex: `$nest` | Scaffolds folder-level `AGENTS.md` plus a `TEMPLATE.md` exemplar inside a subdirectory. Specializes root rules for "when working in here" and gives agents a concrete shape to imitate. Use when a folder grows several files of similar shape (modules, sessions, research notes, monorepo packages). |
+| `agentic-scaffold:logchange` | Claude: `/logchange` · Codex: `$logchange` | Maintains a human-readable `CHANGELOG.md`. In git repos, summarises commits since the last changelog entry; in non-git folders, asks what changed. Groups changes thematically, not by commit. |
+| `agentic-scaffold:repo-audit` | Claude: `/repo-audit` · Codex: `$repo-audit` | Audits scaffold health and security in two phases: **Artifact Audit** (files present, versions consistent, CHANGELOG fresh, ROADMAP → DECISIONS integrity, layered-instruction consistency) then **Security Scan** (secrets exposure, gitignore completeness, agent permissions, dependency CVEs, supply chain risks). Mechanical fixes applied silently; everything else surfaces as a punch list. |
+| `agentic-scaffold:session-closeout` | Claude: `/session-closeout` · Codex: `$session-closeout` | Scaffolds a repo-tailored `session-closeout.md` workflow, then runs it to close out a work session — surfacing unfinished to-dos, reconciling the repo's logging surfaces, and building the commit if the repo is under git. An orchestrator: delegates the changelog step to `logchange` and the consistency check to `repo-audit`. Adaptive — the generated workflow contains only the steps the repo's surfaces warrant. |
 
 ## What It Generates
 
@@ -187,7 +187,7 @@ See **[SETUP.md](./SETUP.md)** for full details across Cowork, Claude Code, Code
 **TL;DR**:
 - **Claude Code CLI**: `claude plugins install github.com/montymerlin/agentic-scaffold-plugin`
 - **Cowork**: Upload `agentic-scaffold-<version>.plugin` from `ops/plugins/_dist/`
-- **Codex**: `bash scripts/install_codex_skills.sh --from-github`
+- **Codex**: `bash scripts/install_codex_skills.sh --from-github`, then invoke skills with `$init`, `$session-closeout`, and the other `$skill-name` mentions—not Claude slash commands.
 
 ## Repo Conventions
 

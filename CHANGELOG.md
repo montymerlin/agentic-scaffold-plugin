@@ -4,6 +4,14 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-07-17 — Codex installer discovery and repair
+
+Repaired the Codex installer after the plugin's skill inventory outgrew its original two-entry link list. The installer now discovers every immediate `skills/<name>/` directory containing `SKILL.md`, installs the resulting namespaced links in stable order, rejects empty or invalid source roots, and continues to replace valid or broken targets only when `--force` is supplied.
+
+Added a zero-dependency Bash integration test covering clean five-skill installation, overwrite refusal, broken-link repair, and invalid-source failure. Host documentation now carries the full five-skill inventory and distinguishes Claude/Cowork slash commands such as `/session-closeout` from Codex's `$session-closeout` skill mention. This is a maintenance repair on top of v0.8.0; native `.codex-plugin/` packaging and global skill-root migration remain separate work.
+
+---
+
 ## 2026-05-20 — v0.8.0: session-closeout skill — the end-of-session orchestrator
 
 Added `session-closeout` as the plugin's fifth skill and capstone. Where `init` and `nest` scaffold a repo's structure and `logchange` and `repo-audit` maintain it, `session-closeout` ties them together at the moment a work session ends.

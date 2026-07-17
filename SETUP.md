@@ -62,29 +62,29 @@ Download `agentic-scaffold-<version>.plugin` from the GitHub Releases page of `m
 ```bash
 git clone https://github.com/montymerlin/agentic-scaffold-plugin.git
 cd agentic-scaffold-plugin
-zip -r /tmp/agentic-scaffold-0.6.0.plugin . \
+zip -r /tmp/agentic-scaffold-0.8.0.plugin . \
   -x "*.DS_Store" "*/__pycache__/*" "*.pyc" ".git/*" "node_modules/*" "*.log" "_dist/*"
 ```
 
-The output `/tmp/agentic-scaffold-0.6.0.plugin` is your upload artifact.
+The output `/tmp/agentic-scaffold-0.8.0.plugin` is your upload artifact.
 
 **Option 3 — built by the workspace `cowork-plugin-packager` skill** (montymerlinHQ collaborators only):
-The packaged file lives at `ops/plugins/_dist/agentic-scaffold-0.6.0.plugin` after running the skill.
+The packaged file lives at `ops/plugins/_dist/agentic-scaffold-0.8.0.plugin` after running the skill.
 
 Then upload:
 
 1. Open Claude Desktop → **Cowork** → **Plugins** sidebar.
 2. Click **+ Add plugin** → **Upload a file** → select the `.plugin`.
-3. Confirm install. Skills load under `/init`, `/logchange`, `/repo-audit`.
+3. Confirm install. Skills load under `/init`, `/nest`, `/logchange`, `/repo-audit`, and `/session-closeout`.
 
 **Pre-upload verification (recommended):**
 
 ```bash
 # Confirm the manifest is at the zip root
-unzip -l /tmp/agentic-scaffold-0.6.0.plugin | head -20
+unzip -l /tmp/agentic-scaffold-0.8.0.plugin | head -20
 
 # Confirm size is under 50 MB
-du -h /tmp/agentic-scaffold-0.6.0.plugin
+du -h /tmp/agentic-scaffold-0.8.0.plugin
 ```
 
 **Known quirks**:
@@ -113,7 +113,7 @@ mkdir -p ./.claude/plugins
 ln -s ~/src/agentic-scaffold-plugin ./.claude/plugins/agentic-scaffold
 ```
 
-Skills are invoked via slash commands (`/init`, `/logchange`, `/repo-audit`) or natural language.
+Skills are invoked via slash commands (`/init`, `/nest`, `/logchange`, `/repo-audit`, `/session-closeout`) or natural language.
 
 ### Codex
 
@@ -123,7 +123,9 @@ Codex doesn't read `.claude-plugin/`. Use the global install script:
 bash scripts/install_codex_skills.sh --from-github
 ```
 
-This writes skill stubs to `~/.codex/skills/agentic-scaffold-<skill>/` that source from a vendor clone at `${CODEX_HOME:-$HOME/.codex}/vendor_imports/repos/agentic-scaffold-plugin/`.
+This writes five namespaced skill symlinks to `~/.codex/skills/agentic-scaffold-<skill>/` that point into a vendor clone at `${CODEX_HOME:-$HOME/.codex}/vendor_imports/repos/agentic-scaffold-plugin/`. The installer discovers every immediate `skills/<name>/` directory containing `SKILL.md`, so future valid skills do not require a second hard-coded inventory.
+
+Codex invokes skills with `$skill-name` or by matching natural language. The explicit forms are `$init`, `$nest`, `$logchange`, `$repo-audit`, and `$session-closeout`. `/session-closeout` is the Claude Code and Cowork slash-command form; installing the skill does not add that custom slash command to Codex.
 
 ### Agent SDK (Custom Hosts)
 
@@ -133,8 +135,10 @@ Load the plugin using your host's standard plugin loader. The plugin exposes ski
 
 Copy skill files from `skills/` into your system prompt or tool definitions:
 - `skills/init/SKILL.md` — scaffolding logic
+- `skills/nest/SKILL.md` — folder-level instruction and template scaffolding
 - `skills/logchange/SKILL.md` — changelog maintenance
 - `skills/repo-audit/SKILL.md` — health and security audits
+- `skills/session-closeout/SKILL.md` — end-of-session reconciliation and commit orchestration
 
 Reference `skills/<skill>/references/` for supporting templates and guidance.
 
@@ -169,7 +173,7 @@ Reference `skills/<skill>/references/` for supporting templates and guidance.
 
 After install, verify the plugin loaded:
 
-**Cowork**: Type `/` and look for `/init`, `/logchange`, `/repo-audit`.
+**Cowork**: Type `/` and look for `/init`, `/nest`, `/logchange`, `/repo-audit`, and `/session-closeout`.
 
 **Claude Code CLI**:
 ```bash
@@ -178,8 +182,12 @@ claude plugins ls | grep agentic-scaffold
 
 **Codex**:
 ```bash
-ls ~/.codex/skills/ | grep agentic-scaffold
+for skill in init nest logchange repo-audit session-closeout; do
+  test -f "$HOME/.codex/skills/agentic-scaffold-$skill/SKILL.md" || exit 1
+done
 ```
+
+Then open a new Codex task and invoke `$session-closeout`, or ask naturally to “run session closeout.” If the skills do not appear, restart Codex.
 
 ## Further Reading
 
