@@ -8,7 +8,7 @@ A narrative record of how this plugin evolves.
 
 Repaired the Codex installer after the plugin's skill inventory outgrew its original two-entry link list. The installer now discovers every immediate `skills/<name>/` directory containing `SKILL.md`, installs the resulting namespaced links in stable order, rejects empty or invalid source roots, and continues to replace valid or broken targets only when `--force` is supplied.
 
-Added a zero-dependency Bash integration test covering clean five-skill installation, overwrite refusal, broken-link repair, and invalid-source failure. Host documentation now carries the full five-skill inventory and distinguishes Claude/Cowork slash commands such as `/session-closeout` from Codex's `$session-closeout` skill mention. This is a maintenance repair on top of v0.8.0; native `.codex-plugin/` packaging and global skill-root migration remain separate work.
+Added a zero-dependency Bash integration test covering clean five-skill installation, overwrite refusal, broken-link repair, and invalid-source failure. Host documentation now carries the full five-skill inventory and distinguishes Claude/Cowork slash commands such as `/session-closeout` from Codex's `$session-closeout` skill mention. This is a maintenance repair on top of v0.8.0; native `.codex-plugin/` packaging and global skill-root migration remain separate work, now captured in the ROADMAP rather than left implicit.
 
 ---
 

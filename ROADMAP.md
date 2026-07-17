@@ -12,6 +12,7 @@ Where this plugin could go. Items here are aspirations, not commitments. When an
 
 ## Future explorations
 
+- **Native Codex plugin distribution and skill-root migration** — Evaluate adding `.codex-plugin/plugin.json` and a Codex marketplace/install path so the five skills ship as one native plugin rather than only through the current symlink installer. The same pass should reconcile the installer's legacy `${CODEX_HOME}/skills` destination with Codex's current documented global skill location, avoiding duplicate discovery during migration. Deliberately deferred from the 2026-07-17 installer repair, which restored the active local setup without broadening into a distribution redesign. `status: idea`
 - **Audit shape-drift detection** — Best-effort check inside `repo-audit` that samples sibling files of a `TEMPLATE.md` and reports drift between the template's structure and the actual files. Heuristic, not strict. Builds on the layered audit checks introduced in Decision 014. `status: idea`
 - **API project patterns** — OpenAPI spec pointers, endpoint documentation conventions, request/response examples structure. `status: idea`
 - **Knowledge garden scaffold** — Adapted structure for personal knowledge management systems (journal, readings, wisdom directories). Different from code repo patterns. `status: idea`
