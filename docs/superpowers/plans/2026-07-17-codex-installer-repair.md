@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Status:** Complete (2026-07-17)
+
 **Goal:** Make the Codex installer expose every valid agentic-scaffold skill, repair broken links safely with `--force`, and document the correct Codex invocation model.
 
 **Architecture:** Keep the existing symlink installer and its local/GitHub source modes, but replace the duplicated two-skill inventory with deterministic discovery of immediate `skills/*/SKILL.md` directories. A zero-dependency Bash integration test exercises the installer against temporary Codex homes before the live links are repaired from the current checkout.
@@ -38,7 +40,7 @@
 - Consumes: `scripts/install_codex_skills.sh --codex-home <path> --source-root <path> [--force]`
 - Produces: a standalone test command that exits zero only when all five skills install correctly and invalid sources fail safely.
 
-- [ ] **Step 1: Write the failing integration test**
+- [x] **Step 1: Write the failing integration test**
 
 Create an executable Bash test with these assertions:
 
@@ -90,7 +92,7 @@ grep -q "No valid skills found" "$TMP_ROOT/invalid.log" || fail "missing invalid
 echo "PASS: Codex installer exposes and repairs all agentic-scaffold skills"
 ```
 
-- [ ] **Step 2: Make the test executable and verify shell syntax**
+- [x] **Step 2: Make the test executable and verify shell syntax**
 
 Run:
 
@@ -101,7 +103,7 @@ bash -n tests/test_install_codex_skills.sh
 
 Expected: `bash -n` exits 0 with no output.
 
-- [ ] **Step 3: Run the test and verify RED**
+- [x] **Step 3: Run the test and verify RED**
 
 Run:
 
@@ -123,7 +125,7 @@ Expected: FAIL with `missing symlink` for `agentic-scaffold-nest`, proving the c
 - Consumes: `${SOURCE_ROOT}/skills/*/SKILL.md`, `--force`, `--codex-home`, and `--source-root`.
 - Produces: sorted symlinks named `agentic-scaffold-<directory-name>` plus a human-readable install summary.
 
-- [ ] **Step 1: Add source validation and skill discovery**
+- [x] **Step 1: Add source validation and skill discovery**
 
 Before creating the destination skill root, collect valid skill directories without relying on Bash 4-only features:
 
@@ -147,7 +149,7 @@ if [[ "${#skill_dirs[@]}" -eq 0 ]]; then
 fi
 ```
 
-- [ ] **Step 2: Replace the hard-coded install calls**
+- [x] **Step 2: Replace the hard-coded install calls**
 
 Install the discovered directories and collect names for the summary:
 
@@ -169,7 +171,7 @@ echo
 echo "Codex detects skill changes automatically; restart if the new skills do not appear."
 ```
 
-- [ ] **Step 3: Verify GREEN**
+- [x] **Step 3: Verify GREEN**
 
 Run:
 
@@ -180,7 +182,7 @@ bash tests/test_install_codex_skills.sh
 
 Expected: syntax checks exit 0 and the integration test prints `PASS: Codex installer exposes and repairs all agentic-scaffold skills`.
 
-- [ ] **Step 4: Commit the tested installer behavior**
+- [x] **Step 4: Commit the tested installer behavior**
 
 ```bash
 git add scripts/install_codex_skills.sh tests/test_install_codex_skills.sh
@@ -202,11 +204,11 @@ git commit -m "fix: install every agentic-scaffold Codex skill" \
 - Consumes: the verified five-skill installer behavior and Codex's `$skill-name` invocation model.
 - Produces: consistent human and agent guidance without changing skill frontmatter or Claude invocation behavior.
 
-- [ ] **Step 1: Correct the canonical repository description**
+- [x] **Step 1: Correct the canonical repository description**
 
 In `AGENTS.md`, set the current version to `0.8.0`, list `nest` and `session-closeout` in the `skills/` tree, and add `tests/test_install_codex_skills.sh` to the canonical structure.
 
-- [ ] **Step 2: Correct installation and invocation guidance**
+- [x] **Step 2: Correct installation and invocation guidance**
 
 In `SETUP.md`:
 
@@ -218,11 +220,11 @@ In `SETUP.md`:
 
 In `README.md`, change the invocation column to show both forms, for example `Claude: /session-closeout · Codex: $session-closeout`, and add the Codex invocation note beside the install command.
 
-- [ ] **Step 3: Record the maintenance repair**
+- [x] **Step 3: Record the maintenance repair**
 
 Add an unreleased 2026-07-17 entry to `CHANGELOG.md` describing dynamic discovery, the regression test, broken-link repair, and corrected host-specific invocation guidance. Do not bump the published plugin manifest version.
 
-- [ ] **Step 4: Verify documentation consistency**
+- [x] **Step 4: Verify documentation consistency**
 
 Run:
 
@@ -234,7 +236,7 @@ bash tests/test_install_codex_skills.sh
 
 Expected: `AGENTS.md` no longer reports version 0.6.0; Codex sections use `$session-closeout`; remaining `/session-closeout` references are explicitly Claude/Cowork-facing or explanatory; diff and integration test pass.
 
-- [ ] **Step 5: Commit the reconciled documentation**
+- [x] **Step 5: Commit the reconciled documentation**
 
 ```bash
 git add AGENTS.md SETUP.md README.md CHANGELOG.md
@@ -253,7 +255,7 @@ git commit -m "docs: clarify agentic-scaffold skill invocation" \
 - Consumes: the verified installer in the current checkout.
 - Produces: five resolving global symlinks available to subsequent Codex tasks.
 
-- [ ] **Step 1: Run the verified installer against the live Codex home**
+- [x] **Step 1: Run the verified installer against the live Codex home**
 
 Run:
 
@@ -266,7 +268,7 @@ bash scripts/install_codex_skills.sh \
 
 Expected: the installer lists exactly five namespaced skills and reports the current checkout as its source root.
 
-- [ ] **Step 2: Verify every live link resolves**
+- [x] **Step 2: Verify every live link resolves**
 
 Run:
 
@@ -281,7 +283,7 @@ done
 
 Expected: all five commands succeed and every target points into the current `agentic-scaffold-plugin/skills/` checkout.
 
-- [ ] **Step 3: Run final repository verification**
+- [x] **Step 3: Run final repository verification**
 
 Run:
 
@@ -294,6 +296,6 @@ git status --short --branch
 
 Expected: syntax and integration checks pass; the branch contains the planned commits; no unrelated files are modified.
 
-- [ ] **Step 4: Report restart behavior**
+- [x] **Step 4: Report restart behavior**
 
 Tell the user that the current task's initial skill catalogue is already fixed in context, so the newly installed skills should be verified from a new Codex task. If they do not appear there, restart Codex. Explicit invocation is `$session-closeout`, while natural-language triggers such as “run session closeout” also work.
