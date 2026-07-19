@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-07-19 — app-changelogs closeout block
+
+Added an `app-changelogs` block to the session-closeout block library, contributed from montymerlinHQ the same day its App logging layer landed (per-app `CHANGELOG.md`/`ROADMAP.md` under `apps/`, versions mirrored in a registry and rendered in the repo's own UI). Without it, a closeout in a repo with an app layer checks every root surface, finds app-internal work correctly absent from all of them, and closes clean while the app's changelog silently drifts. The block asks the seam question — "did the session touch an app, and is this a seam?" — then prompts the version cut, the registry mirror, and the roadmap retirement. Detection: per-app CHANGELOG/ROADMAP files inside an `apps/`-style directory plus a registry carrying version fields; bridging-worlds' `app/` layer matches the same shape.
+
+---
+
 ## 2026-07-19 — local-indexes closeout block
 
 Added a `local-indexes` block to the session-closeout skill's block library, prompted by a real miss-class in montymerlinHQ: a session that builds something new under a directory whose README enumerates its contents (a registry table, an MOC, an inventory) had no closeout step nudging that index back into sync — hand-maintained indexes fell between the consistency step (cross-references) and the generated-files step (auto-generated only). The block derives the session's touched directories from the git delta, checks each (and its parent) for files that *claim to list things the session changed*, and adds a one-line glance at memory-index and daily-log surfaces where the repo keeps them. Wired into the scaffold assembly order between generated-files and git; omitted when a repo has no such files.

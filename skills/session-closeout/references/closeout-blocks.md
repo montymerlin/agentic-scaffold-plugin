@@ -44,6 +44,12 @@ If `repo-audit` is available, append: *For a structural session, run `/repo-audi
 
 > **Reconcile skill changelogs.** Any skill-internal version bump or convention change this session? Update that skill's `SKILL.md` changelog or `references/changelog.md`.
 
+## Block: app-changelogs — *include when the repo keeps per-app CHANGELOG/ROADMAP files (an app layer)*
+
+> **App changelogs & roadmaps.** Did the session touch any app in the repo's app layer? If yes, ask **"is this a seam?"** — the end of a working session on an app usually is. If so: cut a versioned entry in that app's `CHANGELOG.md` (newest-first, what shipped and what taught it), mirror the version wherever the repo's app registry advertises it, and retire shipped items from that app's `ROADMAP.md`. App-internal work logs only at the app layer — the repo root keeps a capability-level pointer at most.
+
+*(Detection hint for the generator: look for `CHANGELOG.md`/`ROADMAP.md` files inside an apps/ or app/ directory, and a registry file — e.g. `hubs.json` — carrying `version` fields. Contributed from montymerlinHQ 2026-07-19, where the app layer is governed by its DEC-0049; bridging-worlds' `app/` layer matches the same shape.)*
+
 ## Block: project-ops — *include if the repo has nested AGENTS.md / project subfolders*
 
 > **Reconcile project ops.** Any project-specific operational work (a migration, a wave, a brief, a review)? Log it to that project's ops location.
