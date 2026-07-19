@@ -58,6 +58,14 @@ If `logchange` is available, append: *Run `/logchange` — it distils the sessio
 
 > **Generated files.** Confirm any auto-generated files (indexes, maps) reflect the current state — a verification, not a regeneration; the post-commit hook still runs and is idempotent.
 
+## Block: local-indexes — *include when the repo keeps hand-maintained index/registry files*
+
+> **Local indexes & READMEs.** Derive the directories the session touched (`git log <session-range> --name-only | xargs -n1 dirname | sort -u`, or the session's file list where git is absent). For each touched directory and its parent, check whether a README / index / registry file **enumerates** what changed — a registry table, an MOC, an inventory list, an architecture map. The test: *does this file claim to list things, and did the session change the list?* Update any that drifted. This covers hand-maintained indexes only — auto-generated ones belong to the generated-files step.
+>
+> Where the repo keeps session-context surfaces (a memory index, a daily journal/log), add one glance each: did the session produce durable context the memory surface should hold, and does today's log entry capture the session?
+
+*(Detection hint for the generator: look for README.md files containing tables or lists that enumerate sibling files/folders, registry files named in the repo's instruction file, and MOC/landscape/index conventions. If none exist, omit the block.)*
+
 ## Block: git — *include ONLY if the repo is under git*
 
 > **Inspect the session delta.** Run `git status`, `git diff --stat`, `git diff --name-only`, `git log --oneline -n 10`. Confirm the delta matches what the reconcile steps above produced — nothing unexpected, nothing missing.

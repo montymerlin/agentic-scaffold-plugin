@@ -80,6 +80,7 @@ Read `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/closeout-block
 - the **to-dos** block — always
 - one **reconcile block per detected surface**, ordered: consistency → decisions → roadmap → skill changelogs → project ops → changelog
 - the **generated-files** block — if hooks/generators detected
+- the **local-indexes** block — if the repo keeps hand-maintained index/registry files (READMEs with inventories, registries, MOCs)
 - the **git** block (session delta + commit) — *only if git detected*
 - the **version-bump recommendation** block — if versioned
 - the **handoff** block — always

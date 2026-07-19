@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-07-19 — local-indexes closeout block
+
+Added a `local-indexes` block to the session-closeout skill's block library, prompted by a real miss-class in montymerlinHQ: a session that builds something new under a directory whose README enumerates its contents (a registry table, an MOC, an inventory) had no closeout step nudging that index back into sync — hand-maintained indexes fell between the consistency step (cross-references) and the generated-files step (auto-generated only). The block derives the session's touched directories from the git delta, checks each (and its parent) for files that *claim to list things the session changed*, and adds a one-line glance at memory-index and daily-log surfaces where the repo keeps them. Wired into the scaffold assembly order between generated-files and git; omitted when a repo has no such files.
+
+---
+
 ## 2026-07-17 — Codex installer discovery and repair
 
 Repaired the Codex installer after the plugin's skill inventory outgrew its original two-entry link list. The installer now discovers every immediate `skills/<name>/` directory containing `SKILL.md`, installs the resulting namespaced links in stable order, rejects empty or invalid source roots, and continues to replace valid or broken targets only when `--force` is supplied.
