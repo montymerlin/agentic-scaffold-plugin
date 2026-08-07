@@ -1,6 +1,6 @@
 # SETUP.md — agentic-scaffold
 
-Scaffold agentic best practices (AGENTS.md, CLAUDE.md, DECISIONS.md, ROADMAP.md, CHANGELOG.md) into any project folder with five composable skills: **init** (root scaffold), **nest** (folder-level layers), **logchange** (changelog maintenance), **repo-audit** (health and security check), and **session-closeout** (end-of-session reconcile and commit).
+Scaffold agentic best practices (AGENTS.md, CLAUDE.md, DECISIONS.md, ROADMAP.md, CHANGELOG.md) into any project folder with five composable skills: **init** (root scaffold), **nest** (folder-level layers), **logchange** (changelog maintenance), **repo-audit** (health and security check), and **session-closeout** (sets up the end-of-session reconcile-and-commit pass, vendoring a `closeout` runner into the repo that runs it).
 
 ---
 
@@ -62,14 +62,14 @@ Download `agentic-scaffold-<version>.plugin` from the GitHub Releases page of `m
 ```bash
 git clone https://github.com/montymerlin/agentic-scaffold-plugin.git
 cd agentic-scaffold-plugin
-zip -r /tmp/agentic-scaffold-0.8.0.plugin . \
+zip -r /tmp/agentic-scaffold-0.9.0.plugin . \
   -x "*.DS_Store" "*/__pycache__/*" "*.pyc" ".git/*" "node_modules/*" "*.log" "_dist/*"
 ```
 
-The output `/tmp/agentic-scaffold-0.8.0.plugin` is your upload artifact.
+The output `/tmp/agentic-scaffold-0.9.0.plugin` is your upload artifact.
 
 **Option 3 — built by the workspace `cowork-plugin-packager` skill** (montymerlinHQ collaborators only):
-The packaged file lives at `ops/plugins/_dist/agentic-scaffold-0.8.0.plugin` after running the skill.
+The packaged file lives at `ops/plugins/_dist/agentic-scaffold-0.9.0.plugin` after running the skill.
 
 Then upload:
 
@@ -81,10 +81,10 @@ Then upload:
 
 ```bash
 # Confirm the manifest is at the zip root
-unzip -l /tmp/agentic-scaffold-0.8.0.plugin | head -20
+unzip -l /tmp/agentic-scaffold-0.9.0.plugin | head -20
 
 # Confirm size is under 50 MB
-du -h /tmp/agentic-scaffold-0.8.0.plugin
+du -h /tmp/agentic-scaffold-0.9.0.plugin
 ```
 
 **Known quirks**:
@@ -127,6 +127,8 @@ This writes five namespaced skill symlinks to `~/.codex/skills/agentic-scaffold-
 
 Codex invokes skills with `$skill-name` or by matching natural language. The explicit forms are `$init`, `$nest`, `$logchange`, `$repo-audit`, and `$session-closeout`. `/session-closeout` is the Claude Code and Cowork slash-command form; installing the skill does not add that custom slash command to Codex.
 
+**Closeout on Codex.** `$session-closeout` sets closeout up as it does everywhere, but Codex loads skills from this global install rather than from repo-local directories, so the `closeout` runner it vendors into a repo does not become `$closeout` there. To *run* a closeout under Codex, ask for it in natural language ("run the session closeout") and the repo's `ops/workflows/session-closeout.md` is followed; or install the vendored runner globally alongside the others if you want an explicit mention.
+
 ### Agent SDK (Custom Hosts)
 
 Load the plugin using your host's standard plugin loader. The plugin exposes skills via the `.claude-plugin/plugin.json` manifest.
@@ -138,7 +140,8 @@ Copy skill files from `skills/` into your system prompt or tool definitions:
 - `skills/nest/SKILL.md` — folder-level instruction and template scaffolding
 - `skills/logchange/SKILL.md` — changelog maintenance
 - `skills/repo-audit/SKILL.md` — health and security audits
-- `skills/session-closeout/SKILL.md` — end-of-session reconciliation and commit orchestration
+- `skills/session-closeout/SKILL.md` — sets up closeout: generates the repo's workflow and vendors its runner
+- `skills/session-closeout/references/runner-skill-template.md` — the thin `closeout` runner vendored into target repos, which is what actually runs a closeout
 
 Reference `skills/<skill>/references/` for supporting templates and guidance.
 

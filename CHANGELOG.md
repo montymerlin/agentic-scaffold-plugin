@@ -4,6 +4,20 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-08-07 — v0.9.0: session-closeout splits into a generator and a vendored runner
+
+`session-closeout` was dual-mode: it generated a repo's `session-closeout.md` and also ran it. That shape only served a single operator with the plugin installed. `bridging-worlds` exposed the gap — a tracked, mature closeout workflow, a GitHub remote with collaborators, and no way for any of them to invoke it. The workflow had always been plugin-independent; the trigger never was.
+
+The deciding argument was subtler than distribution. With run-mode in the plugin, every closeout the maintainer runs goes through the plugin path, so any repo-local path stays permanently unexercised — the collaborator path breaks invisibly. Splitting the concern makes one path the only path.
+
+The skill is now **setup-only**. It detects the repo's logging surfaces, generates or refreshes the tailored workflow, vendors a thin `closeout` runner skill into the repo, and runs staleness checks against both artefacts. It no longer runs closeouts, and its description is narrowed to setup triggers so it stops competing for "close out" / "wrap up".
+
+The runner is new: `skills/session-closeout/references/runner-skill-template.md`, copied verbatim to `.agents/skills/closeout/SKILL.md` in the target repo, with a `.claude/skills` compatibility symlink where Claude Code needs one. It carries no procedure of its own — nearest-wins walk-up to the closest workflow, then follow it exactly. That walk-up is a real gain over the old flat four-path lookup: `/closeout` inside a nested spoke now runs the spoke's workflow and falls back to the parent's. The shape is lifted from the `gm` skill in montymerlinHQ, which had already proven it in the same repos.
+
+Step 5b checks `git check-ignore` on the runner and the symlink before declaring success, since vendoring that isn't committed is inert. A repo that already has a workflow but no runner gets a runner-only vendor — the existing workflow is never regenerated without an explicit ask, because it may be hand-written or hand-edited. See Decision 016.
+
+---
+
 ## 2026-07-19 — app-changelogs closeout block
 
 Added an `app-changelogs` block to the session-closeout block library, contributed from montymerlinHQ the same day its App logging layer landed (per-app `CHANGELOG.md`/`ROADMAP.md` under `apps/`, versions mirrored in a registry and rendered in the repo's own UI). Without it, a closeout in a repo with an app layer checks every root surface, finds app-internal work correctly absent from all of them, and closes clean while the app's changelog silently drifts. The block asks the seam question — "did the session touch an app, and is this a seam?" — then prompts the version cut, the registry mirror, and the roadmap retirement. Detection: per-app CHANGELOG/ROADMAP files inside an `apps/`-style directory plus a registry carrying version fields; bridging-worlds' `app/` layer matches the same shape.

@@ -4,9 +4,47 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
-## Decision 015: Add session-closeout skill — the end-of-session orchestrator
+## Decision 016: Split session-closeout into a plugin generator and a vendored runner
 
 **Status:** Accepted
+**Date:** 2026-08-07
+
+**Context:** Decision 015 made `session-closeout` dual-mode: it both generated a repo's `session-closeout.md` and ran it. That worked for a single operator with the plugin installed, and failed for everyone else. Two problems surfaced in practice.
+
+The first is distribution. `bridging-worlds` has a tracked, mature `ops/workflows/session-closeout.md` and a GitHub remote with collaborators — but no way for any of them to invoke it. The workflow was plugin-independent as designed; the *trigger* was not. A collaborator could read the file and had no `/closeout`.
+
+The second, and the deciding one, is testing drift. With run-mode in the plugin, the operator's every closeout goes through the plugin path. Any repo-local path — the one collaborators would depend on — stays permanently unexercised, so its breakage is invisible until someone else hits it.
+
+The `gm` skill in montymerlinHQ had already solved the shape: a ~30-line repo-agnostic dispatcher that walks up to the nearest `ops/workflows/gm.md` and follows it, vendored and tracked in both HQ and `bridging-worlds`. The pattern was proven in the exact repo that needed it; it simply hadn't been applied to closeout.
+
+**Decision:** Split the concern across two scopes.
+
+- **`agentic-scaffold:session-closeout` becomes setup-only.** It detects the repo's logging surfaces, generates or refreshes the tailored `session-closeout.md`, vendors the runner, and performs staleness checks. Run-mode is removed; its description is narrowed to setup triggers so it no longer competes for "close out" / "wrap up".
+- **A thin `closeout` runner skill is vendored into the target repo** — shipped as `skills/session-closeout/references/runner-skill-template.md`, copied verbatim to `.agents/skills/closeout/SKILL.md` (with a `.claude/skills` compatibility symlink where Claude Code needs one). It holds no procedure: nearest-wins walk-up to the workflow, then follow it exactly.
+
+Vendoring targets `.agents/skills/` first, per the canonical-skills-directory convention. Step 5b checks `git check-ignore` on both the runner and the symlink, because vendoring that isn't committed is inert.
+
+**Consequences:**
+- Every closeout — the maintainer's and a collaborator's — runs the same code path. Drift between them becomes impossible rather than merely unlikely.
+- `/closeout` works from a clone with no plugins installed. The plugin becomes a setup-time dependency, not a runtime one.
+- Nearest-wins resolution now matters and is explicit: `/closeout` inside a nested spoke runs the spoke's workflow, falling back to the parent's. Decision 015's flat "check four paths in the target repo" did not handle nesting.
+- The plugin's identity gets cleaner. `agentic-scaffold` scaffolds and inspects; *running* a repo's own workflow is a repo concern. This is Principle 7 (rules at the narrowest scope) applied to the plugin's own skills.
+- A behavioural contract is removed from a skill, so this is a minor bump: v0.8.0 → v0.9.0. Repos that had a workflow but no runner are handled by a runner-only vendor path — the existing workflow is never regenerated without an explicit ask, since it may be hand-written or hand-edited.
+- Codex is unaffected in the invocation sense: it installs skills globally rather than from repo-local directories, so the vendored runner benefits Claude Code and Cowork users, and Codex users continue to reach the workflow by natural language.
+
+**Alternatives Considered:**
+- *Keep run-mode in the plugin alongside the vendored runner* — the plugin would still work in repos where nothing was vendored, but it reintroduces the trigger collision and, more seriously, leaves the collaborator path untested. Rejected on the drift argument.
+- *Thin the plugin skill down to `gm`'s exact shape (template-copy only)* — `gm`'s scaffold path copies a static template, which is cheap to inline. Closeout's generator detects surfaces and assembles modular blocks; that adaptivity (Decision 015) is the plugin's actual value and would be lost.
+- *Vendor nothing; tell collaborators to install the plugin* — pushes a toolchain requirement onto contributors to a knowledge repo, for a workflow that is already fully described by a file in that repo.
+
+<!-- Supersedes the dual-mode half of Decision 015; the generator, adaptivity, and orchestrator properties established there are unchanged. -->
+<!-- Applies Decision 014's Principle 7 (rules at the narrowest scope) to the plugin's own skill boundaries. -->
+
+---
+
+## Decision 015: Add session-closeout skill — the end-of-session orchestrator
+
+**Status:** Accepted — amended by Decision 016 (dual-mode split into generator + vendored runner)
 **Date:** 2026-05-20
 
 **Context:** The plugin scaffolds a repo's structure (`init`, `nest`) and maintains it (`logchange`, `repo-audit`), but nothing ties those skills together at the moment a work session ends — when unfinished to-dos, unlogged decisions, an un-updated changelog, and an unbuilt commit all need reconciling at once. A per-commit hook reminder (the pattern some repos use) fires at the wrong granularity and can only remind, never act. The need is a coherent, on-demand end-of-session pass.

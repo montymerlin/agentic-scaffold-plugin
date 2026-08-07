@@ -111,11 +111,12 @@ This is the runbook / playbook pattern: long-standing operations practice, recen
 | Followed by | The agent | A human or an agent |
 | Lives | `.agents/skills/` (host-discovered) | a `workflows/` folder in the repo (a repo artifact) |
 
-They are complementary and increasingly combined — a skill can scaffold or run a workflow file (the plugin's own `session-closeout` skill does exactly this).
+They are complementary and increasingly combined — a skill can scaffold a workflow file, and a skill can run one. This plugin's own closeout is the worked example, and it separates the two: `session-closeout` *generates* the workflow, while a thin `closeout` runner vendored into the repo *follows* it (Decision 016). Splitting them is the general lesson — the generator is a toolchain concern that belongs in a plugin, the runner is a repo concern that should ship with the repo so anyone who clones it can invoke the procedure without installing anything.
 
 **Source:** The runbook / playbook pattern — operations heritage, adapted for AI agents. Validated independently across recent practice (e.g. [agent runbooks as on-demand procedural context](https://briantakita.me/posts/agent-runbooks-on-demand-procedural-context/); the [Playbooks](https://docs.runplaybooks.ai/) tooling). **Not** a formal cross-host standard like `AGENTS.md` or Agent Skills — there is no `workflows` spec. Describe it as a validated *pattern*, never overclaim it as a standard.
 
 **How to apply:**
 - When a recurring, multi-step, judgement-bearing procedure surfaces, don't inline it into `AGENTS.md` — suggest a workflow file. Most repos start with none and add them only as real procedures recur (progressive disclosure again — don't pre-scaffold a `workflows/` folder a repo hasn't earned).
 - A `workflows/` directory (e.g. `.agents/workflows/` or `ops/workflows/`) is the conventional home; a short README there explaining the pattern is worth it once a repo has two or more.
-- The `session-closeout` skill scaffolds one workflow file. Generalising `init` to *offer* a `workflows/` folder is a candidate future step — not a default.
+- The `session-closeout` skill scaffolds one workflow file, and vendors the runner that follows it. Generalising `init` to *offer* a `workflows/` folder is a candidate future step — not a default.
+- When you do pair a workflow with a runner skill, keep the runner thin and repo-local: resolve the nearest workflow, follow it exactly, hold no procedure of its own. A fat runner duplicates the workflow and the two drift.

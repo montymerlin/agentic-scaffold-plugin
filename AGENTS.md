@@ -6,7 +6,7 @@ Canonical repo instructions for `agentic-scaffold-plugin`.
 
 - **Name:** agentic-scaffold
 - **Type:** Host-agnostic scaffold and skills repo with Claude plugin packaging compatibility
-- **Version:** 0.8.0
+- **Version:** 0.9.0
 - **Stack:** Markdown templates + SKILL.md workflow specifications + lightweight install scripts
 
 ## Canonical Structure
@@ -27,9 +27,11 @@ agentic-scaffold-plugin/
 │   ├── repo-audit/
 │   │   ├── SKILL.md
 │   │   └── references/
-│   └── session-closeout/
+│   └── session-closeout/       # setup only — generates the workflow, vendors the runner
 │       ├── SKILL.md
 │       └── references/
+│           ├── closeout-blocks.md         # modular blocks the workflow is assembled from
+│           └── runner-skill-template.md   # the thin `closeout` runner vendored into repos
 ├── templates/
 │   ├── AGENTS.md.tmpl
 │   ├── CLAUDE.md.tmpl

@@ -2,7 +2,7 @@
 
 The modular library the `session-closeout` skill assembles a repo-tailored `session-closeout.md` from (SKILL.md Step 3). Each block below carries an **Include** condition. The skill emits the header and footer always, the to-dos and handoff blocks always, and one reconcile block per detected surface — then numbers the steps at assembly time, since which blocks appear varies by repo.
 
-Interpolation placeholders: `{{repo_name}}`, `{{workflow_path}}` (where the file lands), `{{handoff_dir}}` (detected handoff location).
+Interpolation placeholders: `{{repo_name}}`, `{{workflow_path}}` (where the file lands), `{{handoff_dir}}` (detected handoff location), `{{runner_path}}` (where the `closeout` runner skill was vendored — see SKILL.md Step 5b).
 
 Keep the generated file at orchestrator altitude: each step is a short prompt that routes to a deeper tool or surface, not a re-implementation of it. Reconcile records first; build the commit (if any) last.
 
@@ -15,6 +15,8 @@ Frontmatter: `title`, `type: workflow`, `date`, `status: active`, `scope` (one l
 > # Workflow — Session Closeout
 >
 > A short orientation pass at the end of a work session on {{repo_name}}: catch anything the session changed that hasn't been recorded, then close the session out. An **orchestrator** — it routes to deeper tools rather than re-implementing them. Reconcile the records first; build the commit (if any) last.
+>
+> **This file is the source of truth for the closeout.** `/closeout` — the thin runner vendored at `{{runner_path}}` — resolves this file and follows it; don't improvise a closeout from generic steps. The `agentic-scaffold:session-closeout` skill *generated* this file and vendored that runner; it does not run closeouts. If {{repo_name}} later gains or retires a logging surface, re-run that skill: its staleness check compares this file against the repo's current surfaces and offers to regenerate, preserving hand-edits you flag.
 >
 > ## When to use
 > Ending a substantial work session; preparing a commit; finishing a structural change; or when the user says "close out", "wrap up", "prepare commit", "session end". Not after every micro-task.
@@ -101,4 +103,4 @@ If `logchange` is available, append: *Run `/logchange` — it distils the sessio
 > Building the commit before the records are reconciled · re-running deep checks by hand instead of delegating · bumping the version inside the closeout · running the full closeout after a micro-task.
 >
 > ## Related
-> The repo's instruction file (`AGENTS.md`), its decision log and changelog where present, and `agentic-scaffold` skills `logchange` and `repo-audit` where installed.
+> `{{runner_path}}` — `/closeout`, the runner that follows this workflow · the repo's instruction file (`AGENTS.md`), its decision log and changelog where present · `agentic-scaffold` skills `logchange` and `repo-audit` where installed, and `session-closeout` to regenerate this file when the repo's surfaces change.
