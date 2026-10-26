@@ -62,14 +62,14 @@ Download `agentic-scaffold-<version>.plugin` from the GitHub Releases page of `m
 ```bash
 git clone https://github.com/montymerlin/agentic-scaffold-plugin.git
 cd agentic-scaffold-plugin
-zip -r /tmp/agentic-scaffold-0.9.0.plugin . \
+zip -r /tmp/agentic-scaffold-0.9.1.plugin . \
   -x "*.DS_Store" "*/__pycache__/*" "*.pyc" ".git/*" "node_modules/*" "*.log" "_dist/*"
 ```
 
-The output `/tmp/agentic-scaffold-0.9.0.plugin` is your upload artifact.
+The output `/tmp/agentic-scaffold-0.9.1.plugin` is your upload artifact.
 
 **Option 3 — built by the workspace `cowork-plugin-packager` skill** (montymerlinHQ collaborators only):
-The packaged file lives at `ops/plugins/_dist/agentic-scaffold-0.9.0.plugin` after running the skill.
+The packaged file lives at `ops/plugins/_dist/agentic-scaffold-0.9.1.plugin` after running the skill.
 
 Then upload:
 
@@ -81,10 +81,10 @@ Then upload:
 
 ```bash
 # Confirm the manifest is at the zip root
-unzip -l /tmp/agentic-scaffold-0.9.0.plugin | head -20
+unzip -l /tmp/agentic-scaffold-0.9.1.plugin | head -20
 
 # Confirm size is under 50 MB
-du -h /tmp/agentic-scaffold-0.9.0.plugin
+du -h /tmp/agentic-scaffold-0.9.1.plugin
 ```
 
 **Known quirks**:

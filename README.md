@@ -229,4 +229,4 @@ Sources referenced throughout this document, for those who want to dig deeper:
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).

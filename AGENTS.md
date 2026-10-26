@@ -6,7 +6,7 @@ Canonical repo instructions for `agentic-scaffold-plugin`.
 
 - **Name:** agentic-scaffold
 - **Type:** Host-agnostic scaffold and skills repo with Claude plugin packaging compatibility
-- **Version:** 0.9.0
+- **Version:** 0.9.1
 - **Stack:** Markdown templates + SKILL.md workflow specifications + lightweight install scripts
 
 ## Canonical Structure
@@ -31,7 +31,8 @@ agentic-scaffold-plugin/
 │       ├── SKILL.md
 │       └── references/
 │           ├── closeout-blocks.md         # modular blocks the workflow is assembled from
-│           └── runner-skill-template.md   # the thin `closeout` runner vendored into repos
+│           ├── runner-skill-template.md   # the thin `closeout` runner vendored into repos
+│           └── runner-LICENSE.txt         # its MIT notice, vendored beside it
 ├── templates/
 │   ├── AGENTS.md.tmpl
 │   ├── CLAUDE.md.tmpl
@@ -54,6 +55,7 @@ agentic-scaffold-plugin/
 ├── DECISIONS.md
 ├── ROADMAP.md
 ├── README.md
+├── LICENSE                  # MIT
 ├── .gitignore
 └── .cursorrules             # Cursor-specific behavior config
 ```

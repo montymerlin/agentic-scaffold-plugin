@@ -4,6 +4,14 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-10-26 — v0.9.1: the licence travels with the code
+
+The plugin always declared MIT in its manifest and README, but shipped no licence text, and MIT's one condition is that its notice goes with every copy. The repo now has a `LICENSE` file (Copyright (c) 2026 Monty Bryant).
+
+The vendored `closeout` runner is the part that actually gets copied into other repos, so it now carries the notice too. The runner template gains a `license:` line, and `session-closeout` vendors `references/runner-LICENSE.txt` beside it as `closeout/LICENSE.txt`. The Step 6 staleness check reports a vendored runner that lacks it. Existing vendored runners pick up both through the usual drift offer.
+
+---
+
 ## 2026-08-07 — v0.9.0: session-closeout splits into a generator and a vendored runner
 
 `session-closeout` was dual-mode: it generated a repo's `session-closeout.md` and also ran it. That shape only served a single operator with the plugin installed. `bridging-worlds` exposed the gap — a tracked, mature closeout workflow, a GitHub remote with collaborators, and no way for any of them to invoke it. The workflow had always been plugin-independent; the trigger never was.

@@ -1,6 +1,7 @@
 ---
 name: closeout
 description: Run this repo's session-closeout workflow. Use when the user types /closeout or says "close out", "wrap up", "session end", "end of session", "prepare commit", or "finish up". Resolves the nearest repo closeout workflow (ops/workflows/session-closeout.md) and follows it exactly.
+license: MIT. Complete terms in LICENSE.txt
 ---
 
 # closeout — end-of-session reconcile + commit

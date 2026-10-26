@@ -123,7 +123,7 @@ Write `session-closeout.md` to the detected location. Default `ops/workflows/` (
 
 ## Step 5b: Vendor the runner skill
 
-Copy `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/runner-skill-template.md` **verbatim** to the repo's skills directory as `closeout/SKILL.md`. Only substitute the workflow filename if this repo's workflow is not named `session-closeout.md`.
+Copy `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/runner-skill-template.md` **verbatim** to the repo's skills directory as `closeout/SKILL.md`. Only substitute the workflow filename if this repo's workflow is not named `session-closeout.md`. Copy `references/runner-LICENSE.txt` beside it as `closeout/LICENSE.txt`: the runner is MIT-licensed, and its notice travels with every copy.
 
 Choose the destination in this order:
 
@@ -155,7 +155,7 @@ Finish by telling the user: closeout is set up, and `/closeout` runs it. Do not 
 
 When a workflow already exists, compare the repo's current surfaces (Step 2 detection) against the blocks that workflow contains. If the repo has gained a surface the workflow doesn't cover — a `CHANGELOG.md` added, a skills directory created, git initialised — report the gap and offer to regenerate, preserving any hand-edits the user flags. If nothing has drifted, say so and stop.
 
-Also check the vendored runner against `references/runner-skill-template.md`. If it has drifted from the current template, report the diff and offer to refresh it — but never overwrite hand-edits without showing them first.
+Also check the vendored runner against `references/runner-skill-template.md`, and that `closeout/LICENSE.txt` sits beside it. If it has drifted from the current template, or the licence file is missing, report the diff and offer to refresh it — but never overwrite hand-edits without showing them first.
 
 ## Edge cases
 
