@@ -13,7 +13,7 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 **Decision:** Keep the plugin active, but warn about the four stale skills by name. The README opens with a notice saying `session-closeout` is current and the other four shouldn't be relied on to scaffold someone else's project until refreshed; the manifests say the same (v0.9.3). This revises the morning's v0.9.2, which marked the whole plugin dormant and recorded that under a duplicated number ("Decision 012", appended at the bottom); that entry is removed.
 
-**Consequences:** A refresh of the four skills is wanted, not scheduled. The author's `fellow-gardens` project, which collects what he learns seeding gardens for others, is the likely successor for the scaffolding half and may absorb it later (see ROADMAP).
+**Consequences:** A refresh of the four skills is wanted, not scheduled. The author's `fellow-gardens` project collects what he learns seeding gardens for others; folding that practice into this plugin is the likely way to refresh `init` and `nest` and to share an HQ or garden setup with others (parked in ROADMAP).
 
 **Alternatives Considered:**
 - *Mark the whole plugin dormant* (v0.9.2) — overstated; `session-closeout` is current and used daily.
