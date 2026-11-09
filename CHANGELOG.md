@@ -4,9 +4,13 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-09 — v0.9.3: The warning names the stale skills
+
+Same-day correction to v0.9.2. Marking the whole plugin dormant overstated it: `session-closeout` is current and in daily use. The README notice and manifest description now name the four skills that need a refresh (`init`, `nest`, `logchange`, `repo-audit`) and say `session-closeout` is current. Decision 017 records it, replacing the misnumbered "Decision 017" entry. No behaviour change.
+
 ## 2026-11-09 — v0.9.2: Dormant
 
-No behaviour change. The plugin is marked dormant: it hasn't been reviewed against the conventions its author's repos now follow, so the README warns against relying on it for other people's builds. The manifests move to 0.9.2 with a description that says so. See Decision 012.
+No behaviour change. The plugin is marked dormant: it hasn't been reviewed against the conventions its author's repos now follow, so the README warns against relying on it for other people's builds. The manifests move to 0.9.2 with a description that says so. See Decision 017.
 
 ## 2026-10-26 — v0.9.1: the licence travels with the code
 

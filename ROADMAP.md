@@ -23,6 +23,7 @@ Where this plugin could go. Items here are aspirations, not commitments. When an
 
 ## Parking lot
 
+- **Merge with fellow-gardens** — The author's `fellow-gardens` project (in his HQ) collects briefs, feedback and lessons from seeding knowledge gardens for others, which is what `init` and `nest` were for. It reads as this plugin's successor, and the two may merge in future. Not a priority (noted 2026-11-09). `status: parked`
 - **CLI distribution** — Wrap detection and templating in a standalone script (Python or Node) that runs outside Cowork. No agent required. `status: parked`
 - **Cursor-native distribution** — Package as a Cursor extension or .cursor/rules skill for non-Cowork users. `status: parked`
 - **GitHub template repo format** — Publish a template repository people can clone directly, as an alternative to dynamic generation. Simpler but less adaptive. `status: parked`

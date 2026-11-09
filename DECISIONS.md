@@ -4,6 +4,22 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 017: Flag the out-of-date skills
+
+**Status:** Accepted
+**Date:** 2026-11-09 (revised the same day)
+
+**Context:** The skills encode conventions from spring and summer 2026. Since then the author's repos have moved on: skills state objectives with dated suggestions rather than fixed steps, setup is written as goal-led units, and logging follows a five-layer model. `session-closeout` kept pace (Decision 016 in August, last changed in October), and its runner powers `/closeout` in the author's repos. The other four (`init`, `nest`, `logchange`, `repo-audit`) were last changed between April and August and haven't been reviewed against any of this.
+
+**Decision:** Keep the plugin active, but warn about the four stale skills by name. The README opens with a notice saying `session-closeout` is current and the other four shouldn't be relied on to scaffold someone else's project until refreshed; the manifests say the same (v0.9.3). This revises the morning's v0.9.2, which marked the whole plugin dormant and recorded that under a duplicated number ("Decision 012", appended at the bottom); that entry is removed.
+
+**Consequences:** A refresh of the four skills is wanted, not scheduled. The author's `fellow-gardens` project, which collects what he learns seeding gardens for others, is the likely successor for the scaffolding half and may absorb it later (see ROADMAP).
+
+**Alternatives Considered:**
+- *Mark the whole plugin dormant* (v0.9.2) — overstated; `session-closeout` is current and used daily.
+- *Retire it* — it still does useful work.
+- *Leave it unmarked* — others would take the stale skills' output as current practice.
+
 ## Decision 016: Split session-closeout into a plugin generator and a vendored runner
 
 **Status:** Accepted
@@ -388,14 +404,3 @@ For partially-scaffolded repos that already have a CLAUDE.md but lack versioning
 **Alternatives Considered:**
 - *Cowork only* — rejected. `/init` is equally useful in Claude Code CLI where users scaffold new repos
 - *Add COMPATIBILITY.md* — deferred. The plugin has no environment-specific behaviour to document; the Distribution section in CLAUDE.md is sufficient
-
-## Decision 012: Mark the plugin dormant (2026-11-09)
-
-**Context:** The skills encode conventions from spring and summer 2026. Since then the author's repos have moved on: skills state objectives with dated suggestions rather than fixed steps, setup is written as goal-led units, and logging follows a five-layer model. The plugin has had two commits since August, both housekeeping, and hasn't been reviewed against any of this.
-
-**Decision:** Mark it dormant rather than retire it. The README opens with a notice saying it's out of date and not to be relied on for scaffolding other people's projects; the manifests move to 0.9.2 with a description that says the same. The author keeps using it on his own repos, where he can correct its output.
-
-**Consequences:** A review against current conventions is wanted before the plugin is recommended to anyone again. Until then, nothing new is added.
-
-**Alternatives considered:** *Retire it*: it still does useful work for its author, so that overstates it. *Leave it unmarked*: others would take its output as current practice.
-

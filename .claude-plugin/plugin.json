@@ -1,7 +1,7 @@
 {
   "name": "agentic-scaffold",
-  "version": "0.9.2",
-  "description": "Dormant since 2026-11-09: out of date against current conventions, so do not rely on it to scaffold projects for others. Scaffold agentic best practices into any repo. Generates AGENTS.md as the canonical instruction file, a CLAUDE.md compatibility wrapper, README.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and adaptive editor configs.",
+  "version": "0.9.3",
+  "description": "session-closeout is current; init, nest, logchange and repo-audit are out of date against current conventions (2026-11-09), so do not rely on them to scaffold projects for others. Scaffold agentic best practices into any repo. Generates AGENTS.md as the canonical instruction file, a CLAUDE.md compatibility wrapper, README.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, and adaptive editor configs.",
   "author": {
     "name": "Monty Merlin"
   },
