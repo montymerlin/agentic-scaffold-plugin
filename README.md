@@ -1,5 +1,7 @@
 # agentic-scaffold
 
+> **Dormant since 2026-11-09: out of date, don't build on it.** These skills predate the conventions their author now uses (dated-suggestion skills, the five-layer logging model, goal-led setup), and they haven't been reviewed against them. They still work for the author's own repos, but don't rely on them to scaffold a new project for someone else. A review is wanted but not scheduled. See [DECISIONS.md](DECISIONS.md), Decision 012.
+
 Scaffold agentic best practices into any project folder. Five skills cover the full lifecycle: **init** to create the canonical root structure, **nest** to add folder-level layers as projects grow, **logchange** to keep the changelog current, **repo-audit** to verify the whole thing stays healthy and secure, and **session-closeout** to set up the end-of-session pass that reconciles the records and builds the commit — each informed by established conventions, with smart defaults adapted to what's already there.
 
 `session-closeout` is the one skill that leaves a skill behind: it vendors a thin `closeout` runner into the target repo, so `/closeout` works for anyone who clones it, plugin or no plugin.

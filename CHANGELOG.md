@@ -4,6 +4,10 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-09 — v0.9.2: Dormant
+
+No behaviour change. The plugin is marked dormant: it hasn't been reviewed against the conventions its author's repos now follow, so the README warns against relying on it for other people's builds. The manifests move to 0.9.2 with a description that says so. See Decision 012.
+
 ## 2026-10-26 — v0.9.1: the licence travels with the code
 
 The plugin always declared MIT in its manifest and README, but shipped no licence text, and MIT's one condition is that its notice goes with every copy. The repo now has a `LICENSE` file (Copyright (c) 2026 Monty Bryant).

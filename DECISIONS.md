@@ -388,3 +388,14 @@ For partially-scaffolded repos that already have a CLAUDE.md but lack versioning
 **Alternatives Considered:**
 - *Cowork only* — rejected. `/init` is equally useful in Claude Code CLI where users scaffold new repos
 - *Add COMPATIBILITY.md* — deferred. The plugin has no environment-specific behaviour to document; the Distribution section in CLAUDE.md is sufficient
+
+## Decision 012: Mark the plugin dormant (2026-11-09)
+
+**Context:** The skills encode conventions from spring and summer 2026. Since then the author's repos have moved on: skills state objectives with dated suggestions rather than fixed steps, setup is written as goal-led units, and logging follows a five-layer model. The plugin has had two commits since August, both housekeeping, and hasn't been reviewed against any of this.
+
+**Decision:** Mark it dormant rather than retire it. The README opens with a notice saying it's out of date and not to be relied on for scaffolding other people's projects; the manifests move to 0.9.2 with a description that says the same. The author keeps using it on his own repos, where he can correct its output.
+
+**Consequences:** A review against current conventions is wanted before the plugin is recommended to anyone again. Until then, nothing new is added.
+
+**Alternatives considered:** *Retire it*: it still does useful work for its author, so that overstates it. *Leave it unmarked*: others would take its output as current practice.
+

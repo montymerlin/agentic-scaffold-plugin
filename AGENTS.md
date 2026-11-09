@@ -6,7 +6,8 @@ Canonical repo instructions for `agentic-scaffold-plugin`.
 
 - **Name:** agentic-scaffold
 - **Type:** Host-agnostic scaffold and skills repo with Claude plugin packaging compatibility
-- **Version:** 0.9.1
+- **Version:** 0.9.2
+- **Status:** Dormant since 2026-11-09 (Decision 012). Out of date against current conventions; review before adding anything.
 - **Stack:** Markdown templates + SKILL.md workflow specifications + lightweight install scripts
 
 ## Canonical Structure
@@ -64,7 +65,7 @@ agentic-scaffold-plugin/
 
 Cowork install is via a `.plugin` zip uploaded through Claude Desktop. Two paths:
 
-1. **Use the `cowork-plugin-packager` skill** in the montymerlinHQ workspace — runs validation, packaging, and verification. Produces `agentic-scaffold-<version>.plugin` in `ops/plugins/_dist/`.
+1. **Use the `cowork-plugin-packager` skill** in the montymerlinHQ workspace — runs validation, packaging, and verification. Produces `agentic-scaffold-<version>.plugin`.
 2. **Build by hand** — see `SETUP.md` § "Cowork (Claude Desktop App)" for the raw `zip` command and verification steps. Use this when working outside montymerlinHQ.
 
 `SETUP.md` is the single source of truth for install pathways across Cowork, Claude Code CLI, Codex, Cursor/VS Code, and Agent SDK — read it before changing install or packaging behavior.
