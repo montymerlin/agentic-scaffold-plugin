@@ -1,12 +1,34 @@
 # agentic-scaffold
 
-> **Partly out of date (2026-11-09).** `session-closeout` is current: it generates the `/closeout` runner its author's repos use, and was last updated in October 2026. `init`, `nest`, `logchange` and `repo-audit` predate the conventions those repos now follow (dated-suggestion skills, the five-layer logging model, goal-led setup) and haven't been reviewed against them. Don't rely on those four to scaffold a project for someone else until they're refreshed. See [DECISIONS.md](DECISIONS.md), Decision 017.
+> **How far to lean on each skill:** see [Modules](#modules). Only `session-closeout` is `evergreen` today; the other four are `budding` and shouldn't be relied on to scaffold a project for someone else until they're refreshed.
 
 Scaffold agentic best practices into any project folder. Five skills cover the full lifecycle: **init** to create the canonical root structure, **nest** to add folder-level layers as projects grow, **logchange** to keep the changelog current, **repo-audit** to verify the whole thing stays healthy and secure, and **session-closeout** to set up the end-of-session pass that reconciles the records and builds the commit — each informed by established conventions, with smart defaults adapted to what's already there.
 
 `session-closeout` is the one skill that leaves a skill behind: it vendors a thin `closeout` runner into the target repo, so `/closeout` works for anyone who clones it, plugin or no plugin.
 
 The goal is to give every project a solid foundation for AI-assisted development from day one, without front-loading complexity you don't need yet.
+
+## Modules
+
+Each module carries a growth stage: how far its author stands behind it today. A skill keeps the stage in its `SKILL.md` frontmatter under `metadata`, with `created` (shown here as *Planted*) and `updated` (shown as *Tended*: the last meaningful change). This table mirrors those values.
+
+| Stage | Meaning for you |
+|---|---|
+| `seedling` | Rough and experimental. Read it for ideas; don't rely on it. |
+| `budding` | Works, with known gaps. Read the gap note before relying on it. |
+| `grown` | Complete for its purpose, but not kept current. It is the record as it stood. |
+| `evergreen` | Complete and kept current. The author uses it and stands behind it. |
+| `compost` | Retired: no longer valid. Kept for the record. Its useful parts may feed newer modules, and it may name the one that replaced it. |
+
+| Module | Stage | Planted | Tended | Known gaps |
+|---|---|---|---|---|
+| `session-closeout` | evergreen | 2026-05-23 | 2026-10-26 | — |
+| `init` | budding | 2026-04-08 | 2026-08-07 | It predates goal-led setup, the five-layer logging model and dated-suggestion skills. |
+| `nest` | budding | 2026-05-18 | 2026-05-18 | Same as `init`. Its `TEMPLATE.md` frontmatter (`title`, `status`, `author`, `date`) also predates the docs schema planned as this library's next module. |
+| `logchange` | budding | 2026-04-21 | 2026-04-27 | It predates the five-layer logging model and reader-test release notes. |
+| `repo-audit` | budding | 2026-04-23 | 2026-05-18 | It checks the 2026-05 scaffold; it hasn't been reviewed against current conventions. |
+
+A stage moves only when the author's view of a module changes, and it can move down as well as up. `updated` changes only with substantive edits.
 
 ## Skills
 

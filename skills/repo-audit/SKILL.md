@@ -7,6 +7,10 @@ description: >
   that CHANGELOG, DECISIONS, ROADMAP, and version numbers are consistent and up to
   date. Also runs as an optional pre-step inside finishing-a-development-branch when
   this plugin is installed.
+metadata:
+  created: "2026-04-23"
+  updated: "2026-05-18"
+  stage: "budding"
 ---
 
 # repo-audit

@@ -9,6 +9,10 @@ description: >
   configs to a new or existing project. Also trigger when the user asks to
   "add a roadmap", "set up a roadmap", or opens a fresh repo and asks
   "what should I set up?" or "how should I organize this?"
+metadata:
+  created: "2026-04-08"
+  updated: "2026-08-07"
+  stage: "budding"
 ---
 
 # Init — Agentic Scaffold

@@ -7,6 +7,10 @@ description: >
   template for this folder", "add folder-level agents.md", "scaffold folder", "nest in
   this folder", or wants to specialize agent rules for a specific subdirectory.
   Complements `agentic-scaffold:init`, which scaffolds the root layer only.
+metadata:
+  created: "2026-05-18"
+  updated: "2026-05-18"
+  stage: "budding"
 ---
 
 # nest — Folder-level Agentic Scaffold

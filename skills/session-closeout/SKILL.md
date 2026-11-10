@@ -7,6 +7,10 @@ description: >
   "add closeout to this repo", "my closeout workflow is out of date", or when a repo has a
   closeout workflow but no way to invoke it. This skill does NOT run the closeout — running
   is the vendored `closeout` skill's job (`/closeout`).
+metadata:
+  created: "2026-05-23"
+  updated: "2026-10-26"
+  stage: "evergreen"
 ---
 
 # session-closeout — the closeout *generator*

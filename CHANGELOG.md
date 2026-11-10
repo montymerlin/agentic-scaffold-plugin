@@ -4,6 +4,10 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-10 — v0.10.0: Each skill shows how far to lean on it
+
+Every skill now carries a growth stage: `seedling`, `budding`, `grown`, `evergreen`, or `compost` for retired material. It's the same ladder its author's documents use. It sits under `metadata` in each `SKILL.md`, with `created` and `updated`, which the README shows as *Planted* and *Tended*. A new *Modules* table in the README lists them, with a note of each skill's known gaps. `session-closeout` is `evergreen`. `init`, `nest`, `logchange` and `repo-audit` are `budding`: they work, but shouldn't be relied on to scaffold someone else's project until they're refreshed. The README's opening notice shrinks to a pointer to the table, and the manifest descriptions say the same. This prepares the plugin to become a method library, with the docs schema as its next module. See Decision 018. Skill behaviour is unchanged.
+
 ## 2026-11-09 — v0.9.3: The warning names the stale skills
 
 Same-day correction to v0.9.2. Marking the whole plugin dormant overstated it: `session-closeout` is current and in daily use. The README notice and manifest description now name the four skills that need a refresh (`init`, `nest`, `logchange`, `repo-audit`) and say `session-closeout` is current. Decision 017 records it, replacing the misnumbered "Decision 017" entry. No behaviour change.

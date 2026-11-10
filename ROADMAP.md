@@ -10,6 +10,15 @@ Where this plugin could go. Items here are aspirations, not commitments. When an
 
 - **Monorepo support — now unblocked by `nest`** — Workspace-aware scaffolding for monorepos. With `agentic-scaffold:nest` (Decision 014) the folder-level scaffolding primitive exists; monorepo support is now a composition of workspace detection (`pnpm-workspace.yaml`, `lerna.json`, Cargo workspace, Go modules, etc.) on top of `nest`. Promoted from `idea` because the blocker is resolved. `status: active`
 
+- **Docs-schema module** — The frontmatter schema its author's repos are converging on: a core of `created`, `updated`, `stage` (`seedling` · `budding` · `grown` · `evergreen` · `compost`), `type`, `authors`, `about` and `supersedes`/`superseded_by`, plus personal and multi-player profiles. It ships as the library's first non-skill module: a contract, a machine-readable vocabulary and templates, versioned on its own so other repos can pin it. Designed in its author's HQ (`ops/specs/2026-11-08_docs-conventions-across-hq-and-its-repo-design.md`). It enters at the stage its contract has reached. `status: active`
+- **Method-library review: rename, scope and versioning** — The plugin is becoming its author's method library: modules any knowledge garden can install. The Ecological Intelligence Commons method uses it rather than rebuilding it, and the `fellow-gardens` project tracks the gardens and the feedback that flows back. To work through:
+  - a name for that role (`agentic-garden` is the leading idea)
+  - per-module versioning against plugin versioning
+  - whether version numbers should also carry endorsement (Decision 018 deferred this)
+  - which parts of EIC's `reference/core` are generic garden machinery and belong here: its docs frontmatter and vocabulary, its `log/` conventions, the flat frontmatter parser, perhaps the meeting-notes tiers
+
+  The last item is EIC's own call, recorded in its `COMPONENTS.md` when anything moves. Not for now (noted 2026-11-10). `status: idea`
+
 ## Future explorations
 
 - **Native Codex plugin distribution and skill-root migration** — Evaluate adding `.codex-plugin/plugin.json` and a Codex marketplace/install path so the five skills ship as one native plugin rather than only through the current symlink installer. The same pass should reconcile the installer's legacy `${CODEX_HOME}/skills` destination with Codex's current documented global skill location, avoiding duplicate discovery during migration. Deliberately deferred from the 2026-07-17 installer repair, which restored the active local setup without broadening into a distribution redesign. `status: idea`

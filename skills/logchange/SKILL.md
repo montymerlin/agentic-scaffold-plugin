@@ -5,6 +5,10 @@ description: >
   the user says "logchange", "log change", "update changelog", "what's changed", "record
   what we did", or any variation of wanting a human-readable summary of recent work. Works
   in both git repos (summarises from commit history) and non-git folders (manual change logging).
+metadata:
+  created: "2026-04-21"
+  updated: "2026-04-27"
+  stage: "budding"
 ---
 
 # logchange

@@ -4,6 +4,26 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 018: Each module carries a growth stage
+
+**Status:** Accepted
+**Date:** 2026-11-10
+
+**Context:** Decision 017 flagged the stale skills in a prose notice at the top of the README and in the manifest description. That works for five skills. It won't hold once the plugin becomes the author's method library. The next module planned is the docs schema his repos are converging on, and parts of the Ecological Intelligence Commons method repo that aren't specific to it may follow. Each module needs its own signal of how far to lean on it. The docs schema also settles a growth ladder for tended documents:
+- `seedling` · `budding` · `grown` · `evergreen`, where `grown` means complete but no longer kept current and `evergreen` means complete and kept current;
+- plus `compost`, for retired material that is kept on record, with or without a named successor.
+
+It takes the standard date keys `created` and `updated` (the last meaningful change), and shows them as *Planted* and *Tended*.
+
+**Decision:** Modules use that same ladder, in line with design principle 6 (*eat your own cooking*). Each skill carries `created`, `updated` and `stage` under `metadata:` in its `SKILL.md` frontmatter. They sit under `metadata:` because the Agent Skills spec reserves the top-level keys; its reference validator, `skills-ref`, rejects unknown ones. They are quoted strings because the spec defines `metadata` as a map from string keys to string values. The README's *Modules* table mirrors them, with a known-gaps note per module. Stages at adoption: `session-closeout` is `evergreen`; `init`, `nest`, `logchange` and `repo-audit` are `budding` (they work, with known gaps). The prose notice shrinks to a pointer to the table. Released as v0.10.0.
+
+**Consequences:** A stage moves when the author's view of a module changes, so a module can go down as well as up. The table and the frontmatter must change in the same commit. A generator that writes the table from the frontmatter is deferred until there are more modules or the two drift. The coming docs-schema module enters at the stage its contract has reached.
+
+**Alternatives Considered:**
+- *A table of "stands behind: yes / needs revision" plus a last-reviewed date.* Rejected: a second vocabulary for the same judgement the ladder already makes.
+- *Let version numbers carry it (1.x stood behind, 0.x not yet).* Deferred to the library's rename and scope review, since it is a per-module versioning question.
+- *Keep the prose notice.* It doesn't scale past a handful of modules and says nothing per module.
+
 ## Decision 017: Flag the out-of-date skills
 
 **Status:** Accepted

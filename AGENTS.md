@@ -6,8 +6,8 @@ Canonical repo instructions for `agentic-scaffold-plugin`.
 
 - **Name:** agentic-scaffold
 - **Type:** Host-agnostic scaffold and skills repo with Claude plugin packaging compatibility
-- **Version:** 0.9.3
-- **Status:** Active, partly out of date (Decision 017). `session-closeout` is current; `init`, `nest`, `logchange` and `repo-audit` need a refresh against current conventions before anything is added to them.
+- **Version:** 0.10.0
+- **Status:** Active. Each module carries a growth stage (Decision 018). `session-closeout` is `evergreen`. `init`, `nest`, `logchange` and `repo-audit` are `budding` and need a refresh against current conventions before anything is added to them.
 - **Stack:** Markdown templates + SKILL.md workflow specifications + lightweight install scripts
 
 ## Canonical Structure
@@ -77,6 +77,7 @@ Cowork install is via a `.plugin` zip uploaded through Claude Desktop. Two paths
 - `skills/` is the canonical source of shared workflows.
 - `.claude-plugin/` is Claude-specific packaging metadata, not the source of truth for the skills themselves.
 - Template files define the scaffold output and must stay aligned with the repo’s own conventions.
+- Every module carries `created`, `updated` (its last meaningful change) and `stage` (`seedling` · `budding` · `grown` · `evergreen` · `compost`). A skill keeps them under `metadata:` in its `SKILL.md` frontmatter as quoted strings in block style, because the Agent Skills spec reserves the top-level keys and allows only string values in `metadata`. The README's Modules table mirrors them, so change both in the same commit. Bump `updated` only for substantive edits. Move `stage` whenever your view of the module changes, down as well as up. A retired module goes to `compost` and stays in the repo (Decision 018).
 
 ## Runtime Conventions
 
