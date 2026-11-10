@@ -4,6 +4,10 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-10 — v0.10.1: The closeout rechecks the rules a session wrote under
+
+`session-closeout` gains a **contracts** block for repos with nested instruction files. At closeout it re-reads the `AGENTS.md`, `CLAUDE.md`, README or skill that governs each file the session changed, checks the changes still follow it, and revisits judgement calls (how something was classified, where it was filed) with what the session has learned since. It reports what it checked and changed, and any contract written under without being read first. Nested contracts are often found by an agent rather than loaded for it, and context compression can drop one mid-session, so nothing else confirmed they were followed. Contributed from montymerlinHQ, where its first run caught a real slip. Existing closeouts gain it when regenerated.
+
 ## 2026-11-10 — v0.10.0: Each skill shows how far to lean on it
 
 Every skill now carries a growth stage: `seedling`, `budding`, `grown`, `evergreen`, or `compost` for retired material. It's the same ladder its author's documents use. It sits under `metadata` in each `SKILL.md`, with `created` and `updated`, which the README shows as *Planted* and *Tended*. A new *Modules* table in the README lists them, with a note of each skill's known gaps. `session-closeout` is `evergreen`. `init`, `nest`, `logchange` and `repo-audit` are `budding`: they work, but shouldn't be relied on to scaffold someone else's project until they're refreshed. The README's opening notice shrinks to a pointer to the table, and the manifest descriptions say the same. This prepares the plugin to become a method library, with the docs schema as its next module. See Decision 018. Skill behaviour is unchanged.

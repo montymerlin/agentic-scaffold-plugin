@@ -34,6 +34,12 @@ Frontmatter: `title`, `type: workflow`, `date`, `status: active`, `scope` (one l
 
 If `repo-audit` is available, append: *For a structural session, run `/repo-audit` for the deep check rather than eyeballing it.* If not, append: *Eyeball the files the session touched for stale references — there is no audit skill installed to do this automatically.*
 
+## Block: contracts — *include when the repo has nested instruction files (folder or subproject `AGENTS.md` / `CLAUDE.md`)*
+
+> **Contracts held, calls rechecked.** For each file the session changed, re-read the instructions that govern it: the nearest folder or subproject `AGENTS.md` (or `CLAUDE.md`), or the README or skill that serves as its contract. A session can skip these or lose them to compaction. Check the changes still follow them, and revisit the judgement calls made under them, such as how something was classified or where it was filed, with what the session now knows. Fix what is clearly wrong, and say in the closeout output what was checked and what changed, including any contract the session wrote under without reading first.
+
+*(Detection hint for the generator: any `AGENTS.md` or `CLAUDE.md` below the repo root. Contributed from montymerlinHQ 2026-11-10, where nested contracts are found by explicit discovery rather than loaded automatically, so nothing else checks they were read; its first run caught a research note that broke its folder's rule.)*
+
 ## Block: decisions — *include if DECISIONS.md exists*
 
 > **Reconcile decisions.** Any judgement made this session significant enough to log, and not yet logged? Any existing entry needing a status or superseded-by update? Log or update it now, against the repo's own "when to log a decision" gate.

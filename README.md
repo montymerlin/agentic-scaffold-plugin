@@ -22,7 +22,7 @@ Each module carries a growth stage: how far its author stands behind it today. A
 
 | Module | Stage | Planted | Tended | Known gaps |
 |---|---|---|---|---|
-| `session-closeout` | evergreen | 2026-05-23 | 2026-10-26 | — |
+| `session-closeout` | evergreen | 2026-05-23 | 2026-11-10 | — |
 | `init` | budding | 2026-04-08 | 2026-08-07 | It predates goal-led setup, the five-layer logging model and dated-suggestion skills. |
 | `nest` | budding | 2026-05-18 | 2026-05-18 | Same as `init`. Its `TEMPLATE.md` frontmatter (`title`, `status`, `author`, `date`) also predates the docs schema planned as this library's next module. |
 | `logchange` | budding | 2026-04-21 | 2026-04-27 | It predates the five-layer logging model and reader-test release notes. |

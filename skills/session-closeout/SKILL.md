@@ -9,7 +9,7 @@ description: >
   is the vendored `closeout` skill's job (`/closeout`).
 metadata:
   created: "2026-05-23"
-  updated: "2026-10-26"
+  updated: "2026-11-10"
   stage: "evergreen"
 ---
 
@@ -94,7 +94,7 @@ Build a surface map:
 | CHANGELOG.md | file exists | the changelog block — delegates to `logchange` |
 | skills | `.agents/skills/` or `.claude/skills/` | the skill-changelog block |
 | app layer | per-app `CHANGELOG.md`/`ROADMAP.md` under `apps/` or `app/`, plus a registry carrying `version` fields | the app-changelogs block |
-| nested structure | nested `AGENTS.md` / project subfolders | the per-folder / project-ops block |
+| nested structure | nested `AGENTS.md` / project subfolders | the per-folder / project-ops block, and the contracts block |
 | generated files | post-commit hook + generator scripts | the generated-file freshness block |
 | `repo-audit` available | the skill is installed | the consistency block delegates to it |
 | versioned | a version manifest or git tags | the version-bump-recommendation block |
@@ -107,7 +107,7 @@ Read `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/closeout-block
 
 - the **header** block — always
 - the **to-dos** block — always
-- one **reconcile block per detected surface**, ordered: consistency → decisions → roadmap → skill changelogs → app changelogs → project ops → changelog
+- one **reconcile block per detected surface**, ordered: consistency → contracts → decisions → roadmap → skill changelogs → app changelogs → project ops → changelog
 - the **generated-files** block — if hooks/generators detected
 - the **local-indexes** block — if the repo keeps hand-maintained index/registry files (READMEs with inventories, registries, MOCs)
 - the **git** block (session delta + commit) — *only if git detected*
