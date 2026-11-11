@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-11 — v0.12.1: The closeout library asks whether notes joined the graph
+
+The closeout library gains *Notes linked into the graph*, for repos that link notes or keep entity cards: each note a session created or changed carries the metadata its folder's rules ask for and links the entities and notes it touches at their canonical homes. Missing cards are suggested rather than created. *Cross-references agree* checks that existing links still hold; nothing asked whether new ones were owed. Existing closeouts take the step through the staleness check.
+
+---
+
 ## 2026-11-11 — v0.12.0: The audit judges content and keeps no log
 
 `repo-audit` now states each check as an objective with what done looks like, from 19.4 KB to 6.1 KB. It reads the repo's own rules first, runs the repo's own validators and audit skill, and doesn't re-check what they enforce. Called from a closeout, it audits what the session changed; run on its own, the whole repo. Twelve checks remain. The records check asks whether a repo has the records it needs, in whatever form, rather than six named files. The changelog is judged against the repo's own rules, not a commit count. The test for fixed headings in `AGENTS.md` becomes a question: do the root instructions cover what an agent can't infer? Size defers to the repo's own budget. Duplication between layers is judged by content, not shared headings, and the rule that a folder of five files should be nested is gone. A new cross-references check covers what closeouts already asked the audit to do.

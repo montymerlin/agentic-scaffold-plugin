@@ -81,6 +81,16 @@ Ordered as a generated workflow would run them. Number them when assembling.
 
 **Origin:** an organisational garden, where hand-kept dates drifted until a closeout step guarded them.
 
+### Notes linked into the graph
+
+**Step.** Each note the session created or meaningfully changed carries the metadata its folder's rules ask for, and links the entities and notes it touches at their canonical homes, so it joins the graph rather than landing as an orphan. A missing card is suggested, not created unasked.
+
+**When a repo wants it:** it links notes to each other (wikilinks or relative links), keeps entity cards for people, organisations, places or projects, or tags notes with entity fields.
+
+**Make it yours:** point to the repo's linking rules.
+
+**Origin:** a personal garden, 2026-11-11. Its closeout re-read folder rules and checked existing links, but nothing asked whether a new note had joined the graph.
+
 ### Decisions logged
 
 **Step.** Every judgement the session made that passes the repo's bar for a decision has an entry, and any entry the session overturned is amended or superseded.
