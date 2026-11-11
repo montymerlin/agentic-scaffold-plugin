@@ -8,7 +8,7 @@
       "name": "agentic-scaffold",
       "source": "./",
       "description": "Scaffold agentic best practices into any repo: AGENTS.md as the canonical instruction file, a CLAUDE.md compatibility wrapper, README.md, CHANGELOG.md, DECISIONS.md, ROADMAP.md, adaptive editor configs and a session-closeout runner. Each skill carries a growth stage; session-closeout is evergreen, while init, nest, logchange and repo-audit are budding (known gaps; don't rely on them to scaffold projects for others yet). See the README's Modules table.",
-      "version": "0.12.2",
+      "version": "0.12.3",
       "author": {
         "name": "Monty Merlin"
       },

@@ -16,7 +16,7 @@ metadata:
 
 Check that a repo's instructions, records and references agree with each other and with the repo, and that nothing sensitive is exposed. Each check states its objective and what done looks like. Commands, thresholds and pattern lists are dated suggestions: use what fits the repo.
 
-The audit is read-only. It reports and proposes, and changes nothing until the user says yes.
+The audit is read-only, apart from the dated record a whole-repo run leaves. It reports and proposes, and changes nothing else until the user says yes.
 
 ## Before you start
 
@@ -58,4 +58,4 @@ The audit is read-only. It reports and proposes, and changes nothing until the u
 
 One punch list per phase, plus one for the repo's own audit skill if it ran: ✅ fine, ⚠️ worth a look, ❌ needs fixing, ℹ️ known or accepted. Lead with what the validators said. Then ask which findings to fix now and which to leave, and apply only the fixes the user approves.
 
-The audit keeps no log of its own: its record is the report and the commits of any fixes. Called from a closeout, the closeout's report covers it. Run on its own, if the user wants the findings kept, write them where the repo keeps dated audits or notes; if it has nowhere, say so rather than invent a place. Never append to a reader-facing changelog.
+Called from a closeout, the audit writes nothing: the closeout's report covers it. Run across the whole repo, it leaves one short dated record of what it found and what was fixed or left, where the repo keeps dated audits or notes, named so it is easy to find (for example `YYYY-MM-DD_repo-audit.md`). The next run, or a reminder, reads it to see when the last audit was. If the repo has nowhere for it, say so rather than invent a place. Never append to a reader-facing changelog.

@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-11 — v0.12.3: A whole-repo audit leaves a dated record
+
+A whole-repo run of `repo-audit` now leaves one short dated record, where the repo keeps dated audits or notes, so a later run or a reminder can tell when the last audit was. This is the one file the audit writes without asking. Audits a closeout calls still write nothing. In its author's garden, the morning check-up offers a whole-repo audit when the newest record is 30 days old. Refines Decision 020.
+
+---
+
 ## 2026-11-11 — v0.12.2: The audit doesn't repeat its caller
 
 When a closeout or another workflow calls `repo-audit`, it now skips the checks the caller's own steps already made, such as records, changelog, plans and decisions, and says which it skipped. What the call adds is depth on cross-references, on instructions the session changed, and on security when the session touched settings, ignore rules or dependencies. Run on its own, it still audits the whole repo, where drift no single session sees shows up. The cross-references check now also asks that links take the form the repo's linking rules require. Whether a note links everything it should stays with the closeout's *Notes linked into the graph* step, or a gardening pass. Refines Decision 020.
