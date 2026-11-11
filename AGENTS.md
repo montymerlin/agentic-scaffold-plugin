@@ -6,7 +6,7 @@ Canonical repo instructions for `agentic-scaffold-plugin`.
 
 - **Name:** agentic-scaffold
 - **Type:** Host-agnostic scaffold and skills repo with Claude plugin packaging compatibility
-- **Version:** 0.12.1
+- **Version:** 0.12.2
 - **Status:** Active. Each module carries a growth stage (Decision 018). `session-closeout` is `evergreen`. `init`, `nest` and `logchange` are `budding` and need a refresh against current conventions before anything is added to them. `repo-audit` is `budding` too: it was rewritten against those conventions (Decision 020) but hasn't yet run on the new text.
 - **Stack:** Markdown templates + SKILL.md workflow specifications + lightweight install scripts
 

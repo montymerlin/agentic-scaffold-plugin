@@ -22,7 +22,7 @@ The audit is read-only. It reports and proposes, and changes nothing until the u
 
 - **Read the repo's own rules.** Its root instructions, and the contracts they name for the files in scope, decide what good looks like. A convention this skill suggests never overrides one the repo chose on purpose. Where the repo records why something is the way it is, in a decision or a note, don't flag it.
 - **Run the repo's own validators** and report what they say: pre-commit hooks, CI, `--check` scripts, a secret scanner. Don't re-check by hand what they already enforce; spend the audit on what they can't judge. If the repo has its own audit skill (often `<namespace>:repo-audit` under `.agents/skills/`), run it and report its findings in their own section.
-- **Set the scope.** Called from a session closeout, audit what the session changed and what those changes could break. Run on its own, audit the whole repo.
+- **Set the scope.** Run on its own, audit the whole repo: that is where drift no single session sees shows up. Called from a closeout or another workflow, audit only what the session changed and what that could break, and skip any check the caller's own steps already made, such as records, changelog, plans and decisions; say which you skipped. What the call adds is depth: cross-references, the instructions when the session changed them, and security when it touched settings, ignore rules or dependencies.
 
 ## Artifact audit
 
@@ -34,7 +34,7 @@ The audit is read-only. It reports and proposes, and changes nothing until the u
 
 4. **Plans and decisions agree.** Whatever the roadmap or plans mark as decided has a decision record, and no live plan rests on a decision since superseded. Defer to the repo's index checker if it has one.
 
-5. **Cross-references resolve.** Links, paths and names in scope point at something that exists and still says what the reference claims, including anything the calling session wrote just before the audit.
+5. **Cross-references resolve.** Links, paths and names in scope point at something that exists and still says what the reference claims, in the form the repo's linking rules ask for, including anything the calling session wrote just before the audit. Whether a note links everything it should is curation, for the closeout or a gardening pass, not this check.
 
 6. **The root instructions cover what an agent can't infer.** Read them as a new agent would. Done when they say what the repo is, what is safe and what needs asking first, where things go, which conventions differ from the obvious, and how to check work; and when they don't spend space on what the code, the folder names or a nested file already says. Judge the content, never the headings: a section removed on purpose is not a gap.
 

@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-11 — v0.12.2: The audit doesn't repeat its caller
+
+When a closeout or another workflow calls `repo-audit`, it now skips the checks the caller's own steps already made, such as records, changelog, plans and decisions, and says which it skipped. What the call adds is depth on cross-references, on instructions the session changed, and on security when the session touched settings, ignore rules or dependencies. Run on its own, it still audits the whole repo, where drift no single session sees shows up. The cross-references check now also asks that links take the form the repo's linking rules require. Whether a note links everything it should stays with the closeout's *Notes linked into the graph* step, or a gardening pass. Refines Decision 020.
+
+---
+
 ## 2026-11-11 — v0.12.1: The closeout library asks whether notes joined the graph
 
 The closeout library gains *Notes linked into the graph*, for repos that link notes or keep entity cards: each note a session created or changed carries the metadata its folder's rules ask for and links the entities and notes it touches at their canonical homes. Missing cards are suggested rather than created. *Cross-references agree* checks that existing links still hold; nothing asked whether new ones were owed. Existing closeouts take the step through the staleness check.
