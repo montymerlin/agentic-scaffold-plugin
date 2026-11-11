@@ -9,7 +9,7 @@ description: >
   is the vendored `closeout` skill's job (`/closeout`).
 metadata:
   created: "2026-05-23"
-  updated: "2026-11-10"
+  updated: "2026-11-11"
   stage: "evergreen"
 ---
 
@@ -22,11 +22,11 @@ The capstone skill of the agentic scaffold. It sets up end-of-session closeout i
 
 **This skill does not run closeouts.** Generating and running are split deliberately: running belongs to the vendored skill so that every closeout — yours and a collaborator's — goes through the one code path that ships with the repo. See Decision 016. If the user asks to *run* a closeout, hand off to `/closeout`.
 
-It is an **orchestrator**, not a monolith. The workflows it generates delegate changelog work to `agentic-scaffold:logchange` and deep consistency checks to `agentic-scaffold:repo-audit` rather than re-implementing them. The closeout owns only what nothing else does — surfacing to-dos, the handoff decision, and assembling the session's close.
+It is an **orchestrator**, not a monolith. Each step of a generated workflow states an objective and what done looks like, and points to the repo's own file for the detail: its decision guide, its release process, its security policy. Deep consistency checks go to `agentic-scaffold:repo-audit` where it is installed.
 
-**Core principle — adaptivity.** No two repos have the same logging surfaces. A bare scaffolded folder may have only `AGENTS.md` and no git; a mature repo has `DECISIONS.md`, `CHANGELOG.md`, `ROADMAP.md`, skills, hooks. The skill detects what the repo actually has and generates a closeout containing only the relevant steps — modular, not mandatory.
+**Core principle: a menu, not a template.** No two repos have the same logging surfaces. A bare folder may have only `AGENTS.md` and no git; a mature repo has decision logs, changelogs, plans, skills and hooks. The skill draws on a library of steps, takes only those the repo needs, and writes each in the repo's own terms. The result is the repo's own file, maintained by hand from then on.
 
-> **Design rationale & invariants:** Set `AGENTIC_SCAFFOLD_ROOT="${AGENTIC_SCAFFOLD_ROOT:-${CLAUDE_PLUGIN_ROOT:-${CODEX_HOME:-$HOME/.codex}/vendor_imports/repos/agentic-scaffold-plugin}}"`. Read `${AGENTIC_SCAFFOLD_ROOT}/skills/init/references/design-principles.md` before generating a workflow — Principle 7 (rules at the narrowest scope) and progressive disclosure govern how the closeout is assembled. The modular step-blocks the generator draws from live in `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/closeout-blocks.md`; the runner skill it vendors lives in `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/runner-skill-template.md`.
+> **Design rationale & invariants:** Set `AGENTIC_SCAFFOLD_ROOT="${AGENTIC_SCAFFOLD_ROOT:-${CLAUDE_PLUGIN_ROOT:-${CODEX_HOME:-$HOME/.codex}/vendor_imports/repos/agentic-scaffold-plugin}}"`. Read `${AGENTIC_SCAFFOLD_ROOT}/skills/init/references/design-principles.md` before generating a workflow — Principle 7 (rules at the narrowest scope) and progressive disclosure govern how the closeout is assembled. The library of steps the generator draws from lives in `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/closeout-library.md`; the runner skill it vendors lives in `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/runner-skill-template.md`.
 
 ## Step 1: Detect what the repo already has
 
@@ -54,76 +54,43 @@ done
 
 The *workflow only* case is the common one for a repo that adopted closeout before this split, or wrote its workflow by hand. Never regenerate over an existing workflow without an explicit ask — vendor the runner and leave the workflow alone.
 
-## Step 2: Detect the repo's logging surfaces
+## Step 2: Find out what the repo keeps
 
-Scan the target repo. This reuses the detection `agentic-scaffold:init` and `repo-audit` already do — do not reinvent it.
+Learn the repo's logging surfaces before choosing steps. Read its root instruction file first: it usually names its decision log, changelog, plans, journal and conventions, and says where things get logged. Then look for what it doesn't mention. Some quick probes, as a starting point:
 
 ```bash
-# git — a first-class conditional; an agentically-scaffolded folder may not be a git repo
 git rev-parse --is-inside-work-tree 2>/dev/null && echo "GIT: yes" || echo "GIT: no"
-
-# repo-level logging surfaces
-for f in DECISIONS.md ROADMAP.md CHANGELOG.md; do
-  [ -f "$f" ] && echo "EXISTS: $f" || echo "MISSING: $f"
-done
-
-# skills
-{ [ -d ".agents/skills" ] || [ -d ".claude/skills" ]; } && echo "SKILLS: yes" || echo "SKILLS: no"
-
-# app layer — per-app CHANGELOG/ROADMAP inside an apps/ or app/ directory
-find apps app -maxdepth 2 \( -name CHANGELOG.md -o -name ROADMAP.md \) 2>/dev/null | head -1
-
-# nested structure (monorepo / nest skill used / project subfolders)
-find . -mindepth 2 -name AGENTS.md -not -path './.git/*' -not -path './node_modules/*' 2>/dev/null | head -1
-
-# generated files + hooks
-{ [ -f ".githooks/post-commit" ] || ls .githooks/* 2>/dev/null | grep -q .; } && echo "HOOKS: yes"
-
-# versioning
-ls plugin.json .claude-plugin/plugin.json package.json pyproject.toml Cargo.toml 2>/dev/null
-git tag -l 2>/dev/null | head -1 | grep -q . && echo "TAGS: yes"
+ls DECISIONS.md ROADMAP.md CHANGELOG.md MEMORY.md SECURITY.md 2>/dev/null
+ls -d .agents/skills .claude/skills ops/decisions ops/specs ops/plans journal 2>/dev/null
+find . -mindepth 2 \( -name AGENTS.md -o -name CLAUDE.md \) -not -path './.git/*' -not -path './node_modules/*' 2>/dev/null | head -3
+git submodule status 2>/dev/null | head -3
+ls .pre-commit-config.yaml .githooks 2>/dev/null
 ```
 
-Build a surface map:
+**Done when** you can say, for each entry in the library, whether this repo has what its *When a repo wants it* line describes, and which file owns the detail the step would point to.
 
-| Surface | Detected by | The closeout gains |
-|---|---|---|
-| **git** | `git rev-parse` succeeds | the session-delta + commit block |
-| DECISIONS.md | file exists | the decisions-reconcile block |
-| ROADMAP.md | file exists | the roadmap-reconcile block |
-| CHANGELOG.md | file exists | the changelog block — delegates to `logchange` |
-| skills | `.agents/skills/` or `.claude/skills/` | the skill-changelog block |
-| app layer | per-app `CHANGELOG.md`/`ROADMAP.md` under `apps/` or `app/`, plus a registry carrying `version` fields | the app-changelogs block |
-| nested structure | nested `AGENTS.md` / project subfolders | the per-folder / project-ops block, and the contracts block |
-| generated files | post-commit hook + generator scripts | the generated-file freshness block |
-| `repo-audit` available | the skill is installed | the consistency block delegates to it |
-| versioned | a version manifest or git tags | the version-bump-recommendation block |
+**No git is a first-class case.** If git is absent, the steps that need it drop out, and the closeout ends with the records reconciled. Never assume the folder is git-tracked.
 
-**No git is a first-class case.** If git is absent, the closeout has no commit step — its terminal action is confirming records are reconciled and, if work is being deferred, writing the handoff file. Never assume the folder is git-tracked.
+## Step 3: Draft the workflow
 
-## Step 3: Assemble the tailored workflow
+Read `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/closeout-library.md`. Take the frame (header, the rules that apply, output, keeping this file) and each step the repo wants, in the library's order. Then rewrite every step in this repo's terms, following the library's *How to write a step*:
 
-Read `${AGENTIC_SCAFFOLD_ROOT}/skills/session-closeout/references/closeout-blocks.md`. Assemble `session-closeout.md` from:
+- one or two sentences on what must be true when it is done;
+- a pointer to the repo's owner file instead of a copy of its rules;
+- the repo's own names, from each entry's *Make it yours*;
+- an *Origin* only where it explains a check a reader might otherwise cut, and then in the changelog rather than the step.
 
-- the **header** block — always
-- the **to-dos** block — always
-- one **reconcile block per detected surface**, ordered: consistency → contracts → decisions → roadmap → skill changelogs → app changelogs → project ops → changelog
-- the **generated-files** block — if hooks/generators detected
-- the **local-indexes** block — if the repo keeps hand-maintained index/registry files (READMEs with inventories, registries, MOCs)
-- the **git** block (session delta + commit) — *only if git detected*
-- the **version-bump recommendation** block — if versioned
-- the **handoff** block — always
-- the **footer** block — always
-
-Wire delegations: where `logchange` / `repo-audit` are available, the changelog and consistency blocks delegate to them; where not, they degrade to inline reminders so the generated file still works standalone. Interpolate the repo's name, the detected handoff-file location, and the workflow's own path.
+Interpolate the repo's name, the workflow's path and the runner's path. A closeout for a bare folder is the to-dos step, *Nothing left open* and the frame; don't pad it.
 
 ## Step 4: Present & confirm
 
-Show the user: which surfaces were detected, which blocks the workflow will contain, where the workflow file will be written, and where the runner skill will be vendored. **GATE: do not write until the user approves.**
+Show the user what was found, which steps the workflow will hold and why, and the drafted text itself, with where the workflow will be written and where the runner will be vendored. **GATE: do not write until the user approves the text.**
 
 ## Step 5a: Write the workflow
 
 Write `session-closeout.md` to the detected location. Default `ops/workflows/` (create it if needed); if the repo already keeps workflow/runbook files elsewhere, use that.
+
+Start its history beside it in `changelogs/session-closeout.md`: a `v1.0` entry naming the steps chosen and any *Origin* worth keeping. The workflow's frontmatter carries `version:` and `changelog:`. History stays out of the workflow because every closeout loads the workflow and only an editor needs the history. If the repo already keeps workflow histories somewhere else, follow it.
 
 ## Step 5b: Vendor the runner skill
 
@@ -157,15 +124,15 @@ Finish by telling the user: closeout is set up, and `/closeout` runs it. Do not 
 
 ## Step 6: Staleness check
 
-When a workflow already exists, compare the repo's current surfaces (Step 2 detection) against the blocks that workflow contains. If the repo has gained a surface the workflow doesn't cover — a `CHANGELOG.md` added, a skills directory created, git initialised — report the gap and offer to regenerate, preserving any hand-edits the user flags. If nothing has drifted, say so and stop.
+When a workflow already exists, compare what the repo keeps now (Step 2) with the steps the workflow holds. If the repo has gained a surface no step covers, or retired one a step still names, report it and propose the change to that one step, drafted from the library in the workflow's own voice, with a changelog entry. Never offer to regenerate the whole file: it is the repo's own, maintained by hand, and its wording carries lessons the library doesn't know. If nothing has drifted, say so and stop.
 
 Also check the vendored runner against `references/runner-skill-template.md`, and that `closeout/LICENSE.txt` sits beside it. If it has drifted from the current template, or the licence file is missing, report the diff and offer to refresh it — but never overwrite hand-edits without showing them first.
 
 ## Edge cases
 
-- **Target is not a git repo** — expected and supported. The generated closeout simply omits the git block; its close is the reconciled record plus an optional handoff file. The runner is still worth vendoring if anyone else works in the folder.
-- **No logging surfaces at all** (bare folder, only `AGENTS.md`) — the closeout is just the to-dos block, the handoff block, and the footer. That is correct and useful; don't pad it.
-- **`logchange` / `repo-audit` not installed** — the changelog and consistency blocks degrade to inline reminders. The generated workflow names this so a future reader understands why.
-- **An existing workflow with hand-edits** — on regenerate, surface the diff and let the user keep their edits; never silently overwrite.
+- **Target is not a git repo:** expected and supported. The steps that need git drop out, and the close is the reconciled record. The runner is still worth vendoring if anyone else works in the folder.
+- **No logging surfaces at all** (a bare folder with only `AGENTS.md`): the closeout is the to-dos step, *Nothing left open* and the frame. That is correct and useful; don't pad it.
+- **`repo-audit` not installed:** the cross-references step says to check the touched files by hand.
+- **An existing workflow:** never overwrite it. Propose step-level changes (Step 6) and show the diff.
 - **A repo that can't or won't commit a skills directory** — vendoring is optional. Generate the workflow anyway; without the runner, the workflow is followed by asking for it in natural language rather than via `/closeout`.
 - **User asks this skill to run the closeout** — it doesn't. Point them at `/closeout`, and if no runner is vendored yet, offer Step 5b first.

@@ -22,7 +22,7 @@ Each module carries a growth stage: how far its author stands behind it today. A
 
 | Module | Stage | Planted | Tended | Known gaps |
 |---|---|---|---|---|
-| `session-closeout` | evergreen | 2026-05-23 | 2026-11-10 | — |
+| `session-closeout` | evergreen | 2026-05-23 | 2026-11-11 | — |
 | `init` | budding | 2026-04-08 | 2026-08-07 | It predates goal-led setup, the five-layer logging model and dated-suggestion skills. |
 | `nest` | budding | 2026-05-18 | 2026-05-18 | Same as `init`. Its `TEMPLATE.md` frontmatter (`title`, `status`, `author`, `date`) also predates the docs schema planned as this library's next module. |
 | `logchange` | budding | 2026-04-21 | 2026-04-27 | It predates the five-layer logging model and reader-test release notes. |
@@ -38,7 +38,7 @@ A stage moves only when the author's view of a module changes, and it can move d
 | `agentic-scaffold:nest` | Claude: `/nest` · Codex: `$nest` | Scaffolds folder-level `AGENTS.md` plus a `TEMPLATE.md` exemplar inside a subdirectory. Specializes root rules for "when working in here" and gives agents a concrete shape to imitate. Use when a folder grows several files of similar shape (modules, sessions, research notes, monorepo packages). |
 | `agentic-scaffold:logchange` | Claude: `/logchange` · Codex: `$logchange` | Maintains a human-readable `CHANGELOG.md`. In git repos, summarises commits since the last changelog entry; in non-git folders, asks what changed. Groups changes thematically, not by commit. |
 | `agentic-scaffold:repo-audit` | Claude: `/repo-audit` · Codex: `$repo-audit` | Audits scaffold health and security in two phases: **Artifact Audit** (files present, versions consistent, CHANGELOG fresh, ROADMAP → DECISIONS integrity, layered-instruction consistency) then **Security Scan** (secrets exposure, gitignore completeness, agent permissions, dependency CVEs, supply chain risks). Mechanical fixes applied silently; everything else surfaces as a punch list. |
-| `agentic-scaffold:session-closeout` | Claude: `/session-closeout` · Codex: `$session-closeout` | **Sets up** session closeout in a repo — it does not run one. Generates a repo-tailored `session-closeout.md` workflow (adaptive: only the steps the repo's surfaces warrant; an orchestrator that delegates the changelog step to `logchange` and the consistency check to `repo-audit`), then vendors a thin `closeout` runner skill into the repo. Running the closeout is `/closeout`'s job — see below. |
+| `agentic-scaffold:session-closeout` | Claude: `/session-closeout` · Codex: `$session-closeout` | **Sets up** session closeout in a repo — it does not run one. Drafts a repo-tailored `session-closeout.md` workflow from a library of steps, each an objective and what done looks like, taking only the steps the repo needs and pointing each to the repo's own files; you approve the text before it is written. Then it vendors a thin `closeout` runner skill into the repo. Running the closeout is `/closeout`'s job — see below. |
 | `closeout` *(vendored into your repo)* | Claude: `/closeout` | The ~30-line runner the setup skill writes to `.agents/skills/closeout/SKILL.md`. Walks up to the nearest `session-closeout.md` and follows it exactly — surfacing unfinished to-dos, reconciling the repo's logging surfaces, and building the commit if the repo is under git. It lives in the repo, not the plugin, so it is committed alongside the workflow and works for anyone who clones the repo with no plugins installed. |
 
 ## What It Generates

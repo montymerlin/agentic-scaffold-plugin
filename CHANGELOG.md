@@ -4,6 +4,14 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-11 — v0.11.0: The closeout library is a menu of steps
+
+`session-closeout` now drafts a repo's closeout from a library of steps rather than fixed blocks. Each step states an objective and what done looks like, with when a repo wants it, what to change to make it its own, and, where it matters, the miss that taught it. The generator takes the steps a repo needs, writes each in the repo's own terms, pointing to its own files instead of restating them, and shows the text before writing. A new workflow starts its history in a `changelogs/` folder beside it, so every closeout doesn't load it. The staleness check proposes a change to one step instead of offering to regenerate the file.
+
+The library adds six steps learned in two gardens: freshness fields, every repo a session touched, the session record, private material kept out of logs, nothing left open, and branches and worktrees. Skill changelogs, app changelogs and project ops merge into one narrowest-owner step. Handoff files are no longer always included: deferred work goes wherever the repo keeps it. The changelog step follows the repo's own release process and uses `logchange` only where the changelog uses its format. Decision logs can be one file or a folder. `closeout-blocks.md` is now `closeout-library.md`. Existing closeouts aren't touched; the staleness check offers the new steps one at a time. See Decision 019.
+
+---
+
 ## 2026-11-10 — v0.10.1: The closeout rechecks the rules a session wrote under
 
 `session-closeout` gains a **contracts** block for repos with nested instruction files. At closeout it re-reads the `AGENTS.md`, `CLAUDE.md`, README or skill that governs each file the session changed, checks the changes still follow it, and revisits judgement calls (how something was classified, where it was filed) with what the session has learned since. It reports what it checked and changed, and any contract written under without being read first. Nested contracts are often found by an agent rather than loaded for it, and context compression can drop one mid-session, so nothing else confirmed they were followed. Contributed from montymerlinHQ, where its first run caught a real slip. Existing closeouts gain it when regenerated.

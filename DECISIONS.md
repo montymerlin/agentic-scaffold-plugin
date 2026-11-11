@@ -4,6 +4,24 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 019: The closeout library is a menu of objectives, not fixed text
+
+**Status:** Accepted
+**Date:** 2026-11-11
+
+**Context:** The generator assembled closeouts from fixed blocks of text and offered to regenerate a workflow whenever a repo's surfaces changed. Both repos with mature closeouts had outgrown that. Their closeouts had grown long by restating detail their own files already held. In the author's personal garden one closeout reached 21.7 KB before a rewrite turned each step into an objective with a pointer to its owner file (8.7 KB). Three blocks also clashed with current practice: the changelog block delegated to `logchange`, whose format neither garden uses; the handoff block was always included, though both gardens retired handoff files; and the decisions block assumed a single `DECISIONS.md`. Regenerating would have overwritten a hand-tightened file with longer generic text.
+
+**Decision:** `closeout-blocks.md` becomes `closeout-library.md`: a menu of steps, each with an objective and done-criterion, when a repo wants it, what to make its own, and an optional origin. The generator drafts from it in the repo's own terms, shows the text before writing, and starts the workflow's history in `changelogs/` beside it. The staleness check proposes step-level changes and never regenerates. The library takes in the steps both gardens learned, and merges the per-layer changelog blocks into one narrowest-owner step.
+
+**Consequences:** Generated closeouts are shorter and point to their owners, so they drift less. They depend more on the agent's judgement, which is the intent. A repo's closeout is its own after generation. Existing closeouts upgrade one step at a time through the staleness check. Generating from the library now needs judgement as well as detection. The plugin's rename to agentic-knowledge-gardens, and how adapted components take upgrades, are still open.
+
+**Alternatives Considered:**
+- *Fix the three clashing blocks and keep fixed text.* Rejected: it keeps the copying that made closeouts long.
+- *One short file per step that repos copy.* Deferred: the generator reads the whole library anyway, and each entry is short. Worth revisiting if steps grow their own references.
+- *Keep regenerate-on-drift.* Rejected: it overwrites lessons the repo's own wording carries.
+
+---
+
 ## Decision 018: Each module carries a growth stage
 
 **Status:** Accepted
