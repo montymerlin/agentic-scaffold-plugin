@@ -4,6 +4,14 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-11 — v0.12.0: The audit judges content and keeps no log
+
+`repo-audit` now states each check as an objective with what done looks like, from 19.4 KB to 6.1 KB. It reads the repo's own rules first, runs the repo's own validators and audit skill, and doesn't re-check what they enforce. Called from a closeout, it audits what the session changed; run on its own, the whole repo. Twelve checks remain. The records check asks whether a repo has the records it needs, in whatever form, rather than six named files. The changelog is judged against the repo's own rules, not a commit count. The test for fixed headings in `AGENTS.md` becomes a question: do the root instructions cover what an agent can't infer? Size defers to the repo's own budget. Duplication between layers is judged by content, not shared headings, and the rule that a folder of five files should be nested is gone. A new cross-references check covers what closeouts already asked the audit to do.
+
+Two behaviours go. The audit no longer applies fixes silently: every fix waits for a yes. And it no longer appends a row to an *Audit Log* in `CHANGELOG.md`: its record is the report, the closeout's report when one calls it, or wherever the repo keeps dated audits. The offer to scaffold a companion audit skill is gone too; one the repo already has still runs. Findings the repo has accepted on record are listed as known, not raised again. See Decision 020.
+
+---
+
 ## 2026-11-11 — v0.11.0: The closeout library is a menu of steps
 
 `session-closeout` now drafts a repo's closeout from a library of steps rather than fixed blocks. Each step states an objective and what done looks like, with when a repo wants it, what to change to make it its own, and, where it matters, the miss that taught it. The generator takes the steps a repo needs, writes each in the repo's own terms, pointing to its own files instead of restating them, and shows the text before writing. A new workflow starts its history in a `changelogs/` folder beside it, so every closeout doesn't load it. The staleness check proposes a change to one step instead of offering to regenerate the file.

@@ -1,6 +1,6 @@
 # Security Checklist
 
-Reference patterns for `agentic-scaffold:repo-audit` Step 3. Update this file to expand the security scan without touching `SKILL.md`.
+Reference patterns for the `agentic-scaffold:repo-audit` security scan (checks 9 to 12). They are suggestions: prefer the repo's own scanner where it has one. Update this file to expand the scan without touching `SKILL.md`.
 
 ---
 
@@ -27,7 +27,7 @@ Grep these patterns against all tracked files (`git ls-files`):
 
 ## §2 — .gitignore baseline
 
-These entries should be present. Flag any that are absent. This is the auto-fix list — missing entries from this set are applied silently during Step 2b.
+A starting list, not a requirement. Judge `.gitignore` against what the repo actually produces and holds (check 10), and propose additions for the user to approve; never add them silently. Some entries, such as `build/` or `dist/`, would hide real folders in a repo that uses those names for content.
 
 ```
 .env
@@ -78,10 +78,10 @@ For context when evaluating prompt injection and other LLM-specific risks:
 
 | Risk | Relevance to repo audit |
 |---|---|
-| **LLM01 — Prompt injection** | External MCP server URLs (Step 3i); AGENTS.md / CLAUDE.md files sourced from untrusted locations |
+| **LLM01 — Prompt injection** | External MCP server URLs (check 12); AGENTS.md / CLAUDE.md files sourced from untrusted locations |
 | **LLM02 — Insecure output handling** | Agent-generated code written to files without a human review gate |
-| **LLM06 — Sensitive info disclosure** | Hardcoded secrets in tracked files (Step 3a); overly broad tool grants (Step 3c) |
-| **LLM08 — Excessive agency** | Wildcard agent permissions (Step 3c); unrestricted bash allows |
+| **LLM06 — Sensitive info disclosure** | Hardcoded secrets in tracked files (check 9); overly broad tool grants (check 11) |
+| **LLM08 — Excessive agency** | Wildcard agent permissions (check 11); unrestricted bash allows |
 | **LLM09 — Overreliance** | No review gate before agent commits or pushes; `finishing-a-development-branch` skipped |
 
 Full reference: https://owasp.org/www-project-top-10-for-large-language-model-applications/
@@ -90,7 +90,7 @@ Full reference: https://owasp.org/www-project-top-10-for-large-language-model-ap
 
 ## §5 — Supply chain: live threat intelligence (ROADMAP)
 
-Static checks in Step 3 cover structural supply chain risks. A future evolution:
+The static security checks cover structural supply chain risks. A future evolution:
 
 - Scheduled agent queries OSV / NVD for installed package CVEs
 - Cross-references configured tools and services against recent breach reports

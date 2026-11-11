@@ -4,6 +4,24 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 020: The audit judges content, defers to a repo's validators and keeps no log
+
+**Status:** Accepted
+**Date:** 2026-11-11
+
+**Context:** `repo-audit` tested structure where it should have judged content. On 2026-11-10 it flagged the author's personal garden for lacking a *Key Conventions* heading in its root `AGENTS.md`, a section removed on purpose as duplication. Its audit log there shows the same pattern for months: no `DECISIONS.md` (the garden keeps one file per decision by design), shared headings between root and folder files, a missing companion audit skill, and a 200-line threshold the garden had replaced with a byte budget its own pre-commit check enforces. Its secret regex re-ran what gitleaks already checks, and every match was a fixture or a document. It also appended a row to an *Audit Log* in root `CHANGELOG.md` at every run, so a reader-facing changelog gained a row at each structural closeout, even though most sessions ship nothing. In its history, the one problem it caught itself was version drift (2026-04-27). The garden's other audit catches came from its closeout's own steps.
+
+**Decision:** Each check states an objective and what done looks like, with commands and thresholds as dated suggestions. The audit reads the repo's own rules first, runs its validators and its own audit skill, and spends its effort on what they can't judge. The heading test becomes a judgement of whether root instructions cover what an agent can't infer. A cross-references check is added, since closeouts already hand that job to the audit. Silent fixes go: every fix waits for a yes. The audit log goes: the report is the record, and a repo that wants findings kept writes them where it keeps dated audits. The version, length and secret checks survive.
+
+**Consequences:** The audit needs more judgement and gives less noise, and it never overrides a convention a repo chose on purpose. Repos that already have an *Audit Log* section keep it as history; the skill stops adding to it. Without a log, whether an audit ran is answered by the closeout's report or the commits of its fixes. The scaffolding offer and its skeleton are gone, so a repo wanting its own audit skill writes one.
+
+**Alternatives Considered:**
+- *Fix the heading list and keep fixed checks.* Rejected: any fixed list ages the same way.
+- *Move the audit log to a separate file.* Rejected for the plugin: where dated records go is the repo's call, and a row for every audit records little that the closeout doesn't.
+- *Keep silent fixes for versions.* Rejected: which version is right is a judgement, and the `.gitignore` baseline could silently hide real folders such as `build/`.
+
+---
+
 ## Decision 019: The closeout library is a menu of objectives, not fixed text
 
 **Status:** Accepted
