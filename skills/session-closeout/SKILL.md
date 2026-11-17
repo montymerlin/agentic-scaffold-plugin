@@ -22,7 +22,7 @@ The capstone skill of the agentic scaffold. It sets up end-of-session closeout i
 
 **This skill does not run closeouts.** Generating and running are split deliberately: running belongs to the vendored skill so that every closeout — yours and a collaborator's — goes through the one code path that ships with the repo. See Decision 016. If the user asks to *run* a closeout, hand off to `/closeout`.
 
-It is an **orchestrator**, not a monolith. Each step of a generated workflow states an objective and what done looks like, and points to the repo's own file for the detail: its decision guide, its release process, its security policy. Deep consistency checks go to `agentic-scaffold:repo-audit` where it is installed.
+It is an **orchestrator**, not a monolith. Each step of a generated workflow states an objective and what done looks like, and points to the repo's own file for the detail: its decision guide, its release process, its security policy. Deep consistency checks go to `/repo-audit` where the repo has it, as a vendored runner or through this plugin.
 
 **Core principle: a menu, not a template.** No two repos have the same logging surfaces. A bare folder may have only `AGENTS.md` and no git; a mature repo has decision logs, changelogs, plans, skills and hooks. The skill draws on a library of steps, takes only those the repo needs, and writes each in the repo's own terms. The result is the repo's own file, maintained by hand from then on.
 
@@ -132,7 +132,7 @@ Also check the vendored runner against `references/runner-skill-template.md`, an
 
 - **Target is not a git repo:** expected and supported. The steps that need git drop out, and the close is the reconciled record. The runner is still worth vendoring if anyone else works in the folder.
 - **No logging surfaces at all** (a bare folder with only `AGENTS.md`): the closeout is the to-dos step, *Nothing left open* and the frame. That is correct and useful; don't pad it.
-- **`repo-audit` not installed:** the cross-references step says to check the touched files by hand.
+- **No `/repo-audit`** (neither a vendored runner nor this plugin): the cross-references step says to check the touched files by hand.
 - **An existing workflow:** never overwrite it. Propose step-level changes (Step 6) and show the diff.
 - **A repo that can't or won't commit a skills directory** — vendoring is optional. Generate the workflow anyway; without the runner, the workflow is followed by asking for it in natural language rather than via `/closeout`.
 - **User asks this skill to run the closeout** — it doesn't. Point them at `/closeout`, and if no runner is vendored yet, offer Step 5b first.

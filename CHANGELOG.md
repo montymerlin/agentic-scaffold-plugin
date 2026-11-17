@@ -4,6 +4,14 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-17 — v0.13.0: Each repo owns its audit
+
+`repo-audit` now works like `session-closeout`. Its checks live in a library, `references/audit-library.md`: each states an objective and what done looks like, when a repo wants it and what to adapt, and, for four of them, the miss that taught it. On request, the skill drafts a repo's own `repo-audit.md` workflow from the library, in the repo's terms, shows it, writes it with a changelog, and vendors a thin `repo-audit` runner so collaborators can run `/repo-audit` without the plugin. Where a repo has a workflow, the audit follows it; where it has none, it audits against the library and offers once to set one up. Three garden checks join the twelve, for whole-repo runs: sensitive material stays in its tier, work views show where things stand, and knowledge is reviewed on its cadence.
+
+The audit guards against its own staleness. Every run first checks that what its workflow names still exists and that the repo has nothing new the workflow misses. Each whole-repo record notes which checks found something, so a check that only ever produces noise can be cut, and one that keeps catching the same problem can become a validator. A refresh proposes changes one check at a time and never regenerates. The companion `<namespace>:repo-audit` skill gives way to the workflow. See Decision 021.
+
+---
+
 ## 2026-11-11 — v0.12.3: A whole-repo audit leaves a dated record
 
 A whole-repo run of `repo-audit` now leaves one short dated record, where the repo keeps dated audits or notes, so a later run or a reminder can tell when the last audit was. This is the one file the audit writes without asking. Audits a closeout calls still write nothing. In its author's garden, the morning check-up offers a whole-repo audit when the newest record is 30 days old. Refines Decision 020.

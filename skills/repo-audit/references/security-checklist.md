@@ -1,6 +1,6 @@
 # Security Checklist
 
-Reference patterns for the `agentic-scaffold:repo-audit` security scan (checks 9 to 12). They are suggestions: prefer the repo's own scanner where it has one. Update this file to expand the scan without touching `SKILL.md`.
+Reference patterns for the `agentic-scaffold:repo-audit` security checks (in `audit-library.md`). They are suggestions: prefer the repo's own scanner where it has one. Update this file to expand the scan without touching `SKILL.md`.
 
 ---
 
@@ -27,7 +27,7 @@ Grep these patterns against all tracked files (`git ls-files`):
 
 ## §2 — .gitignore baseline
 
-A starting list, not a requirement. Judge `.gitignore` against what the repo actually produces and holds (check 10), and propose additions for the user to approve; never add them silently. Some entries, such as `build/` or `dist/`, would hide real folders in a repo that uses those names for content.
+A starting list, not a requirement. Judge `.gitignore` against what the repo actually produces and holds (*Sensitive and generated files are ignored*), and propose additions for the user to approve; never add them silently. Some entries, such as `build/` or `dist/`, would hide real folders in a repo that uses those names for content.
 
 ```
 .env
@@ -78,10 +78,10 @@ For context when evaluating prompt injection and other LLM-specific risks:
 
 | Risk | Relevance to repo audit |
 |---|---|
-| **LLM01 — Prompt injection** | External MCP server URLs (check 12); AGENTS.md / CLAUDE.md files sourced from untrusted locations |
+| **LLM01 — Prompt injection** | External MCP server URLs (*The supply chain is known*); AGENTS.md / CLAUDE.md files sourced from untrusted locations |
 | **LLM02 — Insecure output handling** | Agent-generated code written to files without a human review gate |
-| **LLM06 — Sensitive info disclosure** | Hardcoded secrets in tracked files (check 9); overly broad tool grants (check 11) |
-| **LLM08 — Excessive agency** | Wildcard agent permissions (check 11); unrestricted bash allows |
+| **LLM06 — Sensitive info disclosure** | Hardcoded secrets in tracked files (*No secrets in tracked files or history*); overly broad tool grants (*Agent permissions are no broader than needed*) |
+| **LLM08 — Excessive agency** | Wildcard agent permissions (*Agent permissions are no broader than needed*); unrestricted bash allows |
 | **LLM09 — Overreliance** | No review gate before agent commits or pushes; `finishing-a-development-branch` skipped |
 
 Full reference: https://owasp.org/www-project-top-10-for-large-language-model-applications/

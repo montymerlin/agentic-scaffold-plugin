@@ -157,7 +157,7 @@ Ordered as a generated workflow would run them. Number them when assembling.
 
 **Step.** Every link, reference and file that names what the session changed still matches it, including what the closeout itself just wrote. For structural work, run `/repo-audit` rather than checking by hand.
 
-**When a repo wants it:** it has two or more files that refer to each other. If `repo-audit` isn't installed, check the files the session touched by hand and say so.
+**When a repo wants it:** it has two or more files that refer to each other. If the repo has no `/repo-audit` (neither its own runner nor the plugin), check the files the session touched by hand and say so.
 
 **Make it yours:** say which kinds of work count as structural here.
 

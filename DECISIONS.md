@@ -4,6 +4,24 @@ Architectural decisions for this plugin, in lightweight ADR format.
 
 ---
 
+## Decision 021: Each repo owns its audit workflow, drafted from a library
+
+**Status:** Accepted
+**Date:** 2026-11-17
+
+**Context:** After Decision 020, `repo-audit` was one generic skill, adapted to each repo only by reading the repo's rules and running its validators. That served its author's garden, whose validators already hold most of what is specific to it. It serves the plugin's purpose less well: other people adopt it for their own gardens. A plugin-only skill runs only where the plugin is installed. A repo had no home for the checks it learns from its own misses, except a companion skill that no repo wrote. Its settings (which checks apply, which validators run, where the record goes, how often) were scattered across the repo. `session-closeout` had already solved the same problem with a library, a workflow the repo owns and a thin vendored runner (Decisions 016 and 019).
+
+**Decision:** `repo-audit` takes the same shape. Its checks move into `references/audit-library.md`, each with an objective, when a repo wants it, what to adapt and an optional origin, plus three garden checks for whole-repo runs. The skill runs a repo's `repo-audit.md` workflow where one exists, audits against the library where none does, and on request drafts the workflow, shows it before writing, starts its changelog and vendors a `repo-audit` runner. The runner keeps the name, so `/repo-audit` means the same thing in every repo, with or without the plugin. Every run checks its own workflow for drift first, and each whole-repo record notes which checks found something, so the workflow can be pruned or a check turned into a validator.
+
+**Consequences:** A repo's audit is its own after setup and is maintained by hand, like its closeout. The library reaches it as suggestions, never as a regeneration. The self-check makes drift visible at the next run instead of whenever someone notices. Upgrading an adapted workflow is the same open question the plugin rebuild holds for every component. The companion-skill pattern gives way; one still found is run, and its checks offered for the workflow.
+
+**Alternatives Considered:**
+- *Keep one generic skill.* Rejected: collaborators without the plugin can't run it, and a repo's lessons have nowhere to live.
+- *Wait for the plugin rebuild.* Rejected by the author: the shape is already proven by the closeout, and his garden can adopt it now.
+- *A separate setup skill, as `session-closeout` is for `closeout`.* Rejected: running and setting up share the library, and a second skill name would split `/repo-audit` across two entry points.
+
+---
+
 ## Decision 020: The audit judges content, defers to a repo's validators and keeps no log
 
 **Status:** Accepted
