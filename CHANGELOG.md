@@ -4,6 +4,12 @@ A narrative record of how this plugin evolves.
 
 ---
 
+## 2026-11-18 — v0.13.1: The audit looks beyond its checks
+
+The audit library gains *Then look beyond this file*: after its checks, a bounded free pass for anything no check asked about. The secrets check now scans history rather than staged files, and covers every repository a repo holds, including ignored clones, with their remotes' visibility. Both came from the first run of the library's first adoption. A bare audit run beside it found a secret pushed to a public clone the workflow never reached, and the workflow's pre-commit secret hook had scanned nothing. Refines Decision 021.
+
+---
+
 ## 2026-11-17 — v0.13.0: Each repo owns its audit
 
 `repo-audit` now works like `session-closeout`. Its checks live in a library, `references/audit-library.md`: each states an objective and what done looks like, when a repo wants it and what to adapt, and, for four of them, the miss that taught it. On request, the skill drafts a repo's own `repo-audit.md` workflow from the library, in the repo's terms, shows it, writes it with a changelog, and vendors a thin `repo-audit` runner so collaborators can run `/repo-audit` without the plugin. Where a repo has a workflow, the audit follows it; where it has none, it audits against the library and offers once to set one up. Three garden checks join the twelve, for whole-repo runs: sensitive material stays in its tier, work views show where things stand, and knowledge is reviewed on its cadence.

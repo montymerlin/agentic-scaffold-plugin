@@ -34,6 +34,12 @@ Frontmatter: `title`, `type: workflow`, `version: "1.0"`, `changelog: "changelog
 
 **Make it yours:** name the validators (a pre-commit config, CI, `--check` scripts, a secret scanner) and how to run them across the whole repo.
 
+### Then look beyond this file: always
+
+> After the checks, spend a bounded pass auditing {{repo_name}} as you would without this file: anything sensitive, heavy, stale or broken that no check asked about. Report it in its own section, and propose a check for anything worth catching every time.
+
+**Origin:** in its author's garden, a bare audit run beside the garden's workflow found the most severe issue, a secret pushed to a public repo the garden held as a clone, because nothing confined it to the checks (2026-11-17).
+
 ### Report: always
 
 > One punch list per phase: ✅ fine, ⚠️ worth a look, ❌ needs fixing, ℹ️ known or accepted. Lead with what the validators said. Then ask which findings to fix now and which to leave, and apply only the fixes the user approves.
@@ -130,11 +136,13 @@ Frontmatter: `title`, `type: workflow`, `version: "1.0"`, `changelog: "changelog
 
 ### No secrets in tracked files or history
 
-**Check.** Run the repo's secret scanner over the scope if it has one; otherwise grep the checklist's patterns. Also look for sensitive file types ever committed (`.env`, keys, credentials). Report file and line, never the value. A match in a test fixture or in documentation about secrets is noise: say so once.
+**Check.** Run the repo's secret scanner over the scope if it has one, across history, not just staged files; otherwise grep the checklist's patterns. Cover every repository the repo holds too: submodules and nested clones it ignores. Check whether each one's remote is public; a secret there is ❌, rotated before it is scrubbed. Also look for sensitive file types ever committed (`.env`, keys, credentials). Report file and line, never the value. A match in a test fixture or in documentation about secrets is noise: say so once.
 
 **When a repo wants it:** always, when it is under git.
 
-**Make it yours:** name the scanner.
+**Make it yours:** name the scanner and how to run it over history; a pre-commit hook usually scans staged files only.
+
+**Origin:** a pre-commit secret hook scanned nothing under `--all-files`, and a secret sat in a public clone the audit never looked at (2026-11-17).
 
 ### Sensitive and generated files are ignored
 
